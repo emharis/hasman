@@ -75,12 +75,12 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('armada/delete','ArmadaController@delete');
 
         // JABATAN
-        Route::get('jabatan','MaterialController@index');
-        Route::get('jabatan/create','MaterialController@create');
-        Route::post('jabatan/insert','MaterialController@insert');
-        Route::get('jabatan/edit/{id}','MaterialController@edit');
-        Route::post('jabatan/update','MaterialController@update');
-        Route::post('jabatan/delete','MaterialController@delete');
+        Route::get('jabatan','JabatanController@index');
+        Route::get('jabatan/create','JabatanController@create');
+        Route::post('jabatan/insert','JabatanController@insert');
+        Route::get('jabatan/edit/{id}','JabatanController@edit');
+        Route::post('jabatan/update','JabatanController@update');
+        Route::post('jabatan/delete','JabatanController@delete');
 
         // KARYAWAN
         Route::get('karyawan','KaryawanController@index');
@@ -114,6 +114,11 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('material/update','MaterialController@update');
         Route::post('material/delete','MaterialController@delete');
 
+    });
+
+    Route::group(['prefix' => 'sales'], function () {
+        // ORDERS
+        Route::get('order','SalesOrderController@index');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

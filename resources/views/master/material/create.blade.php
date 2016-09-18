@@ -37,6 +37,14 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Kode</label>
+                    </td>
+                    <td>
+                        <input type="text" name="kode" class="form-control" required autocomplete="off" >
+                    </td>
+                </tr>
+                <tr>
                     <td></td>
                     <td>
                         <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
@@ -62,11 +70,12 @@
     $('#btn-save').click(function(){
         // cek kelengkapan data
         var nama = $('input[name=nama]').val();
+        var kode = $('input[name=kode]').val();
         
 
         if(nama != "" ){
             var formdata = $('<form>').attr('method','POST').attr('action','master/material/insert');
-            formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
+            formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
             formdata.submit();
         }else{
             alert('Lengkapi data yang kosong.');

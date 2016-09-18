@@ -39,6 +39,7 @@
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
                         <th style="width:25px;">No</th>
+                        <th class="col-sm-2 col-md-2 col-lg-2" >Kode</th>
                         <th>Nama</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
@@ -52,6 +53,9 @@
                             {{-- @endif --}}
                         </td>
                         <td class="row-to-edit" >{{$rownum++}}</td>
+                        <td class="row-to-edit" >
+                            {{$dt->kode}}
+                        </td>
                         <td class="row-to-edit" >
                             {{$dt->nama}}
                         </td>
@@ -81,6 +85,7 @@
         "columns": [
             {className: "text-center","orderable": false},
             {className: "text-right"},
+            null,
             null,
             {className: "text-center"},
             // {className: "text-center"}

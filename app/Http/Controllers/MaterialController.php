@@ -27,6 +27,7 @@ class MaterialController extends Controller
 	public function insert(Request $req){
 		\DB::table('material')
 			->insert([
+					'kode' => $req->kode,
 					'nama' => $req->nama,
 				]);
 
@@ -44,6 +45,7 @@ class MaterialController extends Controller
 		\DB::table('material')
 			->where('id',$req->id)
 			->update([
+					'kode' => $req->kode,
 					'nama' => $req->nama,
 				]);
 		return redirect('master/material');

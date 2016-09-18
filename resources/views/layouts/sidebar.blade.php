@@ -30,7 +30,7 @@
                 </ul>
             </li>
 
-            <li class="treeview {{Request::is('purchase/*') ? 'active':''}}" >
+            {{-- <li class="treeview {{Request::is('purchase/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-money"></i>
                     <span>Purchases</span>
@@ -39,7 +39,7 @@
                 <ul class="treeview-menu">
                     <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>  
                 </ul>
-            </li>
+            </li> --}}
 
             <li class="treeview {{Request::is('sales/*') ? 'active':''}}" >
                 <a href="#">
@@ -48,7 +48,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Sales Orders</a></li>  
+                    <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="sales/order"><i class="fa fa-circle-o"></i> Sales Orders</a></li>  
                 </ul>
             </li>
 
