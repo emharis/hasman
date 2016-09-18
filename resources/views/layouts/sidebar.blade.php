@@ -26,6 +26,7 @@
                     <li class="{{Request::is('master/karyawan*') ? 'active':''}}" ><a href="master/karyawan"><i class="fa fa-circle-o"></i> Karyawan</a></li>        
                     <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Supplier</a></li>        
                     <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Customer</a></li>        
+                    <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Material</a></li>        
                 </ul>
             </li>
 
@@ -58,7 +59,8 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    {{-- <li class="{{Request::is('master/lokasi*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Lokasi Galian</a></li>   --}}
+                    <li class="{{Request::is('invoice/customer-invoice*') ? 'active':''}}" ><a href="invoice/customer-bill"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>  
+                    <li class="{{Request::is('invoice/supplier-invoice*') ? 'active':''}}" ><a href="invoice/supplier-bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>  
                 </ul>
             </li>
 

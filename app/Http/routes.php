@@ -75,12 +75,12 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('armada/delete','ArmadaController@delete');
 
         // JABATAN
-        Route::get('jabatan','JabatanController@index');
-        Route::get('jabatan/create','JabatanController@create');
-        Route::post('jabatan/insert','JabatanController@insert');
-        Route::get('jabatan/edit/{id}','JabatanController@edit');
-        Route::post('jabatan/update','JabatanController@update');
-        Route::post('jabatan/delete','JabatanController@delete');
+        Route::get('jabatan','MaterialController@index');
+        Route::get('jabatan/create','MaterialController@create');
+        Route::post('jabatan/insert','MaterialController@insert');
+        Route::get('jabatan/edit/{id}','MaterialController@edit');
+        Route::post('jabatan/update','MaterialController@update');
+        Route::post('jabatan/delete','MaterialController@delete');
 
         // KARYAWAN
         Route::get('karyawan','KaryawanController@index');
@@ -105,6 +105,14 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('customer/edit/{id}','CustomerController@edit');
         Route::post('customer/update','CustomerController@update');
         Route::post('customer/delete','CustomerController@delete');
+
+        // MATERIAL
+        Route::get('material','MaterialController@index');
+        Route::get('material/create','MaterialController@create');
+        Route::post('material/insert','MaterialController@insert');
+        Route::get('material/edit/{id}','MaterialController@edit');
+        Route::post('material/update','MaterialController@update');
+        Route::post('material/delete','MaterialController@delete');
 
     });
 
