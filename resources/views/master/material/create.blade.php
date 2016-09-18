@@ -76,6 +76,7 @@
         if(nama != "" ){
             var formdata = $('<form>').attr('method','POST').attr('action','master/material/insert');
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
+            formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.submit();
         }else{
             alert('Lengkapi data yang kosong.');
