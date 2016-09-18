@@ -49,6 +49,14 @@
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>NPWP</label>
+                    </td>
+                    <td>
+                        <input type="text" name="npwp" class="form-control text-uppercase" autocomplete="off" value="{{$data->npwp}}" >
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Alamat</label>
                     </td>
                     <td>
@@ -137,6 +145,7 @@
         var id = $('input[name=id]').val();
         var nama = $('input[name=nama]').val();
         var kode = $('input[name=kode]').val();
+        var npwp = $('input[name=npwp]').val();
         var nopol = $('input[name=nopol]').val();
         var alamat = $('input[name=alamat]').val();
         var provinsi = $('input[name=provinsi]').val();
@@ -156,6 +165,7 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','id').val(id));
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
+            formdata.append($('<input>').attr('type','hidden').attr('name','npwp').val(npwp));
             formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi').val(provinsi));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));

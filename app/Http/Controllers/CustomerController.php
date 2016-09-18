@@ -27,6 +27,7 @@ class CustomerController extends Controller
 			->insert([
 					'nama' => $req->nama,
 					'kode' => $req->kode,
+					'npwp' => $req->npwp,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,
@@ -51,6 +52,7 @@ class CustomerController extends Controller
 			->update([
 					'nama' => $req->nama,
 					'kode' => $req->kode,
+					'npwp' => $req->npwp,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,

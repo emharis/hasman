@@ -27,6 +27,7 @@
                     <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Supplier</a></li>        
                     <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Customer</a></li>        
                     <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Material</a></li>        
+                    <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Alat Berat</a></li>        
                 </ul>
             </li>
 

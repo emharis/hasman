@@ -114,6 +114,14 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('material/update','MaterialController@update');
         Route::post('material/delete','MaterialController@delete');
 
+        // MATERIAL
+        Route::get('alat','AlatController@index');
+        Route::get('alat/create','AlatController@create');
+        Route::post('alat/insert','AlatController@insert');
+        Route::get('alat/edit/{id}','AlatController@edit');
+        Route::post('alat/update','AlatController@update');
+        Route::post('alat/delete','AlatController@delete');
+
     });
 
     Route::group(['prefix' => 'sales'], function () {
