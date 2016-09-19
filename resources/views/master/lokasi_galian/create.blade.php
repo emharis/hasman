@@ -49,7 +49,7 @@
                         <label>Alamat</label>
                     </td>
                     <td>
-                        <input type="text" name="keterangan" class="form-control text-uppercase" >
+                        <input type="text" name="keterangan" class="form-control " >
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +57,7 @@
                         <label>Provinsi</label>
                     </td>
                     <td>
-                        <input type="text" name="provinsi" class="form-control text-uppercase" data-id="" required>
+                        <input type="text" name="provinsi" class="form-control " data-id="" required>
                     </td>
                 </tr>
                 <tr>
@@ -65,7 +65,7 @@
                         <label>Kota/Kabupaten</label>
                     </td>
                     <td>
-                        <input type="text" name="kabupaten" class="form-control text-uppercase" data-id="" required>
+                        <input type="text" name="kabupaten" class="form-control " data-id="" required>
                     </td>
                 </tr>
                 <tr>
@@ -73,7 +73,7 @@
                         <label>Kecamatan</label>
                     </td>
                     <td>
-                        <input type="text" name="kecamatan" class="form-control text-uppercase" data-id="" required>
+                        <input type="text" name="kecamatan" class="form-control " data-id="" required>
                     </td>
                 </tr>
                 <tr>
@@ -81,7 +81,7 @@
                         <label>Desa</label>
                     </td>
                     <td>
-                        <input type="text" name="desa" class="form-control text-uppercase" data-id="" required>
+                        <input type="text" name="desa" class="form-control " data-id="" required>
                     </td>
                 </tr>
                 

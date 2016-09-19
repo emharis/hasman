@@ -68,7 +68,7 @@
                             <label>Customer</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="customer" autofocus class="form-control text-uppercase" data-customerid="" required>
+                            <input type="text" name="customer" autofocus class="form-control " data-customerid="" required>
                         </td>
                         <td class="col-lg-2" ></td>
                         <td class="col-lg-2" >
@@ -83,7 +83,7 @@
                             <label>Salesperson</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="salesperson" class="form-control text-uppercase" data-salespersonid="" required >
+                            <input type="text" name="salesperson" class="form-control " data-salespersonid="" required >
                         </td>
                         <td class="col-lg-2" ></td>
                         <td class="col-lg-2 hide" >
@@ -115,7 +115,7 @@
                     <tr class="hide" id="row-add-product"  >
                         <td class="text-right" ></td>
                         <td>
-                            <input autocomplete="off" type="text"  data-materialid="" data-kode="" class="text-uppercase form-control input-product input-sm input-clear">
+                            <input autocomplete="off" type="text"  data-materialid="" data-kode="" class=" form-control input-product input-sm input-clear">
                         </td>
                         {{-- <td>
                             <input type="text" readonly autocomplete="off" class="form-control text-right input-quantity-on-hand input-sm input-clear">

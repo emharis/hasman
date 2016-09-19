@@ -53,10 +53,19 @@
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>KTP</label>
+                    </td>
+                    <td>
+                        <input type="text" name="ktp" class="form-control"  autocomplete="off" value="{{$data->ktp}}" >
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Alamat</label>
                     </td>
                     <td>
-                        <input type="text" name="alamat" class="form-control text-uppercase" value="{{$data->alamat}}" >
+                        <input type="text" name="alamat" class="form-control " value="{{$data->alamat}}" >
                     </td>
                 </tr>
                 <tr>
@@ -64,7 +73,7 @@
                         <label>Provinsi</label>
                     </td>
                     <td>
-                        <input type="text" name="provinsi" class="form-control text-uppercase" data-id="{{$data->provinsi_id}}" value="{{$data->provinsi}}" >
+                        <input type="text" name="provinsi" class="form-control " data-id="{{$data->provinsi_id}}" value="{{$data->provinsi}}" >
                     </td>
                 </tr>
                 <tr>
@@ -72,7 +81,7 @@
                         <label>Kota/Kabupaten</label>
                     </td>
                     <td>
-                        <input type="text" name="kabupaten" class="form-control text-uppercase" data-id="{{$data->kabupaten_id}}" value="{{$data->kabupaten}}" >
+                        <input type="text" name="kabupaten" class="form-control " data-id="{{$data->kabupaten_id}}" value="{{$data->kabupaten}}" >
                     </td>
                     
                 </tr>
@@ -81,7 +90,7 @@
                         <label>Kecamatan</label>
                     </td>
                     <td>
-                        <input type="text" name="kecamatan" class="form-control text-uppercase" data-id="{{$data->kecamatan_id}}" value="{{$data->kecamatan}}" >
+                        <input type="text" name="kecamatan" class="form-control " data-id="{{$data->kecamatan_id}}" value="{{$data->kecamatan}}" >
                     </td>
                 </tr>
                 <tr>
@@ -89,7 +98,7 @@
                         <label>Desa</label>
                     </td>
                     <td>
-                        <input type="text" name="desa" class="form-control text-uppercase" data-id="{{$data->desa_id}}" value="{{$data->desa}}" >
+                        <input type="text" name="desa" class="form-control " data-id="{{$data->desa_id}}" value="{{$data->desa}}" >
                     </td>
                 </tr>
                 <tr>
@@ -106,7 +115,7 @@
                         <label>Telp</label>
                     </td>
                     <td>
-                        <input type="text" name="telp" class="form-control text-uppercase" data-id="" value="{{$data->telp}}" >
+                        <input type="text" name="telp" class="form-control " data-id="" value="{{$data->telp}}" >
                     </td>
                     <td>
                         <input type="file" name="foto" accept="image/*">
@@ -139,6 +148,7 @@
         var id = $('input[name=id]').val();
         var nama = $('input[name=nama]').val();
         var kode = $('input[name=kode]').val();
+        var ktp = $('input[name=ktp]').val();
         var alamat = $('input[name=alamat]').val();
         var provinsi = $('input[name=provinsi]').val();
         var provinsi_id = $('input[name=provinsi]').data('id');
@@ -158,6 +168,7 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','id').val(id));
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
+            formdata.append($('<input>').attr('type','hidden').attr('name','ktp').val(ktp));
             formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi').val(provinsi));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));

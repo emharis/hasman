@@ -52,7 +52,7 @@
                         <label>Alamat</label>
                     </td>
                     <td>
-                        <input type="text" name="keterangan" class="form-control text-uppercase" value="{{$data->keterangan}}">
+                        <input type="text" name="keterangan" class="form-control " value="{{$data->keterangan}}">
                     </td>
                 </tr>
                 <tr>
@@ -60,7 +60,7 @@
                         <label>Provinsi</label>
                     </td>
                     <td>
-                        <input type="text" name="provinsi" class="form-control text-uppercase" data-id="{{$data->provinsi_id}}" value="{{$data->provinsi}}" required>
+                        <input type="text" name="provinsi" class="form-control " data-id="{{$data->provinsi_id}}" value="{{$data->provinsi}}" required>
                     </td>
                 </tr>
                 <tr>
@@ -68,7 +68,7 @@
                         <label>Kota/Kabupaten</label>
                     </td>
                     <td>
-                        <input type="text" name="kabupaten" class="form-control text-uppercase" data-id="{{$data->kabupaten_id}}" value="{{$data->kabupaten}}" required>
+                        <input type="text" name="kabupaten" class="form-control " data-id="{{$data->kabupaten_id}}" value="{{$data->kabupaten}}" required>
                     </td>
                 </tr>
                 <tr>
@@ -76,7 +76,7 @@
                         <label>Kecamatan</label>
                     </td>
                     <td>
-                        <input type="text" name="kecamatan" class="form-control text-uppercase" data-id="{{$data->kecamatan_id}}" value="{{$data->kecamatan}}" required>
+                        <input type="text" name="kecamatan" class="form-control " data-id="{{$data->kecamatan_id}}" value="{{$data->kecamatan}}" required>
                     </td>
                 </tr>
                 <tr>
@@ -84,7 +84,7 @@
                         <label>Desa</label>
                     </td>
                     <td>
-                        <input type="text" name="desa" class="form-control text-uppercase" data-id="{{$data->desa_id}}" value="{{$data->desa}}" required>
+                        <input type="text" name="desa" class="form-control " data-id="{{$data->desa_id}}" value="{{$data->desa}}" required>
                     </td>
                 </tr>
                 

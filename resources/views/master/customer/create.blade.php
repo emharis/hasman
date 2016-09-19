@@ -41,7 +41,7 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control text-uppercase" required autocomplete="off" >
+                        <input type="text" name="kode" class="form-control " required autocomplete="off" >
                     </td>
                 </tr>
                 <tr>
@@ -49,7 +49,15 @@
                         <label>NPWP</label>
                     </td>
                     <td>
-                        <input type="text" name="npwp" class="form-control text-uppercase" autocomplete="off" >
+                        <input type="text" name="npwp" class="form-control " autocomplete="off" >
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Owner</label>
+                    </td>
+                    <td>
+                        <input type="text" name="owner" class="form-control " autocomplete="off" >
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +65,7 @@
                         <label>Alamat</label>
                     </td>
                     <td>
-                        <input type="text" name="alamat" class="form-control text-uppercase" >
+                        <input type="text" name="alamat" class="form-control " >
                     </td>
                 </tr>
                 <tr>
@@ -65,7 +73,7 @@
                         <label>Provinsi</label>
                     </td>
                     <td>
-                        <input type="text" name="provinsi" class="form-control text-uppercase" data-id="" >
+                        <input type="text" name="provinsi" class="form-control " data-id="" >
                     </td>
                 </tr>
                 <tr>
@@ -73,7 +81,7 @@
                         <label>Kota/Kabupaten</label>
                     </td>
                     <td>
-                        <input type="text" name="kabupaten" class="form-control text-uppercase" data-id="" >
+                        <input type="text" name="kabupaten" class="form-control " data-id="" >
                     </td>
                     
                 </tr>
@@ -82,7 +90,7 @@
                         <label>Kecamatan</label>
                     </td>
                     <td>
-                        <input type="text" name="kecamatan" class="form-control text-uppercase" data-id="" >
+                        <input type="text" name="kecamatan" class="form-control " data-id="" >
                     </td>
                 </tr>
                 <tr>
@@ -90,7 +98,7 @@
                         <label>Desa</label>
                     </td>
                     <td>
-                        <input type="text" name="desa" class="form-control text-uppercase" data-id="" >
+                        <input type="text" name="desa" class="form-control " data-id="" >
                     </td>
                 </tr>
                 <tr>
@@ -142,6 +150,7 @@
         var nama = $('input[name=nama]').val();
         var kode = $('input[name=kode]').val();
         var npwp = $('input[name=npwp]').val();
+        var owner = $('input[name=owner]').val();
         var nopol = $('input[name=nopol]').val();
         var alamat = $('input[name=alamat]').val();
         var provinsi = $('input[name=provinsi]').val();
@@ -160,6 +169,8 @@
             var formdata = $('<form>').attr('method','POST').attr('action','master/customer/insert');
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
+            formdata.append($('<input>').attr('type','hidden').attr('name','npwp').val(npwp));
+            formdata.append($('<input>').attr('type','hidden').attr('name','owner').val(owner));
             formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi').val(provinsi));
             formdata.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));

@@ -34,6 +34,7 @@ class KaryawanController extends Controller
 			->insertGetId([
 					'nama' => $req->nama,
 					'kode' => $req->kode,
+					'ktp' => $req->ktp,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,
@@ -86,6 +87,7 @@ class KaryawanController extends Controller
 			->update([
 					'nama' => $req->nama,
 					'kode' => $req->kode,
+					'ktp' => $req->ktp,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,

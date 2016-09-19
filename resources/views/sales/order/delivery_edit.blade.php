@@ -157,7 +157,7 @@
                             <label>Salesperson</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="salesperson" class="form-control text-uppercase" data-salespersonid="" required >
+                            <input type="text" name="salesperson" class="form-control " data-salespersonid="" required >
                         </td>
                         <td class="col-lg-2" ></td>
                         <td class="col-lg-2 hide" >

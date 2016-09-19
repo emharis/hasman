@@ -44,7 +44,7 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control text-uppercase" required autocomplete="off" value="{{$data->kode}}" >
+                        <input type="text" name="kode" class="form-control " required autocomplete="off" value="{{$data->kode}}" >
                     </td>
                 </tr>
                 <tr>
@@ -52,7 +52,7 @@
                         <label>Nopol</label>
                     </td>
                     <td>
-                        <input type="text" name="nopol" class="form-control text-uppercase" data-id="" required value="{{$data->nopol}}">
+                        <input type="text" name="nopol" class="form-control " data-id="" required value="{{$data->nopol}}">
                     </td>
                 </tr>
                 <tr>

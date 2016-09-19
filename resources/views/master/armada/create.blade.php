@@ -41,7 +41,7 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control text-uppercase" required autocomplete="off" >
+                        <input type="text" name="kode" class="form-control " required autocomplete="off" >
                     </td>
                 </tr>
                 <tr>
@@ -49,7 +49,7 @@
                         <label>Nopol</label>
                     </td>
                     <td>
-                        <input type="text" name="nopol" class="form-control text-uppercase" data-id="" required>
+                        <input type="text" name="nopol" class="form-control " data-id="" required>
                     </td>
                 </tr>
                 <tr>
