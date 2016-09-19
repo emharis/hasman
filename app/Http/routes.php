@@ -132,6 +132,9 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/validate/{id}','SalesOrderController@validateOrder');
         Route::post('order/insert','SalesOrderController@insert');
         Route::post('order/update','SalesOrderController@update');
+        Route::get('order/delivery/{so_id}','SalesOrderController@delivery');
+        Route::get('order/delivery/edit/{delivery_id}','SalesOrderController@deliveryEdit');
+        Route::post('order/delivery/update','SalesOrderController@deliveryUpdate');
     });
 
     Route::group(['prefix' => 'delivery'], function () {

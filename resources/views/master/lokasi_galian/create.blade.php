@@ -105,7 +105,7 @@
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
-    // alert('ok');
+
     // SET AUTOCOMPLETE PROVINSI
     $('input[name=provinsi]').autocomplete({
         serviceUrl: 'api/get-auto-complete-provinsi',
@@ -162,7 +162,7 @@
     });
     // END OF SET AUTOCOMPLETE KECAMATAN
 
-    // SET AUTOCOMPLETE KECAMATAN
+    // SET AUTOCOMPLETE DESA
     $('input[name=desa]').autocomplete({
         serviceUrl: 'api/get-auto-complete-desa',
         params: {  
@@ -182,7 +182,7 @@
         }
 
     });
-    // END OF SET AUTOCOMPLETE KECAMATAN
+    // END OF SET AUTOCOMPLETE DESA
 
     // SAVE LOKASI GALIAN
     // $('form').ajaxForm({

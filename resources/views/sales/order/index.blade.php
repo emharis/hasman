@@ -42,29 +42,42 @@
                         <th>Nomor Order</th>
                         <th>Tanggal</th>
                         <th>Customer</th>
-                        <th>Pekerjaan</th>
-                        <th>Total</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach($data as $dt)
+                    @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         <td>
-                            @if($dt->ref == 0)
+                            {{-- @if($dt->ref == 0) --}}
                                 <input type="checkbox" class="ck_row" >
-                            @endif
+                            {{-- @endif --}}
                         </td>
                         <td class="row-to-edit" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
-                            {{$dt->nama}}
+                            {{$dt->order_number}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->order_date_formatted}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->customer}}
+                        </td>
+                        <td class="row-to-edit" >
+                            @if($dt->status == 'O')
+                                OPEN
+                            @elseif($dt->status == 'V')
+                                VALIDATED
+                            @else
+                                DONE
+                            @endif    
                         </td>
                         <td >
                             <a class="btn btn-primary btn-xs" href="sales/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
         </div><!-- /.box-body -->
@@ -86,8 +99,6 @@
         "columns": [
             {className: "text-center","orderable": false},
             {className: "text-right"},
-            null,
-            null,
             null,
             null,
             null,

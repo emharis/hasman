@@ -52,7 +52,7 @@ class ApiController extends Controller
 
 	public function getAutoCompleteArmada(Request $req){
 
-		$data = \DB::select('select id as data,concat("[",kode,"] ",nama," ",nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama 
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama," - ",nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama 
 				from VIEW_ARMADA
 				where karyawan_id is not NULL and (
 				nama like "%'.$req->get('nama').'%" 

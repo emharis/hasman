@@ -43,10 +43,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >{{$data_master->order_number}}</h4></label> --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
-
-             <a class="btn btn-primary btn-sm" style="margin-left:10px;" id="btn-validate" href="sales/order/set-to-done/{{$data_master->id}}" >Set to done</a>
+            
+             <a class="btn btn-primary btn-sm" id="btn-validate" href="sales/order/set-to-done/{{$data_master->id}}" >Set to done</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
@@ -63,6 +61,7 @@
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
+            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
             <input type="hidden" name="sales_order_id" value="{{$data_master->id}}">
             <div class="row" >
                 <div class="col-sm-8 col-md-8 col-lg-8">
@@ -94,7 +93,7 @@
                     </a>
                     
                     <a class="btn btn-app pull-right" href="sales/order/delivery/{{$data_master->id}}" >
-                        <span class="badge bg-green">1</span>
+                        <span class="badge bg-green">{{$delivery_order_count}}</span>
                         <i class="fa fa-truck"></i> Delivery
                     </a>
 

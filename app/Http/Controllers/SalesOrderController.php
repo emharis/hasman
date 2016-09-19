@@ -9,9 +9,10 @@ use App\Http\Controllers\Controller;
 class SalesOrderController extends Controller
 {
 	public function index(){
+		$data = \DB::table('VIEW_SALES_ORDER')->orderBy('order_date','desc')->get();
 		
 		return view('sales.order.index',[
-				// 'data' => $data
+				'data' => $data
 			]);
 	}
 
@@ -71,9 +72,11 @@ class SalesOrderController extends Controller
 				'data_detail' => $data_detail,
 			]);
 		}elseif($data_master->status = 'V'){
+			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
 			return view('sales.order.validated',[
 					'data_master' => $data_master,
 					'data_detail' => $data_detail,
+					'delivery_order_count' => $delivery_order_count,
 				]);
 		}
 
@@ -120,11 +123,74 @@ class SalesOrderController extends Controller
 	}
 
 	public function validateOrder($id){
-		\DB::table('sales_order')->where('id',$id)->update([
+		return \DB::transaction(function()use($id){
+			\DB::table('sales_order')->where('id',$id)->update([
 				'status' => 'V'
 			]);
+
+			// generate & insert delivery order for this sales order
+			$sales_order_detail = \DB::table('sales_order_detail')->where('sales_order_id',$id)->get();
+			foreach($sales_order_detail as $dt){
+				// insert delivery order 
+				for($i=0;$i<$dt->qty;$i++){
+					// generate delivery order number
+					$do_counter = \DB::table('appsetting')->where('name','do_counter')->first()->value;
+            		$do_prefix = \DB::table('appsetting')->where('name','do_prefix')->first()->value;
+            		$do_number = $do_prefix . '/' . date('Y') . '/000' . $do_counter++;
+
+		            // update so_counter
+		            \DB::table('appsetting')->where('name','do_counter')->update(['value'=>$do_counter]);
+
+		            // insert delivery order
+					\DB::table('delivery_order')
+					->insert([
+							'sales_order_id' => $id,
+							'delivery_order_number' => $do_number,
+							'material_id' => $dt->material_id,
+							'qty' => 1,
+							'status' => 'O',
+						]);
+				}
+			}
 		return redirect()->back();
+
+		});
+		
 	}
 
+	public function delivery($so_id){
+		$sales_order = \DB::table('VIEW_SALES_ORDER')->find($so_id);
+		$sales_order_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')
+								->where('sales_order_id',$so_id)->get();
+		$delivery_order = \DB::table('VIEW_DELIVERY_ORDER')->where('sales_order_id',$so_id)->get();
+		return view('sales.order.delivery',[
+				'sales_order' => $sales_order,
+				'sales_order_detail' => $sales_order_detail,
+				'delivery_order' => $delivery_order,
+			]);
+	}
+
+	public function deliveryEdit($delivery_id){
+		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
+		return view('sales.order.delivery_edit',[
+				'data' => $data
+			]);
+	}
+
+	public function deliveryUpdate(Request $req){
+		return \DB::transaction(function()use($req){
+			\DB::table('delivery_order')
+				->where('id',$req->delivery_order_id)
+				->update([
+						'armada_id' => $req->armada_id,
+						'lokasi_galian_id' => $req->lokasi_galian_id,
+						'desa_id' => $req->desa_id,
+						'alamat' => $req->alamat,
+						'keterangan' => $req->keterangan,
+					]);
+
+			return redirect()->back();
+		});
+	}
 
 }
