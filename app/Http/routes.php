@@ -127,12 +127,28 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::group(['prefix' => 'sales'], function () {
         // ORDERS
         Route::get('order','SalesOrderController@index');
+        Route::get('order/create','SalesOrderController@create');
+        Route::get('order/edit/{id}','SalesOrderController@edit');
+        Route::get('order/validate/{id}','SalesOrderController@validateOrder');
+        Route::post('order/insert','SalesOrderController@insert');
+        Route::post('order/update','SalesOrderController@update');
+    });
+
+    Route::group(['prefix' => 'delivery'], function () {
+        // ORDERS
+        Route::get('order','DeliveryOrderController@index');
+        Route::get('order/create','DeliveryOrderController@create');
+        
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');
     Route::get('api/get-auto-complete-kabupaten','ApiController@getAutoCompleteKabupaten');
     Route::get('api/get-auto-complete-kecamatan','ApiController@getAutoCompleteKecamatan');
     Route::get('api/get-auto-complete-desa','ApiController@getAutoCompleteDesa');
+    Route::get('api/get-auto-complete-customer','ApiController@getAutoCompleteCustomer');
+    Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
+    Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
+    Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
 });
 
 

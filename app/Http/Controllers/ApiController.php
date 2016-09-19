@@ -36,4 +36,41 @@ class ApiController extends Controller
 		return json_encode($data_res);	
 	}
 
+	public function getAutoCompleteCustomer(Request $req){
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from customer where nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+		
+		return json_encode($data_res);	
+	}
+
+	public function getAutoCompleteLokasiGalian(Request $req){
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from lokasi_galian where nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+		
+		return json_encode($data_res);	
+	}
+
+	public function getAutoCompleteArmada(Request $req){
+
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama," ",nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama 
+				from VIEW_ARMADA
+				where karyawan_id is not NULL and (
+				nama like "%'.$req->get('nama').'%" 
+				or kode like "%'.$req->get('nama').'%"
+				or kode_karyawan like "%'.$req->get('nama').'%"
+				or karyawan like "%'.$req->get('nama').'%"
+				)');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+		
+		return json_encode($data_res);	
+	}
+
+	public function getAutoCompleteMaterial(Request $req){
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from material where nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+		
+		return json_encode($data_res);	
+	}
+
+
 }

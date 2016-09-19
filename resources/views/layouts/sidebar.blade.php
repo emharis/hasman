@@ -53,6 +53,17 @@
                 </ul>
             </li>
 
+            <li class="treeview {{Request::is('sales/*') ? 'active':''}}" >
+                <a href="#">
+                    <i class="fa fa-truck"></i>
+                    <span>Delivery</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{Request::is('delivery/order*') ? 'active':''}}" ><a href="delivery/order"><i class="fa fa-circle-o"></i> Delivery Order</a></li>  
+                </ul>
+            </li>
+
             <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-newspaper-o"></i>
