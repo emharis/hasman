@@ -25,10 +25,6 @@
         padding-right: 5px;
         padding-left: 5px;
     }
-
-    #table-master-so tr td{
-        vertical-align: top;
-    }
 </style>
 
 @append
@@ -69,7 +65,7 @@
             <input type="hidden" name="sales_order_id" value="{{$data_master->id}}">
             <div class="row" >
                 <div class="col-sm-8 col-md-8 col-lg-8">
-                    <table class="table" id="table-master-so" >
+                    <table class="table" >
                         <tbody>
                             <tr>
                                 <td class="col-lg-2">
@@ -85,18 +81,6 @@
                                 <td class="col-lg-2" >
                                     {{$data_master->order_date_formatted}}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Pekerjaan</label>
-                                </td>
-                                <td>
-                                    {{$data_master->pekerjaan}}<br/>
-                                    {{$data_master->alamat_pekerjaan .', ' . $data_master->desa . ', ' . $data_master->kecamatan}} <br/>
-                                    {{$data_master->kabupaten . ', ' . $data_master->provinsi }}
-                                </td>
-                                <td></td>
-                                <td></td>
                             </tr>
                         </tbody>
                     </table>

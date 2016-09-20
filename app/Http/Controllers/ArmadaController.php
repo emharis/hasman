@@ -16,9 +16,16 @@ class ArmadaController extends Controller
 	}
 
 	public function create(){
-		
-		return view('master.armada.create',[
+		$drivers = \DB::select('select * 
+					from VIEW_KARYAWAN 
+					where VIEW_KARYAWAN.id not in (select karyawan_id from armada where karyawan_id is not null )
+					');
+		$selectDriver = [
+				'0' => 'NONE'
+			];
 
+		return view('master.armada.create',[
+				'selectDriver' => $selectDriver,
 			]);
 	}
 
@@ -27,7 +34,8 @@ class ArmadaController extends Controller
 			->insert([
 					'nama' => $req->nama,
 					'kode' => $req->kode,
-					'nopol' => $req->nopol
+					'nopol' => $req->nopol,
+					'karyawan_id' => $req->driver,
 				]);
 
 		return redirect('master/armada');

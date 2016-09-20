@@ -35,36 +35,57 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">
-                            <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
-                        </th>
                         <th style="width:25px;">No</th>
-                        <th>Nomor Order</th>
-                        <th>Tanggal</th>
-                        <th>Customer</th>
-                        <th>Pekerjaan</th>
-                        <th>Total</th>
+                        <th>DO Number</th>
+                        <th>Material</th>
+                        <th>Driver</th>
+                        <th>Armada</th>
+                        <th>Lokasi Galian</th>
+                        <th>Tujuan</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach($data as $dt)
-                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
-                        <td>
-                            @if($dt->ref == 0)
-                                <input type="checkbox" class="ck_row" >
-                            @endif
-                        </td>
-                        <td class="row-to-edit" >{{$rownum++}}</td>
-                        <td class="row-to-edit" >
-                            {{$dt->nama}}
-                        </td>
-                        <td >
-                            <a class="btn btn-primary btn-xs" href="delivery/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
-                        </td>
-                    </tr>
-                    @endforeach --}}
+                   @foreach($data as $dt)
+                        @for($i=0;$i<$dt->qty;$i++)
+                            <tr>
+                                <td>{{$rownum++}}</td>
+                                <td>{{$dt->delivery_order_number}}</td>
+                                <td>
+                                    {{'['.$dt->kode_material.'] '.$dt->material}}
+                                </td>
+                                <td>
+                                    @if($dt->karyawan)
+                                        {{'['.$dt->kode_karyawan . '] ' . $dt->karyawan}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($dt->armada)
+                                        {{'[' . $dt->kode_armada . '] ' . $dt->armada . ' - ' . $dt->nopol}}
+                                    @endif
+                                </td>
+                                <td>
+                                    {{$dt->lokasi_galian}}
+                                </td>
+                                <td>
+                                    {{$dt->alamat}}
+                                </td>
+                                <td>
+                                    @if($dt->status == 'D')
+                                        Draft
+                                    @elseif($dt->status == 'O')
+                                        Open
+                                    @else
+                                        Delivered
+                                    @endif
+                                </td>
+                                <td class="text-center" >
+                                    <a class="btn btn-primary btn-xs" href="sales/order/delivery/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                                </td>
+                            </tr>
+                        @endfor
+                   @endforeach
                 </tbody>
             </table>
         </div><!-- /.box-body -->

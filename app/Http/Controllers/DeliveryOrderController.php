@@ -9,9 +9,12 @@ use App\Http\Controllers\Controller;
 class DeliveryOrderController extends Controller
 {
 	public function index(){
-		
+		$data = \DB::table('VIEW_DELIVERY_ORDER')
+			->orderBy('order_date','desc')
+			->get();
+			
 		return view('delivery.order.index',[
-				// 'data' => $data
+				'data' => $data
 			]);
 	}
 

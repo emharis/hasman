@@ -59,6 +59,7 @@ class ApiController extends Controller
 				or kode like "%'.$req->get('nama').'%"
 				or kode_karyawan like "%'.$req->get('nama').'%"
 				or karyawan like "%'.$req->get('nama').'%"
+				or nopol like "%'.$req->get('nama').'%"
 				)');
 		$data_res = ['query'=>'Unit','suggestions' => $data];
 		
@@ -70,6 +71,26 @@ class ApiController extends Controller
 		$data_res = ['query'=>'Unit','suggestions' => $data];
 		
 		return json_encode($data_res);	
+	}
+
+	public function getSelectCustomer(){
+		$data = \DB::table('VIEW_CUSTOMER')->get();
+		$selectCustomer = [];
+		foreach($data as $dt){
+			$selectCustomer[$dt->id] = '[' . $dt->kode . '] ' . $dt->nama;
+		}
+
+		return json_encode($selectCustomer);
+	}
+
+	public function getSelectPekerjaan($customer_id){
+		$data = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$customer_id)->get();
+		$selectPekerjaan = [];
+		foreach($data as $dt){
+			$selectPekerjaan[$dt->id] =  $dt->nama;
+		}
+
+		return json_encode($selectPekerjaan);
 	}
 
 

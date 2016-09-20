@@ -42,6 +42,7 @@
                         <th>Nomor Order</th>
                         <th>Tanggal</th>
                         <th>Customer</th>
+                        <th>Pekerjaan</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
@@ -63,6 +64,9 @@
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->customer}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->pekerjaan}}
                         </td>
                         <td class="row-to-edit" >
                             @if($dt->status == 'O')
@@ -99,6 +103,7 @@
         "columns": [
             {className: "text-center","orderable": false},
             {className: "text-right"},
+            null,
             null,
             null,
             null,

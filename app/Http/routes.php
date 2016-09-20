@@ -135,6 +135,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/delivery/{so_id}','SalesOrderController@delivery');
         Route::get('order/delivery/edit/{delivery_id}','SalesOrderController@deliveryEdit');
         Route::post('order/delivery/update','SalesOrderController@deliveryUpdate');
+        Route::post('order/create-pekerjaan','SalesOrderController@createPekerjaan');
     });
 
     Route::group(['prefix' => 'delivery'], function () {
@@ -152,6 +153,8 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
+    Route::get('api/get-select-customer','ApiController@getSelectCustomer');
+    Route::get('api/get-select-pekerjaan/{customer_id}','ApiController@getSelectPekerjaan');
 });
 
 

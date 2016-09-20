@@ -135,7 +135,7 @@
     }
 
     // Row Clicked
-    $('.row-to-edit').click(function(){        
+    $(document).on('click','.row-to-edit',function(){        
         var row = $(this).parent();        
         var data_id = row.data('id');            
         location.href = 'master/karyawan/edit/' + data_id ;        

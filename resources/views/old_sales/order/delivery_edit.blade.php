@@ -25,11 +25,6 @@
         padding-right: 5px;
         padding-left: 5px;
     }
-
-    #table-do-master tr td{
-        vertical-align: top;
-    }
-
 </style>
 
 @append
@@ -81,7 +76,7 @@
             @endif
 
             <input type="hidden" name="delivery_order_id" value="{{$data->id}}">
-            <table class="table" id="table-do-master" >
+            <table class="table" >
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
@@ -108,38 +103,36 @@
                             <label>Delivery Date</label>
                         </td>
                         <td>
-                            <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : date('d-m-Y')}}">
+                            <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted}}">
                         </td>
                         
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Pekerjaan</label>
-                        </td>
-                        <td>
-                            {{$data->pekerjaan}}<br/>
-                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                            {{$data->kabupaten . ', ' . $data->provinsi }}
-                        </td>
-                        <td>
-                            <label>Lokasi Galian</label>
-                        </td>
-                        <td>
-                            <input type="text" name="lokasi_galian" class="form-control" value="{{$data->lokasi_galian ?  '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian : ''}}" autofocus >
-                            <input type="hidden" name="lokasi_galian_id" value="{{$data->lokasi_galian_id}}" >
-                        </td>
                     </tr>
                     <tr>
                         <td>
                             <label>Armada/Driver</label>
                         </td>
                         <td colspan="3" >
-                            <input type="text" name="armada" class="form-control" value="{{ $data->armada ? '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan  : ''}}" >
+                            <input type="text" name="armada" class="form-control" value="{{ $data->armada ? '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan  : ''}}" autofocus>
                             <input type="hidden" name="armada_id" value="{{$data->armada_id}}" >
                         </td>
                     </tr>
-                    
-                    {{-- <tr>
+                    <tr>
+                        <td>
+                            <label>Lokasi Galian</label>
+                        </td>
+                        <td>
+                            <input type="text" name="lokasi_galian" class="form-control" value="{{$data->lokasi_galian ?  '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian : ''}}" >
+                            <input type="hidden" name="lokasi_galian_id" value="{{$data->lokasi_galian_id}}" >
+                        </td>
+                        <td>
+                            <label>Alamat Pengiriman</label>
+                        </td>
+                        <td>
+                            <input type="text" name="alamat" class="form-control" value="{{$data->alamat}}" >
+                        </td>
+                        
+                    </tr>
+                    <tr>
                         <td>
                             <label>Provinsi</label>
                         </td>
@@ -171,7 +164,7 @@
                             <input type="text" name="desa" class="form-control" value="{{$data->desa}}" >
                             <input type="hidden" name="desa_id" value="{{$data->desa_id}}" >
                         </td>
-                    </tr> --}}
+                    </tr>
                     <tr>
                         <td colspan="4" >
                             <textarea name="keterangan" class="form-control" rows="2" placeholder="Keterangan" >{{$data->keterangan}}</textarea>
@@ -348,33 +341,32 @@
         var delivery_order_id = $('input[name=delivery_order_id]').val();
         var armada_id = $('input[name=armada_id]').val();
         var lokasi_galian_id = $('input[name=lokasi_galian_id]').val();
-        // var alamat = $('input[name=alamat]').val();
-        // var provinsi_id = $('input[name=provinsi_id]').val();
-        // var kabupaten_id = $('input[name=kabupaten_id]').val();
-        // var kecamatan_id = $('input[name=kecamatan_id]').val();
-        // var desa_id = $('input[name=desa_id]').val();
+        var alamat = $('input[name=alamat]').val();
+        var provinsi_id = $('input[name=provinsi_id]').val();
+        var kabupaten_id = $('input[name=kabupaten_id]').val();
+        var kecamatan_id = $('input[name=kecamatan_id]').val();
+        var desa_id = $('input[name=desa_id]').val();
         var keterangan = $('input[name=keterangan]').val();
         var delivery_date = $('input[name=delivery_date]').val();
 
         if(armada_id != ""
             && lokasi_galian_id != ""
-            && delivery_date != ""
-            // && alamat != ""
-            // && provinsi_id != ""
-            // && kabupaten_id != ""
-            // && kecamatan_id != ""
-            // && desa_id != ""
+            && alamat != ""
+            && provinsi_id != ""
+            && kabupaten_id != ""
+            && kecamatan_id != ""
+            && desa_id != ""
             ){
 
             var doForm = $('<form>').attr('method','POST').attr('action','sales/order/delivery/update');
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_order_id').val(delivery_order_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','armada_id').val(armada_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','lokasi_galian_id').val(lokasi_galian_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','kabupaten_id').val(kabupaten_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','kecamatan_id').val(kecamatan_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
+            doForm.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
+            doForm.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));
+            doForm.append($('<input>').attr('type','hidden').attr('name','kabupaten_id').val(kabupaten_id));
+            doForm.append($('<input>').attr('type','hidden').attr('name','kecamatan_id').val(kecamatan_id));
+            doForm.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','keterangan').val(keterangan));
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_date').val(delivery_date));
             doForm.submit();

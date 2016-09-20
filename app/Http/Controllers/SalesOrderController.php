@@ -17,7 +17,14 @@ class SalesOrderController extends Controller
 	}
 
 	public function create(){
+		// $pekerjaan = \DB::table('pekerjaan')->get();
+		// $selectPekerjaan = [];
+		// foreach($pekerjaan as $dt){
+		// 	$selectPekerjaan[$dt->id] = $dt->nama;
+		// }
+
 		return view('sales.order.create',[
+				// 'selectPekerjaan' => $selectPekerjaan
 			]);
 	}
 
@@ -45,7 +52,8 @@ class SalesOrderController extends Controller
 								->insertGetId([
 										'order_number' => $so_number,
 										'order_date' => $fix_order_date,
-										'customer_id' => $so_master->customer_id
+										'customer_id' => $so_master->customer_id,
+										'pekerjaan_id' => $so_master->pekerjaan_id,
 									]);
 			// insert detail sales order
 			foreach($so_material as $dt){
@@ -66,16 +74,24 @@ class SalesOrderController extends Controller
 		$data_master = \DB::table('VIEW_SALES_ORDER')->find($id);
 		$data_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')->where('sales_order_id',$id)->get();
 
+		$pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$data_master->customer_id)->get();
+		$select_pekerjaan = [];
+		foreach($pekerjaan as $dt){
+			$select_pekerjaan[$dt->id] = $dt->nama;
+		}
+
 		if($data_master->status == 'O'){
 			return view('sales.order.edit',[
 				'data_master' => $data_master,
 				'data_detail' => $data_detail,
+				'select_pekerjaan' => $select_pekerjaan
 			]);
 		}elseif($data_master->status = 'V'){
 			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
 			return view('sales.order.validated',[
 					'data_master' => $data_master,
 					'data_detail' => $data_detail,
+					'select_pekerjaan' => $select_pekerjaan,
 					'delivery_order_count' => $delivery_order_count,
 				]);
 		}
@@ -100,7 +116,8 @@ class SalesOrderController extends Controller
 				->where('id',$so_master->sales_order_id)
 				->update([
 						'order_date' => $fix_order_date,
-						'customer_id' => $so_master->customer_id
+						'customer_id' => $so_master->customer_id,
+						'pekerjaan_id' => $so_master->pekerjaan_id,
 					]);
 			// delete data material yang lama
 			\DB::table('sales_order_detail')
@@ -148,7 +165,7 @@ class SalesOrderController extends Controller
 							'delivery_order_number' => $do_number,
 							'material_id' => $dt->material_id,
 							'qty' => 1,
-							'status' => 'O',
+							'status' => 'D',
 						]);
 				}
 			}
@@ -179,18 +196,42 @@ class SalesOrderController extends Controller
 
 	public function deliveryUpdate(Request $req){
 		return \DB::transaction(function()use($req){
+			// generate tanggal
+            $delivery_date = $req->delivery_date;
+            $arr_tgl = explode('-',$delivery_date);
+            $fix_delivery_date = new \DateTime();
+            $fix_delivery_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]); 
+
 			\DB::table('delivery_order')
 				->where('id',$req->delivery_order_id)
 				->update([
 						'armada_id' => $req->armada_id,
 						'lokasi_galian_id' => $req->lokasi_galian_id,
-						'desa_id' => $req->desa_id,
-						'alamat' => $req->alamat,
+						// 'desa_id' => $req->desa_id,
+						// 'alamat' => $req->alamat,
 						'keterangan' => $req->keterangan,
+						'status' => 'O',
+						'delivery_date' => $fix_delivery_date,
 					]);
 
 			return redirect()->back();
 		});
 	}
+
+	public function createPekerjaan(Request $req){
+		// \DB::table('pekerjaan')
+		$data_id = \DB::table('pekerjaan')->insertGetId([
+				'nama' => $req->nama,
+				'alamat' => $req->alamat,
+				'customer_id' => $req->customer_id,
+				'desa_id' => $req->desa_id,
+			]);
+		$data = \DB::table('VIEW_PEKERJAAN')
+
+				->find($data_id);
+
+		echo json_encode($data);
+	}
+
 
 }

@@ -14,11 +14,7 @@
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="css/ionicons.min.css">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="css/AdminLTE.min.css">
-        <!-- AdminLTE Skins. Choose a skin from the css/skins
-             folder instead of downloading all of them to reduce the load. -->
-        <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+        
         <!-- FAVICON -->
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <!-- Bootstrap Arrow Button -->
@@ -109,6 +105,12 @@
         </style>
 
         @yield('styles')
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="css/skins/_all-skins.min.css">
     </head>
     <body class="hold-transition skin-blue sidebar-mini {{$sidebar_collapse->value == '1' ? 'sidebar-collapse' : ''}}">
         <!-- Site wrapper -->

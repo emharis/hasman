@@ -2,6 +2,7 @@
 
 @section('styles')
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
 <style>
     .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
     .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
@@ -39,8 +40,6 @@
 
 <!-- Main content -->
 <section class="content">
-
-    <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >New</h4></label> --}}
@@ -77,6 +76,26 @@
                         <td class="col-lg-2" >
                             <input type="text" name="tanggal" class="input-tanggal form-control" value="{{date('d-m-Y')}}" required>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Pekerjaan</label>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <!-- /btn-group -->
+                                {!! Form::select('pekerjaan',[],null,['class'=>'form-control select2','required','disabled']) !!}    
+
+                                 <div class="input-group-btn">
+                                  <button type="button" class="btn btn-primary disabled" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+
+
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     {{-- <tr>
                         <td class="col-lg-2">
@@ -204,6 +223,76 @@
 
 </section><!-- /.content -->
 
+<div class="example-modal">
+    <div class="modal" id="modal-pekerjaan">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Create Pekerjaan</h4>
+          </div>
+          <form name="form_create_pekerjaan" method="POST" action="sales/order/create-pekerjaan" >
+            <input type="hidden" name="customer_id"  >
+            <div class="modal-body">
+                <table class="table table-bordered table-condensed" >
+                    <tbody>
+                        <tr>
+                            <td>Nama Pekerjaan</td>
+                            <td>
+                                <input type="text" name="nama" class="form-control" autocomplete="off" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>
+                                <input type="text" name="alamat" class="form-control" autocomplete="off">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Provinsi</td>
+                            <td>
+                                <input type="text" name="provinsi" class="form-control" autocomplete="off" required >
+                                <input type="hidden" name="provinsi_id" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kabupaten</td>
+                            <td>
+                                <input type="text" name="kabupaten" class="form-control" autocomplete="off" required>
+                                <input type="hidden" name="kabupaten_id" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kecamatan</td>
+                            <td>
+                                <input type="text" name="kecamatan" class="form-control" autocomplete="off" required>
+                                <input type="hidden" name="kecamatan_id" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Desa</td>
+                            <td>
+                                <input type="text" name="desa" class="form-control" autocomplete="off" required>
+                                <input type="hidden" name="desa_id" class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+              </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+<!-- /.modal -->
+</div>
+
 @stop
 
 @section('scripts')
@@ -213,9 +302,18 @@
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
+<!-- Select2 -->
+    <script src="plugins/select2/select2.full.min.js"></script>
+
+
 
 <script type="text/javascript">
 (function ($) {
+
+    //Initialize Select2 Elements
+    $(".select2").select2();
+
+
     // SET DATEPICKER
     $('.input-tanggal').datepicker({
         format: 'dd-mm-yyyy',
@@ -234,9 +332,34 @@
         onSelect:function(suggestions){
             // set data customer
             $('input[name=customer]').data('customerid',suggestions.data);
+
+            // get data pekerjaan
+            fillSelectPekerjaan(suggestions.data);
+
+            // enablekan select pekerjaan
+            $('select[name=pekerjaan]').removeAttr('disabled');
+            $('#btn-add-pekerjaan').removeClass('disabled');
+
+            //set data pekerjaan id
+            $('form[name=form_create_pekerjaan] input[name=customer_id]').val(suggestions.data);
         }
 
     });
+
+    function fillSelectPekerjaan(customer_id){
+        $.get('api/get-select-pekerjaan/' + customer_id,null,function(datares){
+                var data_pekerjaan = JSON.parse(datares);
+                // insert select option
+                $('select[name=pekerjaan]').empty();
+                $.each(data_pekerjaan,function(i,data){
+                    $('select[name=pekerjaan]').append($('<option>').val(i).text(data));
+                });
+                $('select[name=pekerjaan]').val([]);
+
+                //Initialize Select2 Elements
+                $(".select2").select2();
+            });
+    }
     // END OF SET AUTOCOMPLETE CUSTOMER
 
     // // SET AUTOCOMPLETE MATERIAL
@@ -253,6 +376,84 @@
 
     // });
     // END OF SET AUTOCOMPLETE MATERIAL
+
+    // SET AUTOCOMPLETE PROVINSI
+    $('input[name=provinsi]').autocomplete({
+        serviceUrl: 'api/get-auto-complete-provinsi',
+        params: {  
+                    'nama': function() {
+                        return $('input[name=provinsi]').val();
+                    }
+                },
+        onSelect:function(suggestions){
+            // // set data supplier
+            $('input[name=provinsi_id]').val(suggestions.data);
+        }
+
+    });
+    // END OF SET AUTOCOMPLETE PROVINSI
+
+    // SET AUTOCOMPLETE KABUPATEN
+    $('input[name=kabupaten]').autocomplete({
+        serviceUrl: 'api/get-auto-complete-kabupaten',
+        params: {  
+                    'nama': function() {
+                        return $('input[name=kabupaten]').val();
+                    },
+                    'provinsi_id': function() {
+                        return $('input[name=provinsi_id]').val();
+                    },
+                    
+                },
+        onSelect:function(suggestions){
+            // // set data supplier
+            $('input[name=kabupaten_id]').val(suggestions.data);
+        }
+
+    });
+    // END OF SET AUTOCOMPLETE KABUPATEN
+
+    // SET AUTOCOMPLETE KECAMATAN
+    $('input[name=kecamatan]').autocomplete({
+        serviceUrl: 'api/get-auto-complete-kecamatan',
+        params: {  
+                    'nama': function() {
+                        return $('input[name=kecamatan]').val();
+                    },
+                    'kabupaten_id': function() {
+                        return $('input[name=kabupaten_id]').val();
+                    },
+                    
+                },
+        onSelect:function(suggestions){
+            // // set data supplier
+            $('input[name=kecamatan_id]').val(suggestions.data);
+        }
+
+    });
+    // END OF SET AUTOCOMPLETE KECAMATAN
+
+    // SET AUTOCOMPLETE DESA
+    $('input[name=desa]').autocomplete({
+        serviceUrl: 'api/get-auto-complete-desa',
+        params: {  
+                    'nama': function() {
+                        return $('input[name=desa]').val();
+                    },
+                    'kecamatan_id': function() {
+                        return $('input[name=kecamatan_id]').val();
+                    },
+                    
+                },
+        onSelect:function(suggestions){
+            // // set data supplier
+            $('input[name=desa_id]').val(suggestions.data);
+            // alert($('input[name=desa]').data('id'));
+
+        }
+
+    });
+    // END OF SET AUTOCOMPLETE DESA
 
     // -----------------------------------------------------
     // SET AUTO NUMERIC
@@ -465,6 +666,7 @@
         var so_master = {"customer_id":"",
                          // "salesperson_id":"",
                          "order_date":"",
+                         "pekerjaan_id":"",
                          // "note":"",
                          // "subtotal":"",
                          // "disc":"",
@@ -475,6 +677,7 @@
         // so_master.salesperson_id = $('input[name=salesperson]').data('salespersonid');
         // so_master.no_inv = $('input[name=no_inv]').val();
         so_master.order_date = $('input[name=tanggal]').val();
+        so_master.pekerjaan_id = $('select[name=pekerjaan]').val();
         // so_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
         // so_master.note = $('textarea[name=note]').val();
         // so_master.subtotal = $('.label-total-subtotal').autoNumeric('get');
@@ -523,6 +726,7 @@
             // && so_master.salesperson_id != "" 
             // && $('input[name=salesperson]').val() != "" 
             && so_master.order_date != "" 
+            && so_master.pekerjaan_id != "" 
             && so_material.material.length > 0){
 
             var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert');
@@ -540,6 +744,35 @@
     // END OF BTN SAVE TRANSACTION
 
 
+    // CEK INPUT CUSTOMER APAKAH KOSONG ATAU TIDAK
+    $('input[name=customer]').keyup(function(){
+        if($(this).val() == ""){
+            // disable input pekerjaan
+            $('select[name=pekerjaan]').empty();
+            $('select[name=pekerjaan]').attr('disabled','disabled');
+            $('$btn-add-pekerjaan').addClass('disabled');
+        }
+    });
+    // END OF CEK INPUT CUSTOMER APAKAH KOSONG ATAU TIDAK
+
+    // TAMPILKAN MODAL ADD PEKERJAAN
+    $('#btn-add-pekerjaan').click(function(){
+        $('#modal-pekerjaan').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        // focuskan ke input nama
+        $('form[name=form_create_pekerjaan] input[name=nama]').focus();
+    });
+    // END OF TAMPILKAN MODAL ADD PEKERJAAN
+
+    // SAVE ADD PEKERJAAN
+    $('form[name=form_create_pekerjaan]').ajaxForm(function(res){
+        fillSelectPekerjaan($('form[name=form_create_pekerjaan] input[name=customer_id]').val());
+        // close modal
+        $('#modal-pekerjaan').modal('hide');
+    });
+    // END OF SAVE ADD PEKERJAAN
     
 
 

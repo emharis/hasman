@@ -128,7 +128,7 @@
     }
 
     // Row Clicked
-    $('.row-to-edit').click(function(){        
+    $(document).on('click','.row-to-edit',function(){        
            var btn = $(this).parent().children('td:last').children('a');       
            location.href = btn.attr('href');
     });

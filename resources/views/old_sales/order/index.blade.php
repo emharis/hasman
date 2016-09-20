@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Customer
+        Sales Orders
     </h1>
 </section>
 
@@ -26,7 +26,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="master/customer/create" >Create</a>
+            <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
             <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
             <div class="clearfix" ></div>
             <br/>
@@ -35,37 +35,46 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >
+                        <th style="width:25px;">
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
                         <th style="width:25px;">No</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        <th>Telp</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1"></th>
+                        <th>Nomor Order</th>
+                        <th>Tanggal</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         <td>
-                            <input type="checkbox" class="ck_row" >
+                            {{-- @if($dt->ref == 0) --}}
+                                <input type="checkbox" class="ck_row" >
+                            {{-- @endif --}}
                         </td>
                         <td class="row-to-edit" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
-                            {{$dt->kode}}
+                            {{$dt->order_number}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->nama}}
+                            {{$dt->order_date_formatted}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->kabupaten}}
+                            {{$dt->customer}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->telp}}
+                            @if($dt->status == 'O')
+                                OPEN
+                            @elseif($dt->status == 'V')
+                                VALIDATED
+                            @else
+                                DONE
+                            @endif    
                         </td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="master/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                        <td >
+                            <a class="btn btn-primary btn-xs" href="sales/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -94,7 +103,7 @@
             null,
             null,
             null,
-            {className: "text-center"}
+            {className: "text-center"},
             // {className: "text-center"}
         ],
         order: [[ 1, 'asc' ]],
@@ -128,9 +137,10 @@
     }
 
     // Row Clicked
-    $(document).on('click','.row-to-edit',function(){        
-           var btn = $(this).parent().children('td:last').children('a');       
-           location.href = btn.attr('href');
+    $('.row-to-edit').click(function(){        
+        var row = $(this).parent();        
+        var data_id = row.data('id');            
+        location.href = 'sales/order/edit/' + data_id ;        
     });
 
     // Delete Data Lokasi
@@ -144,7 +154,7 @@
                 dataid.push(newdata);
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','master/customer/delete');
+            var deleteForm = $('<form>').attr('method','POST').attr('action','sales/order/delete');
             deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
             deleteForm.submit();
         }

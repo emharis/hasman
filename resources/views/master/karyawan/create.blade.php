@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('styles')
+<link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 <style>
     .col-top-item{
         cursor:pointer;
@@ -35,7 +36,7 @@
                     <td>
                         <input type="text" name="nama" class="form-control"  autofocus autocomplete="off" required>
                     </td>
-                    <td rowspan="8" class="col-lg-2 col-md-2 col-sm-2" >
+                    <td rowspan="10" class="col-lg-2 col-md-2 col-sm-2" >
                         <img id="foto-karyawan" class="col-lg-12 col-sm-12 col-md-12" >
                     </td>
                 </tr>
@@ -54,6 +55,21 @@
                     </td>
                     <td>
                         <input type="text" name="ktp" class="form-control"  autocomplete="off"  >
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Tempat/Tanggal Lahir</label>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <input type="text" name="tempat_lahir" class="form-control">
+
+                             <div class="input-group-btn" style="width:30%;">
+                              <input type="text" name="tgl_lahir" class="input-date form-control">
+                            </div>
+                        </div>
                     </td>
                     
                 </tr>
@@ -136,8 +152,17 @@
 @section('scripts')
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
+<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
+
+    // SET DATEPICKER
+    $('.input-date').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+    });
+    // END OF SET DATEPICKER
    
     // SAVE 
    
@@ -157,6 +182,8 @@
         var desa_id = $('input[name=desa]').data('id');
         var jabatan = $('select[name=jabatan]').val();
         var telp = $('input[name=telp]').val();
+        var tgl_lahir = $('input[name=tgl_lahir]').val();
+        var tempat_lahir = $('input[name=tempat_lahir]').val();
 
         if(nama != "" && kode != ""){
 
@@ -176,6 +203,8 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
             formdata.append($('<input>').attr('type','hidden').attr('name','jabatan').val(jabatan));
             formdata.append($('<input>').attr('type','hidden').attr('name','telp').val(telp));
+            formdata.append($('<input>').attr('type','hidden').attr('name','tgl_lahir').val(tgl_lahir));
+            formdata.append($('<input>').attr('type','hidden').attr('name','tempat_lahir').val(tempat_lahir));
             formdata.append($('input[name=foto]'));
             formdata.submit();
         }else{

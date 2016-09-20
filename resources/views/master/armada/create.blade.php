@@ -53,6 +53,14 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        <label>Driver</label>
+                    </td>
+                    <td>
+                        {!! Form::select('driver',$selectDriver,null,['class'=>'form-control']) !!}
+                    </td>
+                </tr>
+                <tr>
                     <td></td>
                     <td>
                         <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
