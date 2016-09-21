@@ -141,7 +141,10 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::group(['prefix' => 'delivery'], function () {
         // ORDERS
         Route::get('order','DeliveryOrderController@index');
-        Route::get('order/create','DeliveryOrderController@create');
+        Route::get('order/edit/{id}','DeliveryOrderController@edit');
+        Route::post('order/update','DeliveryOrderController@update');
+        Route::post('order/to-validate','DeliveryOrderController@toValidate');
+        Route::get('order/reconcile/{id}','DeliveryOrderController@reconcile');
         
     });
 

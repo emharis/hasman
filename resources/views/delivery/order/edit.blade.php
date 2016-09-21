@@ -38,13 +38,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="sales/order" >Sales Orders</a> 
-         <i class="fa fa-angle-double-right" ></i> 
-         <a href="sales/order/edit/{{$data->sales_order_id}}" >{{$data->order_number}}</a> 
-         <i class="fa fa-angle-double-right" ></i> 
-         <a href="sales/order/delivery/{{$data->sales_order_id}}" >Delivery Orders</a> 
-         <i class="fa fa-angle-double-right" ></i>
-         {{$data->delivery_order_number}} 
+        <a href="delivery/order" >Delivery Orders</a> 
+        <i class="fa fa-angle-double-right" ></i> 
+        {{$data->delivery_order_number}} 
     </h1>
 </section>
 
@@ -56,7 +52,7 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status != 'D')
-                <a  class="btn btn-primary btn-sm" href="sales/order/delivery/validate/{{$data->id}}" >Validate</a>
+                <a  class="btn btn-primary btn-sm" href="delivery/order/validate/{{$data->id}}" id="btn-validate" >Validate</a>
                 <a class="btn btn-success btn-sm" >Print</a>
             @else
                 
@@ -71,7 +67,7 @@
             <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'O' ? 'bg-blue' : 'bg-gray'}}" >Open</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}"" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Draft</a>
         </div>
         <div class="box-body">
             
@@ -138,60 +134,12 @@
                             <input type="hidden" name="armada_id" value="{{$data->armada_id}}" >
                         </td>
                     </tr>
-                    
-                    {{-- <tr>
-                        <td>
-                            <label>Provinsi</label>
-                        </td>
-                        <td>
-                            <input type="text" name="provinsi" class="form-control" value="{{$data->provinsi}}">
-                            <input type="hidden" name="provinsi_id" value="{{$data->provinsi_id}}" >
-                        </td>
-                        <td>
-                            <label>Kabupaten</label>
-                        </td>
-                        <td>
-                            <input type="text" name="kabupaten" class="form-control" value="{{$data->kabupaten}}" >
-                            <input type="hidden" name="kabupaten_id" class="form-control" value="{{$data->kabupaten_id}}" >
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Kecamatan</label>
-                        </td>
-                        <td>
-                            <input type="text" name="kecamatan" class="form-control" value="{{$data->kecamatan}}" >
-                            <input type="hidden" name="kecamatan_id" value="{{$data->kecamatan_id}}" >
-                        </td>
-                        <td>
-                            <label>Desa</label>
-                        </td>
-                        <td>
-                            <input type="text" name="desa" class="form-control" value="{{$data->desa}}" >
-                            <input type="hidden" name="desa_id" value="{{$data->desa_id}}" >
-                        </td>
-                    </tr> --}}
                     <tr>
                         <td colspan="4" >
                             <textarea maxlength="250" name="keterangan" class="form-control" rows="2" placeholder="Keterangan" >{{$data->keterangan}}</textarea>
                         </td>
                     </tr>
-                    {{-- <tr>
-                        <td class="col-lg-2">
-                            <label>Salesperson</label>
-                        </td>
-                        <td class="col-lg-4" >
-                            <input type="text" name="salesperson" class="form-control " data-salespersonid="" required >
-                        </td>
-                        <td class="col-lg-2" ></td>
-                        <td class="col-lg-2 hide" >
-                            <label>Jatuh Tempo</label>
-                        </td>
-                        <td class="col-lg-2 hide" >
-                            <input type="text" name="jatuh_tempo"  class="input-tanggal form-control" value="" >
-                        </td>
-                    </tr> --}}
+                    
                 </tbody>
             </table>
 
@@ -217,11 +165,118 @@
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order/delivery/{{$data->sales_order_id}}" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Cancel</a>
         </div>
     </div><!-- /.box -->
 
 </section><!-- /.content -->
+
+<div class="example-modal">
+    <div class="modal" id="modal-validate">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Validate Delivery Order</h4>
+          </div>
+          <form name="form_create_pekerjaan" method="POST" action="delivery/order/to-validate" >
+            <input type="hidden" name="delivery_id" value="{{$data->id}}"  >
+            <div class="modal-body">
+                <table class="table table-bordered table-condensed" >
+                    <tbody>
+                        <tr>
+                            <td><label>No Nota</label></td>
+                            <td>
+                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Kalkulasi</label></td>
+                            <td>
+                                <select name="kalkulasi" class="form-control" >
+                                    <option value="R" >Ritase</option>
+                                    <option value="K" >Kubikasi</option>
+                                    <option value="T" >Tonase</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="row-kubikasi" >
+                            <td>
+                                <label>Panjang</label>
+                                </td>
+                            <td>
+                                <input type="text" name="panjang" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-kubikasi" >
+                            <td><label>Lebar</label></td>
+                            <td>
+                                <input type="text" name="lebar" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-kubikasi" >
+                            <td><label>Tinggi</label></td>
+                            <td>
+                                <input type="text" name="tinggi" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-kubikasi" >
+                            <td><label>Volume</label></td>
+                            <td>
+                                <input type="text" name="volume" class="form-control text-right " disabled>
+                            </td>
+                        </tr>
+                        <tr class="row-tonase" >
+                            <td><label>Gross</label></td>
+                            <td>
+                                <input type="text" name="gross" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-tonase" >
+                            <td><label>Tarre</label></td>
+                            <td>
+                                <input type="text" name="tarre" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-tonase" >
+                            <td><label>Netto</label></td>
+                            <td>
+                                <input type="text" name="netto" class="form-control text-right" disabled>
+                            </td>
+                        </tr>
+                        <tr class="row-price" >
+                            <td>
+                                <label>Unit Price</label>
+                            </td>
+                            <td>
+                                <input type="text" name="unit_price" class="form-control text-right">
+                            </td>
+                        </tr>
+                        <tr class="row-price" >
+                            <td>
+                                <label>Total</label>
+                            </td>
+                            <td>
+                                <input type="text" name="total" class="form-control text-right" disabled>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+              </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+<!-- /.modal -->
+</div>
 
 @stop
 
@@ -235,6 +290,19 @@
 
 <script type="text/javascript">
 (function ($) {
+    // HIDE SOME ELEMENT
+    $('.row-tonase, .row-kubikasi, .row-price').hide();
+    $('select[name=kalkulasi]').val([]);
+
+    // SET AUTONUMERIC
+    $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=gross], input[name=tarre], input[name=volume], input[name=netto]').autoNumeric('init');
+
+     $('input[name=unit_price], input[name=total]').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
+    // END OF SET AUTONUMERIC
+
     // SET AUTOCOMPLETE PROVINSI
     $('input[name=provinsi]').autocomplete({
         serviceUrl: 'api/get-auto-complete-provinsi',
@@ -348,11 +416,6 @@
         var delivery_order_id = $('input[name=delivery_order_id]').val();
         var armada_id = $('input[name=armada_id]').val();
         var lokasi_galian_id = $('input[name=lokasi_galian_id]').val();
-        // var alamat = $('input[name=alamat]').val();
-        // var provinsi_id = $('input[name=provinsi_id]').val();
-        // var kabupaten_id = $('input[name=kabupaten_id]').val();
-        // var kecamatan_id = $('input[name=kecamatan_id]').val();
-        // var desa_id = $('input[name=desa_id]').val();
         var keterangan = $('textarea[name=keterangan]').val();
         var delivery_date = $('input[name=delivery_date]').val();
 
@@ -366,15 +429,10 @@
             // && desa_id != ""
             ){
 
-            var doForm = $('<form>').attr('method','POST').attr('action','sales/order/delivery/update');
+            var doForm = $('<form>').attr('method','POST').attr('action','delivery/order/update');
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_order_id').val(delivery_order_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','armada_id').val(armada_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','lokasi_galian_id').val(lokasi_galian_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','kabupaten_id').val(kabupaten_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','kecamatan_id').val(kecamatan_id));
-            // doForm.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','keterangan').val(keterangan));
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_date').val(delivery_date));
             doForm.submit();
@@ -395,15 +453,56 @@
     });
     // END OF SET DATEPICKER
 
-    // // CANCEL DO EDIT
-    // $('#btn-cancel-save').click(function(){
-    //     if(confirm('Anda akan membatalkan proses ini?')){
+    // VALIDATE DELOIVERY ORDER
+    $('#btn-validate').click(function(){
+        $('#modal-validate').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#modal-validate input[name=no_nota_timbang]').focus();
 
-    //     }else{
-    //         return false;
-    //     }
-    // });
-    // // END OF CANCEL DO EDIT
+        return false;
+    });
+    // END OF VALIDATE DELOIVERY ORDER
+
+    // KALKULASI DO
+    $('select[name=kalkulasi]').change(function(){
+        if($(this).val() == 'R'){
+            $('.row-kubikasi, .row-tonase').hide();
+            $('.row-price').show();
+        }else if($(this).val() == 'K'){
+            $('.row-kubikasi').show();
+            $('.row-tonase').hide();
+            $('.row-price').show();
+        }else{
+            $('.row-kubikasi').hide();
+            $('.row-tonase').show();
+            $('.row-price').show();
+        }
+    });
+    // END OF KALKULASI DO
+
+    // CALCULATE KUBIKASI
+    $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=unit_price]').keyup(function(){
+        
+        var panjang = $('input[name=panjang]').autoNumeric('get');
+
+        
+        var lebar = $('input[name=lebar]').autoNumeric('get');
+        // alert(lebar);
+        var tinggi = $('input[name=tinggi]').autoNumeric('get');
+        // alert(tinggi);
+        var volume = Number(panjang) * Number(lebar) * Number(tinggi);
+        // alert('volume ' + volume);
+        $('input[name=volume]').autoNumeric('set',volume);
+
+        // hitung total harga
+        var price = $('input[name=unit_price]').autoNumeric('get');
+        var total = Number(price) * Number(volume);
+
+        $('input[name=total]').autoNumeric('set',total);
+    });
+    // END OF CALCULATE KUBIKASI
 
 })(jQuery);
 </script>

@@ -26,24 +26,21 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="delivery/order/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-            <div class="clearfix" ></div>
-            <br/>
-
             <?php $rownum=1; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
                         <th style="width:25px;">No</th>
                         <th>DO Number</th>
+                        <th>Order Date</th>
+                        <th>Delivery Date</th>
+                        <th>Customer</th>
                         <th>Material</th>
-                        <th>Driver</th>
-                        <th>Armada</th>
-                        <th>Lokasi Galian</th>
+                        <th>Pekerjaan</th>
                         <th>Tujuan</th>
+                        <th>Lokasi Galian</th>
                         <th>Status</th>
-                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                        <th style="width:25px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,24 +49,22 @@
                             <tr>
                                 <td>{{$rownum++}}</td>
                                 <td>{{$dt->delivery_order_number}}</td>
+                                <td>{{$dt->order_date_formatted}}</td>
+                                <td>{{$dt->delivery_date_formatted}}</td>
                                 <td>
-                                    {{'['.$dt->kode_material.'] '.$dt->material}}
+                                    {{ $dt->customer}}
                                 </td>
                                 <td>
-                                    @if($dt->karyawan)
-                                        {{'['.$dt->kode_karyawan . '] ' . $dt->karyawan}}
-                                    @endif
+                                    {{$dt->material}}
                                 </td>
                                 <td>
-                                    @if($dt->armada)
-                                        {{'[' . $dt->kode_armada . '] ' . $dt->armada . ' - ' . $dt->nopol}}
-                                    @endif
+                                    {{$dt->pekerjaan}}
+                                </td>
+                                <td>
+                                    {{  $dt->kecamatan  }}
                                 </td>
                                 <td>
                                     {{$dt->lokasi_galian}}
-                                </td>
-                                <td>
-                                    {{$dt->alamat}}
                                 </td>
                                 <td>
                                     @if($dt->status == 'D')
@@ -77,11 +72,11 @@
                                     @elseif($dt->status == 'O')
                                         Open
                                     @else
-                                        Delivered
+                                        Validated
                                     @endif
                                 </td>
                                 <td class="text-center" >
-                                    <a class="btn btn-primary btn-xs" href="sales/order/delivery/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                                    <a class="btn btn-primary btn-xs" href="delivery/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                                 </td>
                             </tr>
                         @endfor
@@ -105,18 +100,20 @@
 
     var TBL_KATEGORI = $('#table-data').DataTable({
         "columns": [
+            {className: "text-right","orderable": false},
+            {className: "text-left"},
+            null,
+            null,
+            null,   
+            null,   
+            null,   
+            null,
+            null,
+            null,
             {className: "text-center","orderable": false},
-            {className: "text-right"},
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {className: "text-center"},
             // {className: "text-center"}
         ],
-        order: [[ 1, 'asc' ]],
+        sort: false,
     });
 
     // check all checkbox
