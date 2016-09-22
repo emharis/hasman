@@ -103,10 +103,10 @@
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4" >
                      {{-- modul invoices --}}
-                     <a class="btn btn-app pull-right" href="sales/order/invoice/{{$data_master->id}}" >
+                     {{-- <a class="btn btn-app pull-right" href="sales/order/invoice/{{$data_master->id}}" >
                         <span class="badge bg-green">1</span>
                         <i class="fa fa-newspaper-o"></i> Invoice
-                    </a>
+                    </a> --}}
                     
                     <a class="btn btn-app pull-right" href="sales/order/delivery/{{$data_master->id}}" >
                         <span class="badge bg-green">{{$delivery_order_count}}</span>

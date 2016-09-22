@@ -39,6 +39,7 @@ class KaryawanController extends Controller
 			$karyawan_id = \DB::table('karyawan')
 			->insertGetId([
 					'nama' => $req->nama,
+					'panggilan' => $req->panggilan,
 					'kode' => $req->kode,
 					'ktp' => $req->ktp,
 					'alamat' => $req->alamat,
@@ -91,22 +92,26 @@ class KaryawanController extends Controller
 	public function update(Request $req){
 		return \DB::transaction(function()use($req){
 			// generate tanggal
-            $tgl_lahir = $req->tgl_lahir;
-            $arr_tgl = explode('-',$tgl_lahir);
-            $fix_tgl_lahir = new \DateTime();
-            $fix_tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+            $tgl_lahir = $req->tgl_lahir;	
+			if($req->tgl_lahir != ""){
+				
+	            $arr_tgl = explode('-',$tgl_lahir);
+	            $tgl_lahir = new \DateTime();
+	            $tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+        	}
             
 			\DB::table('karyawan')
 			->where('id',$req->id)
 			->update([
 					'nama' => $req->nama,
+					'panggilan' => $req->panggilan,
 					'kode' => $req->kode,
 					'ktp' => $req->ktp,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,
 					'jabatan_id' => $req->jabatan,
-					'tgl_lahir' => $fix_tgl_lahir,
+					'tgl_lahir' => $tgl_lahir,
 					'tempat_lahir' => $req->tempat_lahir,
 				]);
 

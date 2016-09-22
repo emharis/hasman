@@ -41,6 +41,7 @@
                         <th style="width:25px;">No</th>
                         <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
                         <th>Nama</th>
+                        <th>Panggilan</th>
                         <th>Jabatan</th>
                         <th>Alamat</th>
                         <th>Telp</th>
@@ -61,6 +62,9 @@
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->nama}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->panggilan}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->jabatan}}
@@ -97,6 +101,7 @@
         "columns": [
             {className: "text-center","orderable": false},
             {className: "text-right"},
+            null,
             null,
             null,
             null,

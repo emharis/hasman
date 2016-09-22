@@ -72,7 +72,7 @@
                                     {{$dt->lokasi_galian}}
                                 </td>
                                 <td>
-                                    {{$dt->alamat}}
+                                    {{$dt->desa}}
                                 </td>
                                 <td>
                                     @if($dt->status == 'D')

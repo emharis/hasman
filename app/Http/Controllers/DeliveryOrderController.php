@@ -20,7 +20,7 @@ class DeliveryOrderController extends Controller
 
 	public function edit($id){
 		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($id);
-		if($data->status == 'O'){
+		if($data->status != 'V'){
 			return view('delivery.order.edit',[
 				'data' => $data
 				]);

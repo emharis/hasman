@@ -87,7 +87,9 @@ class SalesOrderController extends Controller
 				'select_pekerjaan' => $select_pekerjaan
 			]);
 		}elseif($data_master->status = 'V'){
+			// get jumlah DO
 			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
+			
 			return view('sales.order.validated',[
 					'data_master' => $data_master,
 					'data_detail' => $data_detail,
@@ -145,6 +147,17 @@ class SalesOrderController extends Controller
 				'status' => 'V'
 			]);
 
+			// generate customer invoice
+			$invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
+			$invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
+			\DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
+
+			$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+					'inv_number' => $invoice_number,
+					'order_id' => $id,
+					'status' => 'D'
+				]);
+
 			// generate & insert delivery order for this sales order
 			$sales_order_detail = \DB::table('sales_order_detail')->where('sales_order_id',$id)->get();
 			foreach($sales_order_detail as $dt){
@@ -158,14 +171,21 @@ class SalesOrderController extends Controller
 		            // update so_counter
 		            \DB::table('appsetting')->where('name','do_counter')->update(['value'=>$do_counter]);
 
-		            // insert delivery order
-					\DB::table('delivery_order')
-					->insert([
+		            // Create & insert delivery order
+					$do_id = \DB::table('delivery_order')
+					->insertGetId([
 							'sales_order_id' => $id,
 							'delivery_order_number' => $do_number,
 							'material_id' => $dt->material_id,
 							'qty' => 1,
 							'status' => 'D',
+						]);
+
+					// generate Invoice detail
+					\DB::table('customer_invoice_detail')->insert([
+							'customer_invoice_id' => $customer_invoice_id,
+							'delivery_order_id' => $do_id,
+							'qty' => 1
 						]);
 				}
 			}

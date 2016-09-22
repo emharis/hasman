@@ -36,9 +36,18 @@
                     <td>
                         <input type="text" name="nama" class="form-control"  autofocus autocomplete="off" required>
                     </td>
-                    <td rowspan="10" class="col-lg-2 col-md-2 col-sm-2" >
+                    <td rowspan="11" class="col-lg-2 col-md-2 col-sm-2" >
                         <img id="foto-karyawan" class="col-lg-12 col-sm-12 col-md-12" >
                     </td>
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Panggilan</label>
+                    </td>
+                    <td>
+                        <input type="text" name="panggilan" class="form-control"  autocomplete="off" required >
+                    </td>
+                    
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -169,6 +178,7 @@
     $('#btn-save').click(function(){
         // cek kelengkapan data
         var nama = $('input[name=nama]').val();
+        var panggilan = $('input[name=panggilan]').val();
         var kode = $('input[name=kode]').val();
         var ktp = $('input[name=ktp]').val();
         var alamat = $('input[name=alamat]').val();
@@ -190,6 +200,7 @@
         // alert('masuk kondisi');
             var formdata = $('<form>').attr('method','POST').attr('action','master/karyawan/insert').attr('enctype','multipart/form-data');
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
+            formdata.append($('<input>').attr('type','hidden').attr('name','panggilan').val(panggilan));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
             formdata.append($('<input>').attr('type','hidden').attr('name','ktp').val(ktp));
             formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));

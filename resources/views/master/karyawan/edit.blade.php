@@ -39,9 +39,18 @@
                         <input type="text" name="nama" class="form-control"  autofocus autocomplete="off" required value="{{$data->nama}}" >
                         <input type="hidden" name="id" class="form-control" value="{{$data->id}}">
                     </td>
-                    <td rowspan="10" class="col-lg-2 col-md-2 col-sm-2" >
+                    <td rowspan="11" class="col-lg-2 col-md-2 col-sm-2" >
                         <img id="foto-karyawan" class="col-lg-12 col-sm-12 col-md-12" src="foto_karyawan/{{$data->foto}}" >
                     </td>
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Panggilan</label>
+                    </td>
+                    <td>
+                        <input type="text" name="panggilan" class="form-control"  autocomplete="off" required value="{{$data->panggilan}}" >
+                    </td>
+                    
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -70,7 +79,7 @@
                             <input type="text" name="tempat_lahir" class="form-control" value="{{$data->tempat_lahir}}">
 
                              <div class="input-group-btn" style="width:30%;">
-                              <input type="text" name="tgl_lahir" class="input-date form-control" value="{{$data->tgl_lahir_formatted}}">
+                              <input type="text" name="tgl_lahir" class="input-date form-control" value="{{$data->tgl_lahir_formatted != '00-00-0000' ? $data->tgl_lahir_formatted : ''}}">
                             </div>
                         </div>
                     </td>
@@ -173,6 +182,7 @@
        // cek kelengkapan data
         var id = $('input[name=id]').val();
         var nama = $('input[name=nama]').val();
+        var panggilan = $('input[name=panggilan]').val();
         var kode = $('input[name=kode]').val();
         var ktp = $('input[name=ktp]').val();
         var alamat = $('input[name=alamat]').val();
@@ -195,6 +205,7 @@
             var formdata = $('<form>').attr('method','POST').attr('action','master/karyawan/update').attr('enctype','multipart/form-data');
             formdata.append($('<input>').attr('type','hidden').attr('name','id').val(id));
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
+            formdata.append($('<input>').attr('type','hidden').attr('name','panggilan').val(panggilan));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
             formdata.append($('<input>').attr('type','hidden').attr('name','ktp').val(ktp));
             formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));

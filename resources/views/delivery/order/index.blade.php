@@ -37,6 +37,8 @@
                         <th>Customer</th>
                         <th>Material</th>
                         <th>Pekerjaan</th>
+                        <th>Driver</th>
+                        <th>Nopol</th>
                         <th>Tujuan</th>
                         <th>Lokasi Galian</th>
                         <th>Status</th>
@@ -59,6 +61,12 @@
                                 </td>
                                 <td>
                                     {{$dt->pekerjaan}}
+                                </td>
+                                <td>
+                                    {{$dt->karyawan}}
+                                </td>
+                                <td>
+                                    {{$dt->nopol}}
                                 </td>
                                 <td>
                                     {{  $dt->kecamatan  }}
@@ -107,6 +115,8 @@
             null,   
             null,   
             null,   
+            null,
+            null,
             null,
             null,
             null,
