@@ -82,12 +82,11 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            <div class="input-group">
-                                <!-- /btn-group -->
-                                {!! Form::select('pekerjaan',[],null,['class'=>'form-control select2','required','disabled']) !!}    
-
+                            <div class="input-group">                                
+                                <select name="pekerjaan" class="form-control select2" required="required" disabled="disabled">
+                                </select>
                                  <div class="input-group-btn">
-                                  <button type="button" class="btn btn-primary disabled" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
+                                  <button type="button" class="btn btn-primary " disabled="disabled" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
                                 </div>
                             </div>
 
@@ -238,40 +237,61 @@
                 <table class="table table-bordered table-condensed" >
                     <tbody>
                         <tr>
-                            <td>Nama Pekerjaan</td>
+                            <td>
+                                <label>Nama Pekerjaan</label>
+                            </td>
                             <td>
                                 <input type="text" name="nama" class="form-control" autocomplete="off" required>
                             </td>
                         </tr>
                         <tr>
-                            <td>Alamat</td>
+                            <td>
+                                <label>Tahun</label>
+                            </td>
+                            <td>
+                                {{-- <input type="text" name="tahun" class="form-control input-tahun" autocomplete="off" required> --}}
+                                <input type="text" name="tahun" maxlength="4" class="form-control" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Alamat</label>
+                            </td>
                             <td>
                                 <input type="text" name="alamat" class="form-control" autocomplete="off">
                             </td>
                         </tr>
                         <tr>
-                            <td>Provinsi</td>
+                            <td>
+                                <label>Provinsi</label>
+                            </td>
                             <td>
                                 <input type="text" name="provinsi" class="form-control" autocomplete="off" required >
                                 <input type="hidden" name="provinsi_id" class="form-control">
                             </td>
                         </tr>
                         <tr>
-                            <td>Kabupaten</td>
+                            <td>
+                                <label>Kabupaten</label>
+                            </td>
                             <td>
                                 <input type="text" name="kabupaten" class="form-control" autocomplete="off" required>
                                 <input type="hidden" name="kabupaten_id" class="form-control">
                             </td>
                         </tr>
                         <tr>
-                            <td>Kecamatan</td>
+                            <td>
+                                <label>Kecamatan</label>
+                            </td>
                             <td>
                                 <input type="text" name="kecamatan" class="form-control" autocomplete="off" required>
                                 <input type="hidden" name="kecamatan_id" class="form-control">
                             </td>
                         </tr>
                         <tr>
-                            <td>Desa</td>
+                            <td>
+                                <label>Desa</label>
+                            </td>
                             <td>
                                 <input type="text" name="desa" class="form-control" autocomplete="off" required>
                                 <input type="hidden" name="desa_id" class="form-control">
@@ -338,7 +358,7 @@
 
             // enablekan select pekerjaan
             $('select[name=pekerjaan]').removeAttr('disabled');
-            $('#btn-add-pekerjaan').removeClass('disabled');
+            $('#btn-add-pekerjaan').removeAttr('disabled');
 
             //set data pekerjaan id
             $('form[name=form_create_pekerjaan] input[name=customer_id]').val(suggestions.data);
@@ -721,12 +741,14 @@
 
         // save ke database
         // alert(so_material.material.length);
+        // alert('Pekerjaan id : ' + so_master.pekerjaan_id);
         if(so_master.customer_id != "" 
             && $('input[name=customer]').val() != "" 
-            // && so_master.salesperson_id != "" 
-            // && $('input[name=salesperson]').val() != "" 
+            && $('input[name=customer]').val() != null 
             && so_master.order_date != "" 
+            && so_master.order_date != null 
             && so_master.pekerjaan_id != "" 
+            && so_master.pekerjaan_id != null 
             && so_material.material.length > 0){
 
             var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert');

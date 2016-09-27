@@ -9,12 +9,15 @@ use App\Http\Controllers\Controller;
 class DeliveryOrderController extends Controller
 {
 	public function index(){
+		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+
 		$data = \DB::table('VIEW_DELIVERY_ORDER')
 			->orderBy('order_date','desc')
-			->get();
+			->paginate($paging_item_number);
 			
 		return view('delivery.order.index',[
-				'data' => $data
+				'data' => $data,
+				'paging_item_number' => $paging_item_number
 			]);
 	}
 
@@ -127,6 +130,67 @@ class DeliveryOrderController extends Controller
 
 			return redirect()->back();
 		});
+	}
+
+	// Filter  with Pagination
+	public function filter(Request $req){
+
+		 $paging_item_number = \DB::table('appsetting')->where('name','paging_item_number')->first()->value; 
+
+         if($req->filter_by == 'order_date' || $req->filter_by == 'delivery_date'){
+         	// generate tanggal
+            $date_start = $req->date_start;
+            $arr_tgl = explode('-',$date_start);  
+            $date_start = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+
+            $date_end = $req->date_end;
+            $arr_tgl = explode('-',$date_end);
+            $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+
+         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+					->orderBy('order_date','desc')
+					->whereBetween($req->filter_by,[$date_start,$date_end])
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'date_start' => $date_start
+	                    ])
+	                ->appends([
+	                    'date_end' => $date_end
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+
+         }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
+         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+					->orderBy('order_date','desc')
+					->where('status','=',$req->filter_by)
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'filter_string' => $req->filter_string
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+
+         }else{
+         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+					->orderBy('order_date','desc')
+					->where($req->filter_by,'like','%' . $req->filter_string . '%')
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'filter_string' => $req->filter_string
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+         }
+
+         return view('delivery.order.filter',[
+                'data' => $data,
+                'paging_item_number' => $paging_item_number
+            ]);
+
 	}
 
 

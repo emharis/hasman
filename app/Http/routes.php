@@ -127,6 +127,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::group(['prefix' => 'sales'], function () {
         // ORDERS
         Route::get('order','SalesOrderController@index');
+        Route::post('order/delete','SalesOrderController@delete');
         Route::get('order/create','SalesOrderController@create');
         Route::get('order/edit/{id}','SalesOrderController@edit');
         Route::get('order/validate/{id}','SalesOrderController@validateOrder');
@@ -136,6 +137,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/delivery/edit/{delivery_id}','SalesOrderController@deliveryEdit');
         Route::post('order/delivery/update','SalesOrderController@deliveryUpdate');
         Route::post('order/create-pekerjaan','SalesOrderController@createPekerjaan');
+        Route::get('order/filter','SalesOrderController@filter');     
     });
 
     Route::group(['prefix' => 'delivery'], function () {
@@ -145,7 +147,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('order/update','DeliveryOrderController@update');
         Route::post('order/to-validate','DeliveryOrderController@toValidate');
         Route::get('order/reconcile/{id}','DeliveryOrderController@reconcile');
-        
+        Route::get('order/filter','DeliveryOrderController@filter');     
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

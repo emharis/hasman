@@ -146,53 +146,6 @@
                 </tbody>
             </table>
 
-            {{-- <div class="row" >
-                <div class="col-lg-8" >
-                    <textarea name="note" class="form-control" rows="3" style="margin-top:5px;" placeholder="Note" ></textarea>
-                    <i>* <span>Q.O.H : Quantity on Hand</span></i>
-                    <i>&nbsp;|&nbsp;</i>
-                    <i><span>S.U.P : Salesperson Unit Price</span></i>
-                </div>
-                <div class="col-lg-4" >
-                    <table class="table table-condensed" >
-                        <tbody>
-                            <tr>
-                                <td class="text-right">
-                                    <label>Subtotal :</label>
-                                </td>
-                                <td class="label-total-subtotal text-right" >
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-right" >
-                                    <label>Disc :</label>
-                                </td>
-                                <td >
-                                   <input style="font-size:14px;" type="text" name="disc" class="input-sm form-control text-right input-clear"> 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-right" style="border-top:solid darkgray 1px;" >
-                                    Total :
-                                </td>
-                                <td class="label-total text-right" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
-                                    
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-lg-12" >
-                    <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-                            <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
-                </div>
-            </div> --}}
-
-
-
-            {{-- <a id="btn-test" href="#" >TEST</a> --}}
-
 
         </div><!-- /.box-body -->
         <div class="box-footer" >

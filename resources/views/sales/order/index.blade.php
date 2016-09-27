@@ -3,6 +3,7 @@
 @section('styles')
 <!--Bootsrap Data Table-->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+<link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 
 <style>
     #table-data > tbody > tr{
@@ -25,18 +26,58 @@
 
     <!-- Default box -->
     <div class="box box-solid">
-        <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-            <div class="clearfix" ></div>
-            <br/>
+        <div class="box-header with-border" >
+            <div class="row" >
+                <div class="col-sm-6 col-md-6 col-lg-6" >
+                    <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
+                    <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6" >
+                    {{-- Filter section --}}
+                    <div class="input-group">
+                        <span class="input-group-addon bg-gray" >
+                            Filter
+                        </span>
+                        <div class="input-group-btn" style="width: 30%;" >
+                            <select name="select_filter_by" class="form-control" >
+                                <option value="order_number" >Nomor Order</option>
+                                <option value="order_date" >Tanggal</option>
+                                <option value="customer" >Customer</option>
+                                <option value="pekerjaan" >Pekerjaan</option>
+                                <option disabled>──────────</option>
+                                <option value="O" >OPEN</option>
+                                <option value="V" >VALIDATED</option>
+                                <option value="D" >DONE</option>
 
-            <?php $rownum=1; ?>
+                            </select>
+                        </div><!-- /btn-group -->
+
+                        {{-- Filter by string --}}
+                        <input type="text" name="filter_string" class="form-control input-filter ">
+
+                        {{-- Filter by date --}}
+                        <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
+                            <input type="text" name="input_filter_date_start" class="form-control input-tanggal">
+                        </div>
+                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
+
+                        {{-- Filter submit button --}}
+                        <div class="input-group-btn" >
+                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
+                        </div>
+
+                    </div>
+                    {{-- End of filter section --}}
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">
-                            <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
+                        <th style="width:25px;" class="text-center">
+                            <input type="checkbox" name="ck_all" >
                         </th>
                         <th style="width:25px;">No</th>
                         <th>Nomor Order</th>
@@ -50,12 +91,12 @@
                 <tbody>
                     @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
-                        <td>
-                            {{-- @if($dt->ref == 0) --}}
+                        <td class="text-center" >
+                            @if($dt->status == 'O')
                                 <input type="checkbox" class="ck_row" >
-                            {{-- @endif --}}
+                            @endif
                         </td>
-                        <td class="row-to-edit" >{{$rownum++}}</td>
+                        <td class="row-to-edit text-right" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
                         </td>
@@ -77,13 +118,18 @@
                                 DONE
                             @endif    
                         </td>
-                        <td >
+                        <td class="text-center" >
                             <a class="btn btn-primary btn-xs" href="sales/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="text-right" >
+                {{$data->render()}}
+            </div>
+
         </div><!-- /.box-body -->
     </div><!-- /.box -->
 
@@ -95,24 +141,77 @@
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
+<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 (function ($) {
 
-    var TBL_KATEGORI = $('#table-data').DataTable({
-        "columns": [
-            {className: "text-center","orderable": false},
-            {className: "text-right"},
-            null,
-            null,
-            null,
-            null,
-            null,
-            {className: "text-center"},
-            // {className: "text-center"}
-        ],
-        order: [[ 1, 'asc' ]],
+    // ==========================================================================
+    // FILTER SECTION
+    $('select[name=select_filter_by]').change(function(){
+        var filter_by = $(this).val();
+
+        // hide filter input
+        $('.input-filter').removeClass('hide');
+        $('.input-filter').hide();
+
+        if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
+            $('input[name=filter_string]').show();
+        }else if(filter_by == 'order_date'){
+            $('.input-filter-by-date').show();
+        }else{
+            // order by status open, validated, done
+            // otomatis submit tanpa tombol click
+            var filter_by = $('select[name=select_filter_by]').val();
+            var formFilter = $('<form>').attr('method','GET').attr('action','sales/order/filter');
+            formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
+            formFilter.submit();
+        }
+
     });
+
+    $('#btn-submit-filter').click(function(){
+        var filter_by = $('select[name=select_filter_by]').val();
+        var formFilter = $('<form>').attr('method','GET').attr('action','sales/order/filter');
+
+        if(filter_by == 'order_date'){
+            formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
+            formFilter.append($('<input>').attr('type','hidden').attr('name','date_end').val($('input[name=input_filter_date_end]').val()));
+        }
+        else{
+            // FILTER BY STRING
+            formFilter.append($('<input>').attr('type','hidden').attr('name','filter_string').val($('input[name=filter_string]').val()));
+            // formFilter.append($('<input>').attr('type','hidden').attr('name','total').val($('input[name=input_filter_total]').autoNumeric('get')));
+        }
+
+        formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
+        formFilter.submit();
+    });
+    // END OF FILTER SECTION
+    // ==========================================================================
+
+    // SET DATEPICKER
+    $('.input-tanggal').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+    });
+    // END OF SET DATEPICKER
+
+    // var TBL_KATEGORI = $('#table-data').DataTable({
+    //     "columns": [
+    //         {className: "text-center","orderable": false},
+    //         {className: "text-right"},
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         {className: "text-center"},
+    //         // {className: "text-center"}
+    //     ],
+    //     order: [[ 1, 'asc' ]],
+    // });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){

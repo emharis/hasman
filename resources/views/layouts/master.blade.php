@@ -73,20 +73,20 @@
             }
 
             /*ganti warna button-primary hover di header box*/
-            .box .box-header > a.btn.btn-primary:hover {
-                background-color: #367fa9;
+            .box .box-header .btn.btn-primary:hover, .box .box-header div .btn.btn-primary:hover {
+                background-color: #367fa9!important;
                 /*background-color: red;*/
             }
 
             /*ganti warna button-danger hover di header box*/
-            .box .box-header > a.btn.btn-danger:hover {
-                background-color: #d73925;
+            .box .box-header .btn.btn-danger:hover,.box .box-header div .btn.btn-danger:hover {
+                background-color: #d73925!important;
                 /*background-color: red;*/
             }
 
             /*ganti warna button-success hover di header box*/
-            .box .box-header > a.btn.btn-success:hover {
-                background-color: #008D4C;
+            .box .box-header .btn.btn-success:hover, .box .box-header div .btn.btn-success:hover {
+                background-color: #008D4C!important;
                 /*background-color: red;*/
             }
 

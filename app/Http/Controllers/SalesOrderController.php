@@ -9,10 +9,15 @@ use App\Http\Controllers\Controller;
 class SalesOrderController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_SALES_ORDER')->orderBy('order_date','desc')->get();
+		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+
+		$data = \DB::table('VIEW_SALES_ORDER')
+					->orderBy('order_date','desc')
+					->paginate($paging_item_number);
 		
 		return view('sales.order.index',[
-				'data' => $data
+				'data' => $data,
+				'paging_item_number' => $paging_item_number
 			]);
 	}
 
@@ -245,6 +250,7 @@ class SalesOrderController extends Controller
 				'alamat' => $req->alamat,
 				'customer_id' => $req->customer_id,
 				'desa_id' => $req->desa_id,
+				'tahun' => $req->tahun,
 			]);
 		$data = \DB::table('VIEW_PEKERJAAN')
 
@@ -253,5 +259,87 @@ class SalesOrderController extends Controller
 		echo json_encode($data);
 	}
 
+	// Delete Data Sales Order yang ber status open
+	public function delete(Request $req){
+		return \DB::transaction(function()use($req){
+			$data_for_delete = json_decode($req->dataid);
+			foreach($data_for_delete as $dt){
+				\DB::table('sales_order')->delete($dt->id);
+			}
 
+			return redirect()->back();	
+		});
+		
+	}
+
+	// Filter  with Pagination
+	public function filter(Request $req){
+		// echo $req->filter_by;
+		// echo '<br/>';
+		// echo $req->filter_string;
+		// echo '<br/>';
+		// echo $req->date_start;
+		// echo '<br/>';
+		// echo $req->date_end;
+
+		 $paging_item_number = \DB::table('appsetting')->where('name','paging_item_number')->first()->value; 
+
+         if($req->filter_by == 'order_date'){
+         	// generate tanggal
+            $date_start = $req->date_start;
+            $arr_tgl = explode('-',$date_start);  
+            $date_start = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+
+            $date_end = $req->date_end;
+            $arr_tgl = explode('-',$date_end);
+            $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+
+         	$data = \DB::table('VIEW_SALES_ORDER')
+					->orderBy('order_date','desc')
+					->whereBetween('order_date',[$date_start,$date_end])
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'date_start' => $date_start
+	                    ])
+	                ->appends([
+	                    'date_end' => $date_end
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+
+         }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
+         	$data = \DB::table('VIEW_SALES_ORDER')
+					->orderBy('order_date','desc')
+					->where('status','=',$req->filter_by)
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'filter_string' => $req->filter_string
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+
+         }else{
+         	$data = \DB::table('VIEW_SALES_ORDER')
+					->orderBy('order_date','desc')
+					->where($req->filter_by,'like','%' . $req->filter_string . '%')
+					->paginate($paging_item_number)
+	                ->appends([
+	                    'filter_string' => $req->filter_string
+	                    ])
+	                ->appends([
+	                    'filter_by' => $req->filter_by
+	                    ]);
+         }
+
+         return view('sales.order.filter',[
+                'data' => $data,
+                'paging_item_number' => $paging_item_number
+            ]);
+
+	}
+
+
+//. END OF CODE
 }

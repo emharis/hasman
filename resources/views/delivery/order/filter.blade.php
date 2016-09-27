@@ -3,7 +3,7 @@
 @section('styles')
 <!--Bootsrap Data Table-->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-<link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+
 <style>
     #table-data > tbody > tr{
         cursor:pointer;
@@ -51,10 +51,11 @@
                                 <option value="V" >VALIDATED</option>
 
                             </select>
+                            <input type="hidden" name="filter_by" value="{{Input::get('filter_by')}}"> 
                         </div><!-- /btn-group -->
 
                         {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter ">
+                        <input type="text" name="filter_string" class="form-control input-filter " value="{{Input::get('filter_string')}}">
 
                         {{-- Filter by date --}}
                         <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
@@ -64,7 +65,11 @@
 
                         {{-- Filter submit button --}}
                         <div class="input-group-btn" >
-                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
+                            <button class="btn btn-success btn-flat" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
+                        </div>
+
+                        <div class="input-group-btn" >
+                            <a class="btn btn-danger " href="delivery/order" ><i class="fa fa-refresh" ></i></a>
                         </div>
 
                     </div>
@@ -95,7 +100,7 @@
                 <tbody>
                    @foreach($data as $dt)
                         @for($i=0;$i<$dt->qty;$i++)
-                            <tr class="row-to-edit" data-id="{{$dt->id}}" >
+                            <tr>
                                 <td class="text-right">{{$rownum++}}</td>
                                 <td>{{$dt->delivery_order_number}}</td>
                                 <td>{{$dt->order_date_formatted}}</td>
@@ -140,7 +145,11 @@
             </table>
 
             <div class="text-right" >
-                {{$data->render()}}
+                {!! $data->appends(['filter_string' => \Input::get('filter_string')])
+                        ->appends(['filter_by' => \Input::get('filter_by')])
+                        ->appends(['date_start' => \Input::get('date_start')])
+                        ->appends(['date_end' => \Input::get('date_end')])
+                                    ->render() !!}
             </div>
         </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -153,10 +162,13 @@
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
-<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 (function ($) {
+
+    // set value for select filter
+    $('select[name=select_filter_by]').val($('input[name=filter_by]').val());
+    $('select[name=select_filter_by]').trigger('change');
 
     // var TBL_KATEGORI = $('#table-data').DataTable({
     //     "columns": [
@@ -227,13 +239,6 @@
     // END OF FILTER SECTION
     // ==========================================================================
 
-    // SET DATEPICKER
-    $('.input-tanggal').datepicker({
-        format: 'dd-mm-yyyy',
-        todayHighlight: true,
-        autoclose: true
-    });
-    // END OF SET DATEPICKER
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){
@@ -263,11 +268,10 @@
     }
 
     // Row Clicked
-    $('.row-to-edit').click(function(){   
-        var row = $(this);        
+    $('.row-to-edit').click(function(){        
+        var row = $(this).parent();        
         var data_id = row.data('id');            
         location.href = 'delivery/order/edit/' + data_id ;        
-        // alert('delivery/order/edit/' + data_id)
     });
 
     // Delete Data Lokasi
