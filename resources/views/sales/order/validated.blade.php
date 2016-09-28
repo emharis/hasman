@@ -47,14 +47,20 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            
-             <a class="btn btn-primary btn-sm" id="btn-validate" href="sales/order/set-to-done/{{$data_master->id}}" >Set to done</a>
+            @if($data_master->status != 'D')
+                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="sales/order/reconcile/{{$data_master->id}}" >Reconcile</button> 
+
+                <a class="btn btn-primary btn-sm" id="btn-validate" href="sales/order/set-to-done/{{$data_master->id}}" >Set to done</a>
+
+            @endif
+
+            <button class="btn btn-success btn-sm" >Print</button>
+             
+            <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
-
-            <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled bg-blue" >Validated</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Validated</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
@@ -66,6 +72,7 @@
         </div>
         <div class="box-body">
             <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
+
             <input type="hidden" name="sales_order_id" value="{{$data_master->id}}">
             <div class="row" >
                 <div class="col-sm-8 col-md-8 col-lg-8">
@@ -161,7 +168,13 @@
 
 <script type="text/javascript">
 (function ($) {
-    
+    // Reconcile
+    $('#btn-reconcile').click(function(){
+        if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
+            // alert('reconcile');
+            location.href = $(this).data('href');
+        }
+    });
 
 })(jQuery);
 </script>

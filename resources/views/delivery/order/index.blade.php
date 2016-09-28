@@ -46,7 +46,7 @@
                                 <option value="pekerjaan" >Pekerjaan</option>
                                 <option value="nopol" >Armada</option>
                                 <option disabled>──────────</option>
-                                <option value="D" >DRAFT</option>
+                                {{-- <option value="D" >DRAFT</option> --}}
                                 <option value="O" >OPEN</option>
                                 <option value="V" >VALIDATED</option>
 

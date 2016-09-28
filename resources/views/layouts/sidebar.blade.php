@@ -64,18 +64,18 @@
                 </ul>
             </li>
 
-            {{-- <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
+            <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-newspaper-o"></i>
                     <span>Invoices</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('invoice/customer-invoice*') ? 'active':''}}" ><a href="invoice/customer-bill"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>  
-                    <li class="{{Request::is('invoice/supplier-invoice*') ? 'active':''}}" ><a href="invoice/supplier-bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>  
+                    <li class="{{Request::is('invoice/customer*') ? 'active':''}}" ><a href="invoice/customer"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>  
+                    {{-- <li class="{{Request::is('invoice/supplier-invoice*') ? 'active':''}}" ><a href="invoice/supplier-bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>   --}}
                 </ul>
             </li>
- --}}
+
             <li class="treeview {{Request::is('setting/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-cogs"></i>

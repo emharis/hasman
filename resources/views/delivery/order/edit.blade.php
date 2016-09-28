@@ -77,6 +77,7 @@
             @endif
 
             <input type="hidden" name="delivery_order_id" value="{{$data->id}}">
+            <input type="hidden" name="delivery_order_number" value="{{$data->delivery_order_number}}">
             <table class="table" id="table-do-master" >
                 <tbody>
                     <tr>
@@ -188,7 +189,7 @@
                         <tr>
                             <td><label>No Nota</label></td>
                             <td>
-                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control">
+                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control" value="CUST/" >
                             </td>
                         </tr>
                         <tr>
@@ -455,6 +456,9 @@
 
     // VALIDATE DELOIVERY ORDER
     $('#btn-validate').click(function(){
+        // set auto kode no nota
+        $('input[name=no_nota_timbang]').val('CUST/'+$('input[name=delivery_order_number]').val());
+
         $('#modal-validate').modal({
             backdrop: 'static',
             keyboard: false

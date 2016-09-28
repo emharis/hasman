@@ -3,6 +3,7 @@
 @section('styles')
 <!--Bootsrap Data Table-->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+<link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 
 <style>
     #table-data > tbody > tr{
@@ -16,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Delivery Orders
+        Customer Invoices
     </h1>
 </section>
 
@@ -28,7 +29,8 @@
         <div class="box-header with-border" >
             <div class="row" >
                 <div class="col-sm-6 col-md-6 col-lg-6" >
-                    
+                    {{-- <a class="btn btn-primary btn-sm" id="btn-add" href="invoice/customer/create" >Create</a> --}}
+                    {{-- <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a> --}}
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6" >
                     {{-- Filter section --}}
@@ -38,24 +40,20 @@
                         </span>
                         <div class="input-group-btn" style="width: 30%;" >
                             <select name="select_filter_by" class="form-control" >
-                                <option value="delivery_order_number" >DO Number</option>
-                                <option value="order_date" >Order Date</option>
-                                <option value="delivery_date" >Delivery Date</option>
+                                <option value="order_number" >Nomor Order</option>
+                                <option value="order_date" >Tanggal</option>
                                 <option value="customer" >Customer</option>
-                                <option value="material" >Material</option>
                                 <option value="pekerjaan" >Pekerjaan</option>
-                                <option value="nopol" >Armada</option>
                                 <option disabled>──────────</option>
-                                {{-- <option value="D" >DRAFT</option> --}}
                                 <option value="O" >OPEN</option>
                                 <option value="V" >VALIDATED</option>
+                                <option value="D" >DONE</option>
 
                             </select>
-                            <input type="hidden" name="filter_by" value="{{Input::get('filter_by')}}"> 
                         </div><!-- /btn-group -->
 
                         {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter " value="{{Input::get('filter_string')}}">
+                        <input type="text" name="filter_string" class="form-control input-filter ">
 
                         {{-- Filter by date --}}
                         <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
@@ -65,11 +63,7 @@
 
                         {{-- Filter submit button --}}
                         <div class="input-group-btn" >
-                            <button class="btn btn-success btn-flat" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
-                        </div>
-
-                        <div class="input-group-btn" >
-                            <a class="btn btn-danger " href="delivery/order" ><i class="fa fa-refresh" ></i></a>
+                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
                         </div>
 
                     </div>
@@ -82,75 +76,68 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
+                        {{-- <th style="width:25px;" class="text-center">
+                            <input type="checkbox" name="ck_all" >
+                        </th> --}}
                         <th style="width:25px;">No</th>
-                        <th>DO Number</th>
-                        <th>Order Date</th>
-                        <th>Delivery Date</th>
                         <th>Customer</th>
-                        <th>Material</th>
-                        <th>Pekerjaan</th>
-                        {{-- <th>Driver</th> --}}
-                        <th>Armada</th>
-                        {{-- <th>Tujuan</th> --}}
-                        {{-- <th>Lokasi Galian</th> --}}
+                        <th>Number</th>
+                        <th>Order Date</th>
+                        <th>Order Number</th>
+                        <th>Total</th>
+                        <th>Amount Due</th>
                         <th>Status</th>
-                        <th style="width:25px;"></th>
+                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach($data as $dt)
-                        @for($i=0;$i<$dt->qty;$i++)
-                            <tr>
-                                <td class="text-right">{{$rownum++}}</td>
-                                <td>{{$dt->delivery_order_number}}</td>
-                                <td>{{$dt->order_date_formatted}}</td>
-                                <td>{{$dt->delivery_date_formatted}}</td>
-                                <td>
-                                    {{ $dt->customer}}
-                                </td>
-                                <td>
-                                    {{$dt->material}}
-                                </td>
-                                <td>
-                                    {{$dt->pekerjaan}}
-                                </td>
-                                {{-- <td>
-                                    {{$dt->karyawan}}
-                                </td> --}}
-                                <td>
-                                    {{$dt->nopol}}
-                                </td>
-                                {{-- <td>
-                                    {{  $dt->kecamatan  }}
-                                </td>
-                                <td>
-                                    {{$dt->lokasi_galian}}
-                                </td> --}}
-                                <td>
-                                    @if($dt->status == 'D')
-                                        Draft
-                                    @elseif($dt->status == 'O')
-                                        Open
-                                    @else
-                                        Validated
-                                    @endif
-                                </td>
-                                <td class="text-center" >
-                                    <a class="btn btn-primary btn-xs" href="delivery/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
-                                </td>
-                            </tr>
-                        @endfor
-                   @endforeach
+                    @foreach($data as $dt)
+                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
+                        {{-- <td class="text-center" >
+                            @if($dt->status == 'O')
+                                <input type="checkbox" class="ck_row" >
+                            @endif
+                        </td> --}}
+                        <td class="row-to-edit text-right" >{{$rownum++}}</td>
+                        <td class="row-to-edit" >
+                            {{$dt->customer}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->inv_number}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->order_date_formatted}}
+                        </td>
+                        <td class="row-to-edit" >
+                            {{$dt->order_number}}
+                        </td>
+                        <td class="row-to-edit uang text-right" >
+                            {{$dt->total}}
+                        </td>
+                        <td class="row-to-edit uang text-right" >
+                            {{$dt->amount_due}}
+                        </td>
+                        <td class="row-to-edit" >
+                            @if($dt->status == 'O')
+                                OPEN
+                            @elseif($dt->status == 'V')
+                                VALIDATED
+                            @else
+                                DONE
+                            @endif    
+                        </td>
+                        <td class="text-center" >
+                            <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
 
             <div class="text-right" >
-                {!! $data->appends(['filter_string' => \Input::get('filter_string')])
-                        ->appends(['filter_by' => \Input::get('filter_by')])
-                        ->appends(['date_start' => \Input::get('date_start')])
-                        ->appends(['date_end' => \Input::get('date_end')])
-                                    ->render() !!}
+                {{$data->render()}}
             </div>
+
         </div><!-- /.box-body -->
     </div><!-- /.box -->
 
@@ -162,33 +149,11 @@
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
+<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 (function ($) {
-
-    // set value for select filter
-    $('select[name=select_filter_by]').val($('input[name=filter_by]').val());
-    $('select[name=select_filter_by]').trigger('change');
-
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-right","orderable": false},
-    //         {className: "text-left"},
-    //         null,
-    //         null,
-    //         null,   
-    //         null,   
-    //         null,   
-    //         null,
-    //         null,
-    //         // null,
-    //         // null,
-    //         // null,
-    //         {className: "text-center","orderable": false},
-    //         // {className: "text-center"}
-    //     ],
-    //     sort: false,
-    // });
 
     // ==========================================================================
     // FILTER SECTION
@@ -199,20 +164,15 @@
         $('.input-filter').removeClass('hide');
         $('.input-filter').hide();
 
-        if(filter_by == 'delivery_order_number' 
-                    || filter_by == 'order_number' 
-                    || filter_by == 'customer' 
-                    || filter_by == 'material' 
-                    || filter_by == 'nopol' 
-                    || filter_by == 'pekerjaan' ){
+        if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
             $('input[name=filter_string]').show();
-        }else if(filter_by == 'order_date' || filter_by == 'delivery_date'){
+        }else if(filter_by == 'order_date'){
             $('.input-filter-by-date').show();
         }else{
             // order by status open, validated, done
             // otomatis submit tanpa tombol click
             var filter_by = $('select[name=select_filter_by]').val();
-            var formFilter = $('<form>').attr('method','GET').attr('action','delivery/order/filter');
+            var formFilter = $('<form>').attr('method','GET').attr('action','invoice/customer/filter');
             formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
             formFilter.submit();
         }
@@ -221,9 +181,9 @@
 
     $('#btn-submit-filter').click(function(){
         var filter_by = $('select[name=select_filter_by]').val();
-        var formFilter = $('<form>').attr('method','GET').attr('action','delivery/order/filter');
+        var formFilter = $('<form>').attr('method','GET').attr('action','invoice/customer/filter');
 
-        if(filter_by == 'order_date' || filter_by == 'delivery_date'){
+        if(filter_by == 'order_date'){
             formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
             formFilter.append($('<input>').attr('type','hidden').attr('name','date_end').val($('input[name=input_filter_date_end]').val()));
         }
@@ -239,6 +199,42 @@
     // END OF FILTER SECTION
     // ==========================================================================
 
+    // -----------------------------------------------------
+    // SET AUTO NUMERIC
+    // =====================================================
+    $('.uang').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
+
+    // normalize
+    $('.uang').each(function(){
+        $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
+    // END OF AUTONUMERIC
+
+    // SET DATEPICKER
+    $('.input-tanggal').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+    });
+    // END OF SET DATEPICKER
+
+    // var TBL_KATEGORI = $('#table-data').DataTable({
+    //     "columns": [
+    //         {className: "text-center","orderable": false},
+    //         {className: "text-right"},
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         {className: "text-center"},
+    //         // {className: "text-center"}
+    //     ],
+    //     order: [[ 1, 'asc' ]],
+    // });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){
@@ -271,7 +267,7 @@
     $('.row-to-edit').click(function(){        
         var row = $(this).parent();        
         var data_id = row.data('id');            
-        location.href = 'delivery/order/edit/' + data_id ;        
+        location.href = 'invoice/customer/edit/' + data_id ;        
     });
 
     // Delete Data Lokasi
@@ -285,7 +281,7 @@
                 dataid.push(newdata);
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','delivery/order/delete');
+            var deleteForm = $('<form>').attr('method','POST').attr('action','invoice/customer/delete');
             deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
             deleteForm.submit();
         }

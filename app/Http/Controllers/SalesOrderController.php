@@ -91,7 +91,8 @@ class SalesOrderController extends Controller
 				'data_detail' => $data_detail,
 				'select_pekerjaan' => $select_pekerjaan
 			]);
-		}elseif($data_master->status = 'V'){
+		}elseif($data_master->status == 'V' || $data_master->status == 'D'){
+		// }elseif($data_master->status == 'V'){
 			// get jumlah DO
 			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
 			
@@ -338,6 +339,20 @@ class SalesOrderController extends Controller
                 'paging_item_number' => $paging_item_number
             ]);
 
+	}
+
+	public function reconcile($id){
+		return \DB::transaction(function()use($id){
+			// delete customer invoice
+			\DB::table('customer_invoices')->where('order_id',$id)->delete();
+			// delete delivery order
+			\DB::table('delivery_order')->where('sales_order_id',$id)->delete();
+			// update status sales order
+			\DB::table('sales_order')->where('id',$id)->update([
+					'status' => 'O'
+				]);
+			return redirect()->back();
+		});
 	}
 
 

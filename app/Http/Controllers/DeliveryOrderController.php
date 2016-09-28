@@ -12,6 +12,7 @@ class DeliveryOrderController extends Controller
 		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
 		$data = \DB::table('VIEW_DELIVERY_ORDER')
+			->where('status','!=','D')
 			->orderBy('order_date','desc')
 			->paginate($paging_item_number);
 			
@@ -107,12 +108,71 @@ class DeliveryOrderController extends Controller
 					]);
 			}
 
+			$data_do = \DB::table('delivery_order')->find($req->delivery_id);
+
+			// update status
+			// \DB::table('delivery_order')
+			// 	->where('id',$req->delivery_id)
+			// 	->update([
+			// 			'status' => 'V'
+			// 		]);
+
+
+				// update customer invoice detail
+				\DB::table('customer_invoice_detail')
+					->where('delivery_order_id',$data_do->id)
+					->update([
+							'kalkulasi' => $data_do->kalkulasi,
+							'panjang' => $data_do->panjang,
+							'lebar' => $data_do->lebar,
+							'tinggi' => $data_do->tinggi,
+							'volume' => $data_do->volume,
+							'gross' => $data_do->gross,
+							'tarre' => $data_do->tarre,
+							'netto' => $data_do->netto,
+							'unit_price' => $data_do->unit_price,
+							'total' => $data_do->total,
+							'qty' => $data_do->qty,
+						]);
+				// ->raw('update customer_invoice_detail as cid
+				// 		set cid.kalkulasi = ' . $data_do->kalkulasi . ',
+				// 		cid.panjang = ' . $data_do->panjang . ',
+				// 		cid.lebar = ' . $data_do->lebar . ',
+				// 		cid.tinggi = ' . $data_do->tinggi . ',
+				// 		cid.volume = ' . $data_do->volume . ',
+				// 		cid.gross = ' . $data_do->gross . ',
+				// 		cid.tarre = ' . $data_do->tarre . ',
+				// 		cid.netto = ' . $data_do->netto . ',
+				// 		cid.unit_price = ' . $data_do->unit_price . ',
+				// 		cid.total = ' . $data_do->total . ',
+				// 		cid.qty = ' . $data_do->qty . ' where delivery_order_id = ' . $data_do->id );
+				// ->where('order_id',$data_do->sales_order_id);
+
+				// Update Status Customer Invoice
+				// update customer_invoices
+				// set status = 'O'
+				// where  
+				// (select count(id) from delivery_order where status = 'V' and sales_order_id = 14) = (select sum(qty) from sales_order_detail where sales_order_id = 14) hasilmancing_db_org
+				\DB::table('customer_invoices')
+					->whereRaW("(select count(id) 
+							from delivery_order where status = 'V' and sales_order_id = " . $data_do->sales_order_id . ") = (select sum(qty) from sales_order_detail where sales_order_id = " . $data_do->sales_order_id . ")
+						and order_id = " . $data_do->sales_order_id)
+					->update([
+							'status' => 'O',
+							'total' =>\DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')'),
+							'amount_due' => \DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')')
+						]);
+
+
+
 			return redirect()->back();
 		});
 	}
 
 	public function reconcile($id){
 		return \DB::transaction(function()use($id){
+			$do = \DB::table('delivery_order')->find($id);
+			// update delivery order
 			\DB::table('delivery_order')->where('id',$id)->update([
 					'status' => 'O',
 					'no_nota_timbang' => '',
@@ -127,6 +187,31 @@ class DeliveryOrderController extends Controller
 					'unit_price' => '',
 					'total' => '',
 				]);
+
+			// reset customer invoice detail
+			\DB::table('customer_invoice_detail')
+				->where('delivery_order_id',$id)
+				->update([
+					'kalkulasi' => '',
+					'panjang' => '',
+					'lebar' => '',
+					'tinggi' => '',
+					'volume' => '',
+					'gross' => '',
+					'tarre' => '',
+					'netto' => '',
+					'unit_price' => '',
+					'total' => '',
+				]);
+
+			// set status customer invoice to 'Draft'
+			\DB::table('customer_invoices')
+			->where('order_id',$do->sales_order_id)
+			->update([
+				'status' => 'D',
+				'total' => 0,
+				'amount_due' => 0,
+			]);
 
 			return redirect()->back();
 		});
@@ -149,6 +234,7 @@ class DeliveryOrderController extends Controller
 
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
+					->where('status','!=','D')
 					->whereBetween($req->filter_by,[$date_start,$date_end])
 					->paginate($paging_item_number)
 	                ->appends([
@@ -164,6 +250,7 @@ class DeliveryOrderController extends Controller
          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
+					->where('status','!=','D')
 					->where('status','=',$req->filter_by)
 					->paginate($paging_item_number)
 	                ->appends([
@@ -176,6 +263,7 @@ class DeliveryOrderController extends Controller
          }else{
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
+					->where('status','!=','D')
 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
 					->paginate($paging_item_number)
 	                ->appends([
