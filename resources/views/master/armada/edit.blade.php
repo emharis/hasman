@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/armada" >Armada</a> 
+        <a href="master/armada" >Data Armada</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

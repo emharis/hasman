@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/supplier" >Supplier</a> 
+        <a href="master/supplier" >Data Supplier</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

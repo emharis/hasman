@@ -102,6 +102,11 @@
             .content-header > h1{
                 font-size: 18px;
             }
+
+            /*kecilkan size breadcrumb*/
+            .content-header h1{
+                font-size: 1.2em!important;
+            }
         </style>
 
         @yield('styles')

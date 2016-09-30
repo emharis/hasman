@@ -109,17 +109,19 @@
                     </table>
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4" >
-                     {{-- modul invoices --}}
-                     {{-- <a class="btn btn-app pull-right" href="sales/order/invoice/{{$data_master->id}}" >
-                        <span class="badge bg-green">1</span>
-                        <i class="fa fa-newspaper-o"></i> Invoice
-                    </a> --}}
-                    
+                    {{-- INVOICES SHORTCUT --}}
+                    @if($data_master->status == 'D')
+                        <a class="btn btn-app pull-right" href="sales/order/invoices/{{$data_master->id}}" >
+                            <span class="badge bg-green">{{$invoices_count}}</span>
+                            <i class="fa fa-newspaper-o"></i> Invoices
+                        </a>
+                    @endif
+
+                    {{-- DELIVERY SHORTCUT --}}
                     <a class="btn btn-app pull-right" href="sales/order/delivery/{{$data_master->id}}" >
                         <span class="badge bg-green">{{$delivery_order_count}}</span>
                         <i class="fa fa-truck"></i> Delivery
                     </a>
-
                     
                 </div>
             </div>

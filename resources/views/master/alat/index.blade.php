@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Alat Berat
+        Data Alat Berat
     </h1>
 </section>
 

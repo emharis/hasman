@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/jabatan" >Jabatan</a> 
+        <a href="master/jabatan" >Data Jabatan</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

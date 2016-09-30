@@ -18,7 +18,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/karyawan" >Karyawan</a> 
+        <a href="master/karyawan" >Data Karyawan</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Lokasi Galian
+        Data Lokasi Galian
     </h1>
 </section>
 

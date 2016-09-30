@@ -30,7 +30,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >Delivery Orders</h3></label>
+            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em" >Delivery Orders</h3></label>
         </div>
         <div class="box-body">
             

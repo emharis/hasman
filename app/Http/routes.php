@@ -139,6 +139,8 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('order/create-pekerjaan','SalesOrderController@createPekerjaan');
         Route::get('order/filter','SalesOrderController@filter'); 
         Route::get('order/reconcile/{id}','SalesOrderController@reconcile');    
+        Route::get('order/invoices/{sales_order_id}','SalesOrderController@invoices');    
+        Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');    
     });
 
     Route::group(['prefix' => 'delivery'], function () {

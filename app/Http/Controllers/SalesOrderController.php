@@ -91,16 +91,25 @@ class SalesOrderController extends Controller
 				'data_detail' => $data_detail,
 				'select_pekerjaan' => $select_pekerjaan
 			]);
-		}elseif($data_master->status == 'V' || $data_master->status == 'D'){
+		}elseif($data_master->status == 'V' ){
 		// }elseif($data_master->status == 'V'){
 			// get jumlah DO
 			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
-			
 			return view('sales.order.validated',[
 					'data_master' => $data_master,
 					'data_detail' => $data_detail,
 					'select_pekerjaan' => $select_pekerjaan,
 					'delivery_order_count' => $delivery_order_count,
+				]);
+		}elseif($data_master->status == 'D'){
+			$delivery_order_count = \DB::table('delivery_order')->where('sales_order_id',$id)->count();
+			$invoices_count = \DB::table('customer_invoices')->where('order_id',$id)->count();
+			return view('sales.order.validated',[
+					'data_master' => $data_master,
+					'data_detail' => $data_detail,
+					'select_pekerjaan' => $select_pekerjaan,
+					'delivery_order_count' => $delivery_order_count,
+					'invoices_count' => $invoices_count,
 				]);
 		}
 
@@ -366,6 +375,33 @@ class SalesOrderController extends Controller
 				]);
 			return redirect()->back();
 		});
+	}
+
+
+	public function invoices($sales_order_id){
+		$sales_order = \DB::table('sales_order')->find($sales_order_id);
+		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+				->where('order_id',$sales_order_id)
+				->get();
+		return view('sales.order.invoices',[
+				'data' => $data,
+				'sales_order' => $sales_order,
+			]);
+	}
+
+	public function showInvoice($invoice_id){
+		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+				->find($invoice_id);
+		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+				->where('customer_invoice_id',$invoice_id)
+				->get();
+		$sales_order = \DB::table('sales_order')->find($data->order_id);
+
+		return view('sales.order.invoice-show',[
+				'data' => $data,
+				'data_detail' => $data_detail,
+				'sales_order' => $sales_order,
+			]);
 	}
 
 

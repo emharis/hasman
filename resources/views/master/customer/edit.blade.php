@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/customer" >Customer</a> 
+        <a href="master/customer" >Data Customer</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

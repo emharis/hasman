@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/material" >Material</a> 
+        <a href="master/material" >Data Material</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Edit
     </h1>

@@ -17,7 +17,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Customer Invoices
+         <a href="sales/order" >Sales Orders</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         <a href="sales/order/edit/{{$sales_order->id}}" >{{$sales_order->order_number}}</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         Customer Invoices
     </h1>
 </section>
 
@@ -26,54 +30,11 @@
 
     <!-- Default box -->
     <div class="box box-solid">
-        <div class="box-header with-border" >
-            <div class="row" >
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- <a class="btn btn-primary btn-sm" id="btn-add" href="invoice/customer/create" >Create</a> --}}
-                    {{-- <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a> --}}
-                    <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Customer Invoices</h3></label>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- Filter section --}}
-                    <div class="input-group">
-                        <span class="input-group-addon bg-gray" >
-                            Filter
-                        </span>
-                        <div class="input-group-btn" style="width: 30%;" >
-                            <select name="select_filter_by" class="form-control" >
-                                <option value="order_number" >Nomor Order</option>
-                                <option value="order_date" >Tanggal</option>
-                                <option value="customer" >Customer</option>
-                                <option value="pekerjaan" >Pekerjaan</option>
-                                <option disabled>──────────</option>
-                                <option value="O" >OPEN</option>
-                                <option value="V" >VALIDATED</option>
-                                <option value="D" >DONE</option>
-
-                            </select>
-                        </div><!-- /btn-group -->
-
-                        {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter ">
-
-                        {{-- Filter by date --}}
-                        <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
-                            <input type="text" name="input_filter_date_start" class="form-control input-tanggal">
-                        </div>
-                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
-
-                        {{-- Filter submit button --}}
-                        <div class="input-group-btn" >
-                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
-                        </div>
-
-                    </div>
-                    {{-- End of filter section --}}
-                </div>
-            </div>
+        <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
+            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Customer Invoices</h3></label>
         </div>
         <div class="box-body">
-            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
+            <?php $rownum=1; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
@@ -138,7 +99,7 @@
                             @endif    
                         </td>
                         <td class="text-center" >
-                            <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            <a class="btn btn-primary btn-xs" href="sales/order/invoices/show/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -146,10 +107,13 @@
             </table>
 
             <div class="text-right" >
-                {{$data->render()}}
+                {{-- {{$data->render()}} --}}
             </div>
 
         </div><!-- /.box-body -->
+        <div class="box-footer" >
+            <a class="btn btn-danger btn-sm" href="sales/order/edit/{{$sales_order->id}}" >Close</a>
+        </div>
     </div><!-- /.box -->
 
 </section><!-- /.content -->
@@ -231,21 +195,6 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
-
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){

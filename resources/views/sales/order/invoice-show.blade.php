@@ -41,7 +41,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="invoice/customer" >Customer Invoices</a> <i class="fa fa-angle-double-right" ></i> {{$data->inv_number}}
+        <a href="sales/order" >Sales Orders</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         <a href="sales/order/edit/{{$sales_order->id}}" >{{$sales_order->order_number}}</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         <a href="sales/order/invoices/{{$sales_order->id}}" >Customer Invoices</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         {{$data->inv_number}}
     </h1>
 </section>
 
@@ -51,23 +57,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            {{-- @if($data->status != 'D')
-                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/order/reconcile/{{$data->id}}" >Reconcile</button> 
-
-                <a class="btn btn-primary btn-sm" id="btn-validate" href="invoice/order/set-to-done/{{$data->id}}" >Set to done</a>
-
-            @endif --}}
-            <button class="btn btn-primary btn-sm" id="btn-register-payment" >Register Payment</button>
-            <div class="btn-group">
-              <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Print <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#">Direct Print</a></li>
-                <li><a href="#">PDF</a></li>
-              </ul>
-            </div>
-            
+            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->inv_number}}</h3></label>
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
@@ -81,7 +71,7 @@
 
         </div>
         <div class="box-body">
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->inv_number}}</h3></label>
+            
 
             <input type="hidden" name="invoice_order_id" value="{{$data->id}}">
             
@@ -319,7 +309,7 @@
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="invoice/customer" >Close</a>
+            <a class="btn btn-danger" href="sales/order/invoices/{{$sales_order->id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 

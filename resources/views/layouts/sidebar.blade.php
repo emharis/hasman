@@ -20,14 +20,14 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('master/lokasi*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Lokasi Galian</a></li>        
-                    <li class="{{Request::is('master/armada*') ? 'active':''}}" ><a href="master/armada"><i class="fa fa-circle-o"></i> Armada</a></li>        
-                    <li class="{{Request::is('master/jabatan*') ? 'active':''}}" ><a href="master/jabatan"><i class="fa fa-circle-o"></i> Jabatan</a></li>        
-                    <li class="{{Request::is('master/karyawan*') ? 'active':''}}" ><a href="master/karyawan"><i class="fa fa-circle-o"></i> Karyawan</a></li>        
-                    <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Supplier</a></li>        
-                    <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Customer</a></li>        
-                    <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Material</a></li>        
-                    <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Alat Berat</a></li>        
+                    <li class="{{Request::is('master/lokasi*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Data Lokasi Galian</a></li>        
+                    <li class="{{Request::is('master/armada*') ? 'active':''}}" ><a href="master/armada"><i class="fa fa-circle-o"></i> Data Armada</a></li>        
+                    <li class="{{Request::is('master/jabatan*') ? 'active':''}}" ><a href="master/jabatan"><i class="fa fa-circle-o"></i> Data Jabatan</a></li>        
+                    <li class="{{Request::is('master/karyawan*') ? 'active':''}}" ><a href="master/karyawan"><i class="fa fa-circle-o"></i> Data Karyawan</a></li>        
+                    <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Data Supplier</a></li>        
+                    <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Data Customer</a></li>        
+                    <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Data Material</a></li>        
+                    <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Data Alat Berat</a></li>        
                 </ul>
             </li>
 

@@ -17,7 +17,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/alat" >Alat Berat</a> <i class="fa fa-angle-double-right" ></i> Create
+        <a href="master/alat" >Data Alat Berat</a> 
+        <i class="fa fa-angle-double-right" ></i> Create
     </h1>
 </section>
 

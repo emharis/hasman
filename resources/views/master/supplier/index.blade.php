@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Supplier
+        Data Supplier
     </h1>
 </section>
 
