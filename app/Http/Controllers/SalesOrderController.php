@@ -153,16 +153,18 @@ class SalesOrderController extends Controller
 				'status' => 'V'
 			]);
 
+			// GENERATE 1 INVOICE
+			// =======================================================================
 			// generate customer invoice
-			$invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
-			$invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
-			\DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
+			// $invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
+			// $invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
+			// \DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
 
-			$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
-					'inv_number' => $invoice_number,
-					'order_id' => $id,
-					'status' => 'D'
-				]);
+			// $customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+			// 		'inv_number' => $invoice_number,
+			// 		'order_id' => $id,
+			// 		'status' => 'D'
+			// 	]);
 
 			// generate & insert delivery order for this sales order
 			$sales_order_detail = \DB::table('sales_order_detail')->where('sales_order_id',$id)->get();
@@ -187,14 +189,17 @@ class SalesOrderController extends Controller
 							'status' => 'D',
 						]);
 
-					// generate Invoice detail
-					\DB::table('customer_invoice_detail')->insert([
-							'customer_invoice_id' => $customer_invoice_id,
-							'delivery_order_id' => $do_id,
-							'qty' => 1
-						]);
+					// // generate Invoice detail
+					// \DB::table('customer_invoice_detail')->insert([
+					// 		'customer_invoice_id' => $customer_invoice_id,
+					// 		'delivery_order_id' => $do_id,
+					// 		'qty' => 1
+					// 	]);
 				}
 			}
+			// END GENERATE 1 INVOICE
+			// =======================================================================
+
 		return redirect()->back();
 
 		});
@@ -215,9 +220,17 @@ class SalesOrderController extends Controller
 
 	public function deliveryEdit($delivery_id){
 		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
-		return view('sales.order.delivery_edit',[
+
+		if($data->status == 'V'){
+			return view('sales.order.delivery_validated',[
 				'data' => $data
 			]);
+		}else{
+			return view('sales.order.delivery_edit',[
+				'data' => $data
+			]);	
+		}
+		
 	}
 
 	public function deliveryUpdate(Request $req){

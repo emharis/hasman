@@ -71,7 +71,7 @@
             <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'O' ? 'bg-blue' : 'bg-gray'}}" >Open</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}"" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Draft</a>
         </div>
         <div class="box-body">
             
@@ -85,7 +85,7 @@
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Sales Order Number</label>
+                            <label>Order Number</label>
                         </td>
                         <td class="col-lg-4" >
                             {{$data->order_number}}
@@ -104,15 +104,23 @@
                         <td>
                             {{'[' . $data->kode_customer .'] ' . $data->customer}}
                         </td>
-                        <td>
+                       {{--  <td>
                             <label>Delivery Date</label>
                         </td>
                         <td>
                             <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : date('d-m-Y')}}">
+                        </td> --}}
+                        <td>
+                            <label>Pekerjaan</label>
+                        </td>
+                        <td>
+                            {{$data->pekerjaan}}<br/>
+                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                            {{$data->kabupaten . ', ' . $data->provinsi }}
                         </td>
                         
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td>
                             <label>Pekerjaan</label>
                         </td>
@@ -128,8 +136,8 @@
                             <input type="text" name="lokasi_galian" class="form-control" value="{{$data->lokasi_galian ?  '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian : ''}}" autofocus >
                             <input type="hidden" name="lokasi_galian_id" value="{{$data->lokasi_galian_id}}" >
                         </td>
-                    </tr>
-                    <tr>
+                    </tr> --}}
+                    {{-- <tr>
                         <td>
                             <label>Armada/Driver</label>
                         </td>
@@ -137,7 +145,7 @@
                             <input type="text" name="armada" class="form-control" value="{{ $data->armada ? '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan  : ''}}" >
                             <input type="hidden" name="armada_id" value="{{$data->armada_id}}" >
                         </td>
-                    </tr>
+                    </tr> --}}
                     
                     {{-- <tr>
                         <td>
@@ -172,11 +180,11 @@
                             <input type="hidden" name="desa_id" value="{{$data->desa_id}}" >
                         </td>
                     </tr> --}}
-                    <tr>
+                    {{-- <tr>
                         <td colspan="4" >
                             <textarea maxlength="250" name="keterangan" class="form-control" rows="2" placeholder="Keterangan" >{{$data->keterangan}}</textarea>
                         </td>
-                    </tr>
+                    </tr> --}}
                     {{-- <tr>
                         <td class="col-lg-2">
                             <label>Salesperson</label>
@@ -216,8 +224,8 @@
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order/delivery/{{$data->sales_order_id}}" >Cancel</a>
+            {{-- <button type="submit" class="btn btn-primary" id="btn-save" >Save</button> --}}
+            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order/delivery/{{$data->sales_order_id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 

@@ -166,7 +166,7 @@
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="{{URL::previous()}}" >Cancel</a>
         </div>
     </div><!-- /.box -->
 
@@ -177,14 +177,14 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span></button>
+            {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button> --}}
             <h4 class="modal-title">Validate Delivery Order</h4>
           </div>
           <form name="form_create_pekerjaan" method="POST" action="delivery/order/to-validate" >
             <input type="hidden" name="delivery_id" value="{{$data->id}}"  >
             <div class="modal-body">
-                <table class="table table-bordered table-condensed" >
+                <table class="table table-bordered table-condensed" id="table-kalkulasi" >
                     <tbody>
                         <tr>
                             <td><label>No Nota</label></td>
@@ -298,7 +298,7 @@
     // SET AUTONUMERIC
     $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=gross], input[name=tarre], input[name=volume], input[name=netto]').autoNumeric('init');
 
-     $('input[name=unit_price], input[name=total]').autoNumeric('init',{
+    $('input[name=unit_price], input[name=total]').autoNumeric('init',{
         vMin:'0',
         vMax:'9999999999'
     });
@@ -471,6 +471,9 @@
 
     // KALKULASI DO
     $('select[name=kalkulasi]').change(function(){
+        // clear input
+        $('#table-kalkulasi input:not([name=no_nota_timbang])').val('');
+
         if($(this).val() == 'R'){
             $('.row-kubikasi, .row-tonase').hide();
             $('.row-price').show();
@@ -489,24 +492,62 @@
     // CALCULATE KUBIKASI
     $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=unit_price]').keyup(function(){
         
-        var panjang = $('input[name=panjang]').autoNumeric('get');
+        if($('select[name=kalkulasi]').val() == 'K'){
+            var panjang = $('input[name=panjang]').autoNumeric('get');
+
+            var lebar = $('input[name=lebar]').autoNumeric('get');
+            // alert(lebar);
+            var tinggi = $('input[name=tinggi]').autoNumeric('get');
+            // alert(tinggi);
+            var volume = Number(panjang) * Number(lebar) * Number(tinggi);
+            // alert('volume ' + volume);
+            $('input[name=volume]').autoNumeric('set',volume);
+
+            // hitung total harga
+            var price = $('input[name=unit_price]').autoNumeric('get');
+            var total = Number(price) * Number(volume);
+
+            $('input[name=total]').autoNumeric('set',total);
+        }
 
         
-        var lebar = $('input[name=lebar]').autoNumeric('get');
-        // alert(lebar);
-        var tinggi = $('input[name=tinggi]').autoNumeric('get');
-        // alert(tinggi);
-        var volume = Number(panjang) * Number(lebar) * Number(tinggi);
-        // alert('volume ' + volume);
-        $('input[name=volume]').autoNumeric('set',volume);
-
-        // hitung total harga
-        var price = $('input[name=unit_price]').autoNumeric('get');
-        var total = Number(price) * Number(volume);
-
-        $('input[name=total]').autoNumeric('set',total);
     });
     // END OF CALCULATE KUBIKASI
+    
+
+    // CALCULATE TONASE
+    $('input[name=gross], input[name=tarre], input[name=unit_price]').keyup(function(){
+        // alert($('select[name=kalkulasi]').val());
+        if($('select[name=kalkulasi]').val() == 'T'){
+            var gross = $('input[name=gross]').autoNumeric('get');
+        
+            var tarre = $('input[name=tarre]').autoNumeric('get');
+            // alert(lebar);
+            var netto = Number(gross) - Number(tarre);
+            
+            $('input[name=netto]').autoNumeric('set',netto);
+
+            // hitung total harga
+            var price = $('input[name=unit_price]').autoNumeric('get');
+            var total = Number(price) * Number(netto);
+
+            $('input[name=total]').autoNumeric('set',total);
+        }
+        
+    });
+    // END CALCULATE TONASE
+
+    // CALCULATE RITASE
+    $('input[name=unit_price]').keyup(function(){
+        // alert($('select[name=kalkulasi]').val());
+        if($('select[name=kalkulasi]').val() == 'R'){
+            var unit_price = $('input[name=unit_price]').autoNumeric('get');
+
+            $('input[name=total]').autoNumeric('set',unit_price);
+        }
+        
+    });
+    // END CALCULATE RITASE
 
 })(jQuery);
 </script>

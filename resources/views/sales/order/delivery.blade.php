@@ -41,9 +41,10 @@
                         <th style="width:25px;">No</th>
                         <th>DO Number</th>
                         <th>Material</th>
-                        <th>Driver</th>
-                        <th>Armada</th>
-                        <th>Lokasi Galian</th>
+                        {{-- <th>Driver</th> --}}
+                        {{-- <th>Armada</th> --}}
+                        {{-- <th>Lokasi Galian</th> --}}
+                        <th>Pekerjaan</th>
                         <th>Tujuan</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
@@ -58,7 +59,7 @@
                                 <td>
                                     {{'['.$dt->kode_material.'] '.$dt->material}}
                                 </td>
-                                <td>
+                               {{--  <td>
                                     @if($dt->karyawan)
                                         {{'['.$dt->kode_karyawan . '] ' . $dt->karyawan}}
                                     @endif
@@ -70,9 +71,12 @@
                                 </td>
                                 <td>
                                     {{$dt->lokasi_galian}}
+                                </td> --}}
+                                <td>
+                                    {{$dt->pekerjaan}}
                                 </td>
                                 <td>
-                                    {{$dt->desa}}
+                                    {{$dt->alamat_pekerjaan . ', ' . $dt->desa . ', ' . $dt->kecamatan . ', ' . $dt->kabupaten}}
                                 </td>
                                 <td>
                                     @if($dt->status == 'D')
@@ -80,7 +84,7 @@
                                     @elseif($dt->status == 'O')
                                         Open
                                     @else
-                                        Delivered
+                                        Validated
                                     @endif
                                 </td>
                                 <td class="text-center" >

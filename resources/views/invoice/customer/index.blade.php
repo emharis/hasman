@@ -84,6 +84,7 @@
                         <th>Number</th>
                         <th>Order Date</th>
                         <th>Order Number</th>
+                        <th>Kalkulasi</th>
                         <th>Total</th>
                         <th>Amount Due</th>
                         <th>Status</th>
@@ -110,6 +111,15 @@
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
+                        </td>
+                        <td class="row-to-edit" >
+                            @if($dt->kalkulasi == 'K')
+                                Kubikasi
+                            @elseif($dt->kalkulasi == 'T')
+                                Tonase
+                            @else
+                                Ritase
+                            @endif
                         </td>
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}

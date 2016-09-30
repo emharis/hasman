@@ -38,9 +38,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="delivery/order" >Delivery Orders</a> 
-        <i class="fa fa-angle-double-right" ></i> 
-        {{$data->delivery_order_number}} 
+        <a href="sales/order" >Sales Orders</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         <a href="sales/order/edit/{{$data->sales_order_id}}" >{{$data->order_number}}</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         <a href="sales/order/delivery/{{$data->sales_order_id}}" >Delivery Orders</a> 
+         <i class="fa fa-angle-double-right" ></i>
+         {{$data->delivery_order_number}} 
     </h1>
 </section>
 
@@ -52,7 +56,7 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status != 'D')
-                <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Reconcile</a>
+                {{-- <a  class="btn btn-primary btn-sm" href="sales/order/delivery/validate/{{$data->id}}" >Validate</a> --}}
                 <a class="btn btn-success btn-sm" >Print</a>
             @else
                 
@@ -104,6 +108,7 @@
                             <label>Delivery Date</label>
                         </td>
                         <td>
+                            {{-- <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : date('d-m-Y')}}"> --}}
                             {{$data->delivery_date_formatted }}
                         </td>
                         
@@ -121,7 +126,9 @@
                             <label>Lokasi Galian</label>
                         </td>
                         <td>
-                            {{ '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian }}
+                            {{-- <input type="text" name="lokasi_galian" class="form-control" value="{{$data->lokasi_galian ?  '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian : ''}}" autofocus > --}}
+                            {{-- <input type="hidden" name="lokasi_galian_id" value="{{$data->lokasi_galian_id}}" > --}}
+                            {{'[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian}}
                         </td>
                     </tr>
                     <tr>
@@ -129,207 +136,95 @@
                             <label>Armada/Driver</label>
                         </td>
                         <td colspan="3" >
+                            {{-- <input type="text" name="armada" class="form-control" value="{{ $data->armada ? '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan  : ''}}" > --}}
+                            {{-- <input type="hidden" name="armada_id" value="{{$data->armada_id}}" > --}}
                             {{ '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan }}
                         </td>
                     </tr>
+                    
+                    {{-- <tr>
+                        <td>
+                            <label>Provinsi</label>
+                        </td>
+                        <td>
+                            <input type="text" name="provinsi" class="form-control" value="{{$data->provinsi}}">
+                            <input type="hidden" name="provinsi_id" value="{{$data->provinsi_id}}" >
+                        </td>
+                        <td>
+                            <label>Kabupaten</label>
+                        </td>
+                        <td>
+                            <input type="text" name="kabupaten" class="form-control" value="{{$data->kabupaten}}" >
+                            <input type="hidden" name="kabupaten_id" class="form-control" value="{{$data->kabupaten_id}}" >
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Kecamatan</label>
+                        </td>
+                        <td>
+                            <input type="text" name="kecamatan" class="form-control" value="{{$data->kecamatan}}" >
+                            <input type="hidden" name="kecamatan_id" value="{{$data->kecamatan_id}}" >
+                        </td>
+                        <td>
+                            <label>Desa</label>
+                        </td>
+                        <td>
+                            <input type="text" name="desa" class="form-control" value="{{$data->desa}}" >
+                            <input type="hidden" name="desa_id" value="{{$data->desa_id}}" >
+                        </td>
+                    </tr> --}}
                     <tr>
                         <td colspan="4" >
-                            <label>Keterangan</label> <br/>
-                            {{$data->keterangan}}
+                            <textarea maxlength="250" name="keterangan" disabled="disabled" class="form-control" rows="2" placeholder="Keterangan" >{{$data->keterangan}}</textarea>
                         </td>
                     </tr>
-                    
+                    {{-- <tr>
+                        <td class="col-lg-2">
+                            <label>Salesperson</label>
+                        </td>
+                        <td class="col-lg-4" >
+                            <input type="text" name="salesperson" class="form-control " data-salespersonid="" required >
+                        </td>
+                        <td class="col-lg-2" ></td>
+                        <td class="col-lg-2 hide" >
+                            <label>Jatuh Tempo</label>
+                        </td>
+                        <td class="col-lg-2 hide" >
+                            <input type="text" name="jatuh_tempo"  class="input-tanggal form-control" value="" >
+                        </td>
+                    </tr> --}}
                 </tbody>
             </table>
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
-            @if($data->kalkulasi == 'K')
-                {{-- TABLE KUBIKASI --}}
-                <table id="table-product" class="table table-bordered table-condensed" >
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="width:25px;" >NO</th>
-                        <th rowspan="2" >MATERIAL</th>
-                        <th colspan="3" class="text-center" >UKURAN</th>
-                        <th rowspan="2" >VOLUME</th>
-                        <th rowspan="2" >UNIT PRICE</th>
-                        <th rowspan="2" >TOTAL</th>
-                    </tr>
-                    <tr>
-                        <th class="text-center" >P</th>
-                        <th class="text-center" >L</th>
-                        <th class="text-center" >T</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
-                        <td class="text-right" >{{$data->panjang}}</td>
-                        <td class="text-right" >{{$data->lebar}}</td>
-                        <td class="text-right">{{$data->tinggi}}</td>
-                        <td class="text-right">{{$data->volume}}</td>
-                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
-                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
-                    </tr>
-                </tbody>
-            </table>
-                {{-- END OF TABLE KUBIKASI --}}
-            @elseif($data->kalkulasi == 'T')
-            {{-- TABLE TONASE --}}
             <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th rowspan="2" style="width:25px;" >NO</th>
-                        <th rowspan="2" >MATERIAL</th>
-                        <th colspan="2" class="text-center" >UKURAN</th>
-                        <th rowspan="2" >NETTO</th>
-                        <th rowspan="2" >UNIT PRICE</th>
-                        <th rowspan="2" >TOTAL</th>
-                    </tr>
-                    <tr>
-                        <th class="text-center" >GROSS</th>
-                        <th class="text-center" >TARE</th>
+                        <th style="width:25px;" >NO</th>
+                        <th  >MATERIAL</th>
+                        <th class="col-lg-1" >QUANTITY</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
                         <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
-                        <td class="text-right" >{{$data->gross}}</td>
-                        <td class="text-right" >{{$data->tarre}}</td>
-                        <td class="text-right">{{$data->netto}}</td>
-                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
-                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            {{-- END OF TABLE TONASE --}}
-            @else
-            {{-- TABLE RITASE --}}
-            <table id="table-product" class="table table-bordered table-condensed" >
-                <thead>
-                    <tr>
-                        <th  style="width:25px;" >NO</th>
-                        <th >MATERIAL</th>
-                        <th  class="text-center" >QTY</th>
-                        <th  >UNIT PRICE</th>
-                        <th  >TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
                         <td>1</td>
-                        <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
-                        <td class="text-right" >{{$data->qty}}</td>
-                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
-                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
                     </tr>
                 </tbody>
             </table>
-            {{-- END OF TABLE RITASE --}}
-            @endif
-
-            
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
             {{-- <button type="submit" class="btn btn-primary" id="btn-save" >Save</button> --}}
-            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Close</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order/delivery/{{$data->sales_order_id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 
 </section><!-- /.content -->
-
-<div class="example-modal">
-    <div class="modal" id="modal-validate">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Validate Delivery Order</h4>
-          </div>
-          <form name="form_create_pekerjaan" method="POST" action="delivery/order/to-validate" >
-            <input type="hidden" name="delivery_id" value="{{$data->id}}"  >
-            <div class="modal-body">
-                <table class="table table-bordered table-condensed" >
-                    <tbody>
-                        <tr>
-                            <td>No Nota</td>
-                            <td>
-                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Kalkulasi</td>
-                            <td>
-                                <select name="kalkulasi" class="form-control" >
-                                    <option value="R" >Ritase</option>
-                                    <option value="K" >Kubikasi</option>
-                                    <option value="T" >Tonase</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr class="row-kubikasi" >
-                            <td>Panjang</td>
-                            <td>
-                                <input type="text" name="panjang" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-kubikasi" >
-                            <td>Lebar</td>
-                            <td>
-                                <input type="text" name="lebar" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-kubikasi" >
-                            <td>Tinggi</td>
-                            <td>
-                                <input type="text" name="tinggi" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-kubikasi" >
-                            <td>Volume</td>
-                            <td>
-                                <input type="text" name="volume" class="form-control text-right " disabled>
-                            </td>
-                        </tr>
-                        <tr class="row-tonase" >
-                            <td>Gross</td>
-                            <td>
-                                <input type="text" name="gross" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-tonase" >
-                            <td>Tarre</td>
-                            <td>
-                                <input type="text" name="tarre" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-tonase" >
-                            <td>Netto</td>
-                            <td>
-                                <input type="text" name="netto" class="form-control text-right" disabled>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
-              </div>
-          </form>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-<!-- /.modal -->
-</div>
 
 @stop
 
@@ -343,14 +238,6 @@
 
 <script type="text/javascript">
 (function ($) {
-    // HIDE SOME ELEMENT
-    $('.row-tonase, .row-kubikasi').hide();
-    $('select[name=kalkulasi]').val([]);
-
-    // SET AUTONUMERIC
-    $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=gross], input[name=tarre], input[name=volume], input[name=netto]').autoNumeric('init');
-    // END OF SET AUTONUMERIC
-
     // SET AUTOCOMPLETE PROVINSI
     $('input[name=provinsi]').autocomplete({
         serviceUrl: 'api/get-auto-complete-provinsi',
@@ -464,6 +351,11 @@
         var delivery_order_id = $('input[name=delivery_order_id]').val();
         var armada_id = $('input[name=armada_id]').val();
         var lokasi_galian_id = $('input[name=lokasi_galian_id]').val();
+        // var alamat = $('input[name=alamat]').val();
+        // var provinsi_id = $('input[name=provinsi_id]').val();
+        // var kabupaten_id = $('input[name=kabupaten_id]').val();
+        // var kecamatan_id = $('input[name=kecamatan_id]').val();
+        // var desa_id = $('input[name=desa_id]').val();
         var keterangan = $('textarea[name=keterangan]').val();
         var delivery_date = $('input[name=delivery_date]').val();
 
@@ -477,10 +369,15 @@
             // && desa_id != ""
             ){
 
-            var doForm = $('<form>').attr('method','POST').attr('action','delivery/order/update');
+            var doForm = $('<form>').attr('method','POST').attr('action','sales/order/delivery/update');
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_order_id').val(delivery_order_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','armada_id').val(armada_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','lokasi_galian_id').val(lokasi_galian_id));
+            // doForm.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
+            // doForm.append($('<input>').attr('type','hidden').attr('name','provinsi_id').val(provinsi_id));
+            // doForm.append($('<input>').attr('type','hidden').attr('name','kabupaten_id').val(kabupaten_id));
+            // doForm.append($('<input>').attr('type','hidden').attr('name','kecamatan_id').val(kecamatan_id));
+            // doForm.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
             doForm.append($('<input>').attr('type','hidden').attr('name','keterangan').val(keterangan));
             doForm.append($('<input>').attr('type','hidden').attr('name','delivery_date').val(delivery_date));
             doForm.submit();
@@ -501,59 +398,15 @@
     });
     // END OF SET DATEPICKER
 
-    // VALIDATE DELOIVERY ORDER
-    $('#btn-validate').click(function(){
-        $('#modal-validate').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $('#modal-validate input[name=no_nota_timbang]').focus();
+    // // CANCEL DO EDIT
+    // $('#btn-cancel-save').click(function(){
+    //     if(confirm('Anda akan membatalkan proses ini?')){
 
-        return false;
-    });
-    // END OF VALIDATE DELOIVERY ORDER
-
-    // KALKULASI DO
-    $('select[name=kalkulasi]').change(function(){
-        if($(this).val() == 'R'){
-            $('.row-kubikasi, .row-tonase').hide()
-        }else if($(this).val() == 'K'){
-            $('.row-kubikasi').show();
-            $('.row-tonase').hide();
-        }else{
-            $('.row-kubikasi').hide();
-            $('.row-tonase').show();
-        }
-    });
-    // END OF KALKULASI DO
-
-    // CALCULATE KUBIKASI
-    $('input[name=panjang], input[name=lebar], input[name=tinggi]').keyup(function(){
-        
-        var panjang = $('input[name=panjang]').autoNumeric('get');
-
-        
-        var lebar = $('input[name=lebar]').autoNumeric('get');
-        // alert(lebar);
-        var tinggi = $('input[name=tinggi]').autoNumeric('get');
-        // alert(tinggi);
-        var volume = Number(panjang) * Number(lebar) * Number(tinggi);
-        // alert('volume ' + volume);
-        $('input[name=volume]').autoNumeric('set',volume);
-    });
-    // END OF CALCULATE KUBIKASI
-
-    // RECONCILE/PEMBATALAN VALIDASI
-    $('#btn-reconcile').click(function(){
-        if(confirm('Anda akan membatalkan data ini?')){
-
-        }else{
-            return false;    
-        }
-        
-    });
-    // END OF RECONCILE/PEMBATALAN VALIDASI
-
+    //     }else{
+    //         return false;
+    //     }
+    // });
+    // // END OF CANCEL DO EDIT
 
 })(jQuery);
 </script>

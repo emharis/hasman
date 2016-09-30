@@ -12,7 +12,7 @@ class DeliveryOrderController extends Controller
 		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
 		$data = \DB::table('VIEW_DELIVERY_ORDER')
-			->where('status','!=','D')
+			//->where('status','!=','D')
 			->orderBy('order_date','desc')
 			->paginate($paging_item_number);
 			
@@ -109,64 +109,201 @@ class DeliveryOrderController extends Controller
 			}
 
 			$data_do = \DB::table('delivery_order')->find($req->delivery_id);
+			$sales_order = \DB::table('sales_order')->find($data_do->sales_order_id);
+			
 
-			// update status
-			// \DB::table('delivery_order')
-			// 	->where('id',$req->delivery_id)
+			//===================================================================
+			// UNTUK 1 INVOICE
+			// // update customer invoice detail
+			// \DB::table('customer_invoice_detail')
+			// 	->where('delivery_order_id',$data_do->id)
 			// 	->update([
-			// 			'status' => 'V'
+			// 			'kalkulasi' => $data_do->kalkulasi,
+			// 			'panjang' => $data_do->panjang,
+			// 			'lebar' => $data_do->lebar,
+			// 			'tinggi' => $data_do->tinggi,
+			// 			'volume' => $data_do->volume,
+			// 			'gross' => $data_do->gross,
+			// 			'tarre' => $data_do->tarre,
+			// 			'netto' => $data_do->netto,
+			// 			'unit_price' => $data_do->unit_price,
+			// 			'total' => $data_do->total,
+			// 			'qty' => $data_do->qty,
+			// 		]);
+			
+			// // Update Status Customer Invoice			
+			// \DB::table('customer_invoices')
+			// 	->whereRaW("(select count(id) 
+			// 			from delivery_order where status = 'V' and sales_order_id = " . $data_do->sales_order_id . ") = (select sum(qty) from sales_order_detail where sales_order_id = " . $data_do->sales_order_id . ")
+			// 		and order_id = " . $data_do->sales_order_id)
+			// 	->update([
+			// 			'status' => 'O',
+			// 			'total' =>\DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')'),
+			// 			'amount_due' => \DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')')
 			// 		]);
 
+			// $customer_invoice = \DB::table('customer_invoices')->where('order_id',$sales_order->id)->first();
 
-				// update customer invoice detail
-				\DB::table('customer_invoice_detail')
-					->where('delivery_order_id',$data_do->id)
-					->update([
-							'kalkulasi' => $data_do->kalkulasi,
-							'panjang' => $data_do->panjang,
-							'lebar' => $data_do->lebar,
-							'tinggi' => $data_do->tinggi,
-							'volume' => $data_do->volume,
-							'gross' => $data_do->gross,
-							'tarre' => $data_do->tarre,
-							'netto' => $data_do->netto,
-							'unit_price' => $data_do->unit_price,
-							'total' => $data_do->total,
-							'qty' => $data_do->qty,
-						]);
-				// ->raw('update customer_invoice_detail as cid
-				// 		set cid.kalkulasi = ' . $data_do->kalkulasi . ',
-				// 		cid.panjang = ' . $data_do->panjang . ',
-				// 		cid.lebar = ' . $data_do->lebar . ',
-				// 		cid.tinggi = ' . $data_do->tinggi . ',
-				// 		cid.volume = ' . $data_do->volume . ',
-				// 		cid.gross = ' . $data_do->gross . ',
-				// 		cid.tarre = ' . $data_do->tarre . ',
-				// 		cid.netto = ' . $data_do->netto . ',
-				// 		cid.unit_price = ' . $data_do->unit_price . ',
-				// 		cid.total = ' . $data_do->total . ',
-				// 		cid.qty = ' . $data_do->qty . ' where delivery_order_id = ' . $data_do->id );
-				// ->where('order_id',$data_do->sales_order_id);
+			// // Jika invoice sudah open maka ototmatis SO ter validasi
+			// // update status invoice to done
 
-				// Update Status Customer Invoice
-				// update customer_invoices
-				// set status = 'O'
-				// where  
-				// (select count(id) from delivery_order where status = 'V' and sales_order_id = 14) = (select sum(qty) from sales_order_detail where sales_order_id = 14) hasilmancing_db_org
-				\DB::table('customer_invoices')
-					->whereRaW("(select count(id) 
-							from delivery_order where status = 'V' and sales_order_id = " . $data_do->sales_order_id . ") = (select sum(qty) from sales_order_detail where sales_order_id = " . $data_do->sales_order_id . ")
-						and order_id = " . $data_do->sales_order_id)
-					->update([
+			// if($customer_invoice->status == 'O'){
+			// 	\DB::table('sales_order')
+			// 		->where('id',$sales_order->id)
+			// 		->update([
+			// 				'status' => 'D'
+			// 			]);
+			// }
+			// UNTUK 1 INVOICE
+			//===================================================================
+
+			// cek jika delivery order untuk satu sales order telah di kirim &  validated
+			// maka customer invoice akan di generate
+			$open_do = \DB::table('delivery_order')
+				->whereRaw('sales_order_id = ' . $data_do->sales_order_id . ' and status != "V"')
+				->count();
+			if($open_do == 0){
+				// genereate multi invoice
+				$by_kubikasi = \DB::table('delivery_order')
+								->where('sales_order_id',$data_do->sales_order_id)
+								->where('kalkulasi','K')->get();
+				$by_tonase = \DB::table('delivery_order')
+								->where('sales_order_id',$data_do->sales_order_id)
+								->where('kalkulasi','T')->get();
+				$by_ritase = \DB::table('delivery_order')
+								->where('sales_order_id',$data_do->sales_order_id)
+								->where('kalkulasi','R')->get();
+
+				if(count($by_kubikasi) > 0){
+					// create invoice kubikasi
+					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+							'inv_number' => $this->getNewCustomerInvoice(),
+							'order_id' => $data_do->sales_order_id,
 							'status' => 'O',
-							'total' =>\DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')'),
-							'amount_due' => \DB::raw('(select sum(total) from delivery_order where sales_order_id = '. $data_do->sales_order_id . ')')
+							'kalkulasi' => 'K'
 						]);
+					// insert detail invoice
+					$total = 0;
+					foreach($by_kubikasi as $dt){
+						\DB::table('customer_invoice_detail')
+							->insert([
+									'customer_invoice_id' => $customer_invoice_id,
+									'delivery_order_id' => $dt->id,
+									'kalkulasi' => 'K',
+									'panjang' => $dt->panjang,
+									'lebar' => $dt->lebar,
+									'tinggi' => $dt->tinggi,
+									'volume' => $dt->volume,
+									'unit_price' => $dt->unit_price,
+									'total' => $dt->total,
+									'qty' => 1,
+								]);
+						$total += $dt->total;
+					}
+
+					// update total & amount_due di sales order
+					\DB::table('customer_invoices')
+						->where('id',$customer_invoice_id)
+						->update([
+								'total' => $total,
+								'amount_due' => $total,
+							]);
+					
+				}
+
+				if(count($by_tonase) > 0){
+					// create invoice TONASE
+					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+							'inv_number' => $this->getNewCustomerInvoice(),
+							'order_id' => $data_do->sales_order_id,
+							'status' => 'O',
+							'kalkulasi' => 'T'
+						]);
+					// insert detail invoice
+					$total = 0;
+					foreach($by_tonase as $dt){
+						\DB::table('customer_invoice_detail')
+							->insert([
+									'customer_invoice_id' => $customer_invoice_id,
+									'delivery_order_id' => $dt->id,
+									'kalkulasi' => 'T',
+									'gross' => $dt->gross,
+									'tarre' => $dt->tarre,
+									'netto' => $dt->netto,
+									'unit_price' => $dt->unit_price,
+									'total' => $dt->total,
+									'qty' => 1,
+								]);
+						$total += $dt->total;
+					}
+
+					// update total & amount_due di sales order
+					\DB::table('customer_invoices')
+						->where('id',$customer_invoice_id)
+						->update([
+								'total' => $total,
+								'amount_due' => $total,
+							]);
+					
+				}
+
+				if(count($by_ritase) > 0){
+					// create invoice RITASE
+					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+							'inv_number' => $this->getNewCustomerInvoice(),
+							'order_id' => $data_do->sales_order_id,
+							'status' => 'O',
+							'kalkulasi' => 'R'
+						]);
+					// insert detail invoice
+					$total = 0;
+					foreach($by_ritase as $dt){
+						\DB::table('customer_invoice_detail')
+							->insert([
+									'customer_invoice_id' => $customer_invoice_id,
+									'delivery_order_id' => $dt->id,
+									'kalkulasi' => 'R',
+									'unit_price' => $dt->unit_price,
+									'total' => $dt->total,
+									'qty' => 1,
+								]);
+						$total += $dt->total;
+					}
+
+					// update total & amount_due di sales order
+					\DB::table('customer_invoices')
+						->where('id',$customer_invoice_id)
+						->update([
+								'total' => $total,
+								'amount_due' => $total,
+							]);
+					
+				}
+
+				// UPDATE SALES ORDER TO DONE
+				\DB::table('sales_order')
+					->where('id',$data_do->sales_order_id)
+					->update([
+							'status' => 'D'
+						]);
+
+
+			}
 
 
 
 			return redirect()->back();
 		});
+	}
+
+	public function getNewCustomerInvoice(){
+		// generate customer invoice
+		$invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
+		$invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
+		// update invoice counter
+		\DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
+
+		return $invoice_number;
 	}
 
 	public function reconcile($id){
@@ -204,7 +341,7 @@ class DeliveryOrderController extends Controller
 					'total' => '',
 				]);
 
-			// set status customer invoice to 'Draft'
+			// reset status customer invoice to 'Draft'
 			\DB::table('customer_invoices')
 			->where('order_id',$do->sales_order_id)
 			->update([
@@ -212,6 +349,13 @@ class DeliveryOrderController extends Controller
 				'total' => 0,
 				'amount_due' => 0,
 			]);
+
+			// reset status sales_order to Validated
+			\DB::table('sales_order')
+				->where('id',$do->sales_order_id)
+				->update([
+						'status' => 'V'
+					]);
 
 			return redirect()->back();
 		});
@@ -234,7 +378,7 @@ class DeliveryOrderController extends Controller
 
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
-					->where('status','!=','D')
+					//->where('status','!=','D')
 					->whereBetween($req->filter_by,[$date_start,$date_end])
 					->paginate($paging_item_number)
 	                ->appends([
@@ -250,7 +394,7 @@ class DeliveryOrderController extends Controller
          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
-					->where('status','!=','D')
+					//->where('status','!=','D')
 					->where('status','=',$req->filter_by)
 					->paginate($paging_item_number)
 	                ->appends([
@@ -263,7 +407,7 @@ class DeliveryOrderController extends Controller
          }else{
          	$data = \DB::table('VIEW_DELIVERY_ORDER')
 					->orderBy('order_date','desc')
-					->where('status','!=','D')
+					//->where('status','!=','D')
 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
 					->paginate($paging_item_number)
 	                ->appends([

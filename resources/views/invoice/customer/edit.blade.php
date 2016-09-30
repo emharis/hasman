@@ -51,14 +51,23 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            @if($data->status != 'D')
+            {{-- @if($data->status != 'D')
                 <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/order/reconcile/{{$data->id}}" >Reconcile</button> 
 
                 <a class="btn btn-primary btn-sm" id="btn-validate" href="invoice/order/set-to-done/{{$data->id}}" >Set to done</a>
 
-            @endif
-
-            <button class="btn btn-success btn-sm" >Print</button>
+            @endif --}}
+            <button class="btn btn-primary btn-sm" id="btn-register-payment" >Register Payment</button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Print <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Direct Print</a></li>
+                <li><a href="#">PDF</a></li>
+              </ul>
+            </div>
+            
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
@@ -87,10 +96,10 @@
                                 </td>
                                 <td class="col-lg-2" ></td>
                                 <td class="col-lg-2" >
-                                    <label>Order Date</label>
+                                    <label>Order Number</label>
                                 </td>
                                 <td class="col-lg-2" >
-                                    {{$data->order_date_formatted}}
+                                    {{$data->order_number}}
                                 </td>
                             </tr>
                             <tr>
@@ -103,7 +112,12 @@
                                     {{$data->kabupaten . ', ' . $data->provinsi }}
                                 </td>
                                 <td></td>
-                                <td></td>
+                                <td  >
+                                    <label>Order Date</label>
+                                </td>
+                                <td  >
+                                    {{$data->order_date_formatted}}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,94 +125,149 @@
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
-            <table  class="table table-bordered table-condensed" id="table-invoice-detail" >
-                <thead>
-                    <tr>
-                        <th rowspan="3" style="width:40px;" >NO</th>
-                        <th rowspan="3" >DELIVERY DATE</th>
-                        <th rowspan="3" >NOPOL</th>
-                        <th rowspan="3" >MATERIAL</th>
-                        <th colspan="8" >KALKULASI</th>
-                        <th rowspan="3" >HARGA</th>
-                        <th rowspan="3" >TOTAL</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4" >KUBIKASI</th>
-                        <th colspan="3" >TONASE</th>
-                        <th  >RITASE</th>
-                    </tr>
-                    <tr>
-                        <th>P</th>
-                        <th>L</th>
-                        <th>T</th>
-                        <th>VOL</th>
-                        <th>GROSS</th>
-                        <th>TARE</th>
-                        <th>NETTO</th>
-                        <th>QTY</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $rownum=1; ?>
-                    <?php $vol=0; ?>
-                   @foreach($data_detail as $dt)
-                    <tr>
-                        <td class="text-right">
-                            {{$rownum++}}
-                        </td>
-                        <td>
-                            {{$dt->delivery_date_formatted}}
-                        </td>
-                        <td>
-                            {{$dt->nopol}}
-                        </td>
-                        <td>
-                            {{$dt->material}}
-                        </td>
-                        <td class="text-right" >{{$dt->panjang}}</td>
-                        <td class="text-right" >{{$dt->lebar}}</td>
-                        <td class="text-right" >{{$dt->tinggi}}</td>
-                        <td class="text-right" style="background-color:whitesmoke;" >{{$dt->volume}}</td>
-                        <td class="text-right" ></td>
-                        <td class="text-right" ></td>
-                        <td class="text-right" style="background-color:whitesmoke;" ></td>
-                        <td class="text-right" style="background-color:whitesmoke;" ></td>
-                        <td class="text-right uang" >{{$dt->unit_price}}</td>
-                        <td class="text-right uang" style="background-color:whitesmoke;" >{{$dt->total}}</td>
-                    </tr>
-                    <?php $vol+= $dt->volume; ?>
-                   @endforeach                   
-                    <tr style="border-top: solid 2px gray;" >
-                        <td colspan="4" class="text-right" >
-                            <label>TOTAL</label>
-                        </td>
-                        <td class="text-right" colspan="3" >
-                            {{-- <label>VOLUME</label> --}}
-                        </td>
-                        <td class="text-right" style="background-color:whitesmoke;" >
-                            <label>{{$vol}}</label>
-                        </td>
-                        <td  colspan="2" >
-                            {{-- <label>NETTO</label> --}}
-                        </td>
-                        <td class="text-right" style="background-color:whitesmoke;" >
-                            {{-- <label>{{$vol}}</label> --}}
-                        </td>
-                        <td class="text-right" style="background-color:whitesmoke;" ></td>
-                        <td>
+            @if($data->kalkulasi == 'K')
+                {{-- TABLE KUBIKASI --}}
+                <table  class="table table-bordered table-condensed" id="table-invoice-detail" >
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width:40px;" >NO</th>
+                            <th rowspan="2" >DELIVERY DATE</th>
+                            <th rowspan="2" >NOPOL</th>
+                            <th rowspan="2" >MATERIAL</th>
+                            <th colspan="3" >KUBIKASI</th>
+                            <th rowspan="2" >VOLUME</th>
+                            <th rowspan="2" >HARGA</th>
+                            <th rowspan="2" >TOTAL</th>
+                        </tr>
+                        <tr>
+                            <th>P</th>
+                            <th>L</th>
+                            <th>T</th>
                             
-                        </td>
-                        <td class="text-right " style="background-color:whitesmoke;" >
-                            <label class="uang" >{{$data->total}}</label>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $rownum=1; ?>
+                        <?php $vol=0; ?>
+                       @foreach($data_detail as $dt)
+                        <tr>
+                            <td class="text-right">
+                                {{$rownum++}}
+                            </td>
+                            <td>
+                                {{$dt->delivery_date_formatted}}
+                            </td>
+                            <td>
+                                {{$dt->nopol}}
+                            </td>
+                            <td>
+                                {{$dt->material}}
+                            </td>
+                            <td class="text-right" >                                
+                                    {{$dt->panjang}}                                
+                            </td>
+                            <td class="text-right" >                               
+                                    {{$dt->lebar}}                                
+                            </td>
+                            <td class="text-right" >                                
+                                    {{$dt->tinggi}}                            
+                            </td>
+                            <td class="text-right" style="background-color:whitesmoke;" >                                
+                                    {{$dt->volume}}                                
+                            </td>
+                            
+                            <td class="text-right uang" >{{$dt->unit_price}}</td>
+                            <td class="text-right uang" style="background-color:whitesmoke;" >{{$dt->total}}</td>
+                        </tr>
+                        <?php $vol+= $dt->volume; ?>
+                       @endforeach                   
+                        <tr style="border-top: solid 2px gray;" >
+                            <td colspan="7" class="text-right" >
+                                <label>TOTAL</label>
+                            </td>
+                            <td class="text-right" style="background-color:whitesmoke;" >
+                                <label>{{$vol}}</label>
+                            </td>
+                            <td colspan="2" class="text-right " style="background-color:whitesmoke;" >
+                                <label class="uang" >{{$data->total}}</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{-- END OF TABLE KUBIKASI --}}
+            @elseif($data->kalkulasi == 'T')
+                {{-- TABLE TONASE --}}
+                <table  class="table table-bordered table-condensed" id="table-invoice-detail" >
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width:40px;" >NO</th>
+                            <th rowspan="2" >DELIVERY DATE</th>
+                            <th rowspan="2" >NOPOL</th>
+                            <th rowspan="2" >MATERIAL</th>
+                            <th colspan="2" >TONASE</th>
+                            <th rowspan="2" >NETTO</th>
+                            <th rowspan="2" >HARGA</th>
+                            <th rowspan="2" >TOTAL</th>
+                        </tr>
+                        <tr>
+                            <th>GROSS</th>
+                            <th>TARE</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $rownum=1; ?>
+                        <?php $netto=0; ?>
+                       @foreach($data_detail as $dt)
+                        <tr>
+                            <td class="text-right">
+                                {{$rownum++}}
+                            </td>
+                            <td>
+                                {{$dt->delivery_date_formatted}}
+                            </td>
+                            <td>
+                                {{$dt->nopol}}
+                            </td>
+                            <td>
+                                {{$dt->material}}
+                            </td>
+                            <td class="text-right" >                                
+                                    {{$dt->gross}}                                
+                            </td>
+                            <td class="text-right" >                               
+                                    {{$dt->tarre}}                                
+                            </td>
+                            <td class="text-right" style="background-color:whitesmoke;" >
+                                    {{$dt->netto}}                                
+                            </td>                            
+                            <td class="text-right uang" >{{$dt->unit_price}}</td>
+                            <td class="text-right uang" style="background-color:whitesmoke;" >{{$dt->total}}</td>
+                        </tr>
+                        <?php $netto+= $dt->netto; ?>
+                       @endforeach                   
+                        <tr style="border-top: solid 2px gray;" >
+                            <td colspan="6" class="text-right" >
+                                <label>TOTAL</label>
+                            </td>
+                            <td class="text-right" style="background-color:whitesmoke;" >
+                                <label>{{$netto}}</label>
+                            </td>
+                            <td colspan="2" class="text-right " style="background-color:whitesmoke;" >
+                                <label class="uang" >{{$data->total}}</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{-- END OF TABLE TONASE --}}
+            @else
+            @endif
 
+            
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="invoice/order" >Close</a>
+            <a class="btn btn-danger" href="invoice/customer" >Close</a>
         </div>
     </div><!-- /.box -->
 

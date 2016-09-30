@@ -41,12 +41,13 @@
                                 <option value="delivery_order_number" >DO Number</option>
                                 <option value="order_date" >Order Date</option>
                                 <option value="delivery_date" >Delivery Date</option>
+                                <option value="order_number" >Order Number</option>
                                 <option value="customer" >Customer</option>
                                 <option value="material" >Material</option>
                                 <option value="pekerjaan" >Pekerjaan</option>
                                 <option value="nopol" >Armada</option>
                                 <option disabled>──────────</option>
-                                {{-- <option value="D" >DRAFT</option> --}}
+                                <option value="D" >DRAFT</option>
                                 <option value="O" >OPEN</option>
                                 <option value="V" >VALIDATED</option>
 
@@ -86,11 +87,12 @@
                         <th>DO Number</th>
                         <th>Order Date</th>
                         <th>Delivery Date</th>
+                        <th>Order Number</th>
                         <th>Customer</th>
                         <th>Material</th>
                         <th>Pekerjaan</th>
                         {{-- <th>Driver</th> --}}
-                        <th>Armada</th>
+                        {{-- <th>Armada</th> --}}
                         {{-- <th>Tujuan</th> --}}
                         {{-- <th>Lokasi Galian</th> --}}
                         <th>Status</th>
@@ -100,11 +102,12 @@
                 <tbody>
                    @foreach($data as $dt)
                         @for($i=0;$i<$dt->qty;$i++)
-                            <tr>
+                            <tr class="row-to-edit" data-id="{{$dt->id}}" >
                                 <td class="text-right">{{$rownum++}}</td>
                                 <td>{{$dt->delivery_order_number}}</td>
                                 <td>{{$dt->order_date_formatted}}</td>
                                 <td>{{$dt->delivery_date_formatted}}</td>
+                                <td>{{$dt->order_number}}</td>
                                 <td>
                                     {{ $dt->customer}}
                                 </td>
@@ -117,9 +120,9 @@
                                 {{-- <td>
                                     {{$dt->karyawan}}
                                 </td> --}}
-                                <td>
+                                {{-- <td>
                                     {{$dt->nopol}}
-                                </td>
+                                </td> --}}
                                 {{-- <td>
                                     {{  $dt->kecamatan  }}
                                 </td>
