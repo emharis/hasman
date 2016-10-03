@@ -24,14 +24,19 @@ class DeliveryOrderController extends Controller
 
 	public function edit($id){
 		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($id);
-		if($data->status != 'V'){
+		if($data->status == 'D' || $data->status == 'O'){
 			return view('delivery.order.edit',[
 				'data' => $data
 				]);
-		}else{
+		}else if($data->status == 'V'){
 			return view('delivery.order.validated',[
 				'data' => $data
 				]);
+		}else if($data->status == 'DN'){
+			// status DONE
+			return view('delivery.order.done',[
+				'data' => $data
+			]);
 		}
 	}
 

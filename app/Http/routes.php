@@ -157,6 +157,12 @@ Route::group(['middleware' => ['web','auth']], function () {
         // ORDERS
         Route::get('customer','CustomerInvoiceController@index');
         Route::get('customer/edit/{id}','CustomerInvoiceController@edit');
+        Route::get('customer/validate/{id}','CustomerInvoiceController@toValidate');
+        Route::get('customer/reconcile/{invoice_id}','CustomerInvoiceController@reconcile');
+        Route::get('customer/register-payment/{invoice_id}','CustomerInvoiceController@registerPayment');
+        Route::get('customer/payments/{invoice_id}','CustomerInvoiceController@payments');
+        Route::get('customer/payments/delete/{payment_id}','CustomerInvoiceController@deletePayment');
+        Route::post('customer/save-register-payment','CustomerInvoiceController@saveRegisterPayment');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

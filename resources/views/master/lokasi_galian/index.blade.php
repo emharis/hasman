@@ -42,7 +42,6 @@
                         <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
                         <th>Nama</th>
                         <th>Alamat</th>
-                        <th>Keterangan</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -60,10 +59,7 @@
                             {{$dt->nama}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->desa . ', ' . $dt->kecamatan}}
-                        </td>
-                        <td class="row-to-edit" >
-                            {{$dt->keterangan}}
+                            {{$dt->alamat.', ' . $dt->desa . ', ' . $dt->kecamatan. ', ' . $dt->kabupaten}}
                         </td>
                         <td>
                             <a class="btn btn-primary btn-xs " href="master/lokasi/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
@@ -91,7 +87,6 @@
         "columns": [
             {className: "text-center","orderable": false},
             {className: "text-right"},
-            null,
             null,
             null,
             null,

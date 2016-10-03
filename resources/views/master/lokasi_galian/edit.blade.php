@@ -52,7 +52,7 @@
                         <label>Alamat</label>
                     </td>
                     <td>
-                        <input type="text" name="keterangan" class="form-control " value="{{$data->keterangan}}">
+                        <input type="text" name="alamat" class="form-control " value="{{$data->alamat}}">
                     </td>
                 </tr>
                 <tr>
@@ -201,7 +201,7 @@
         var kec_id = $('input[name=kecamatan]').data('id');
         var desa = $('input[name=desa]').val();
         var desa_id = $('input[name=desa]').data('id');
-        var keterangan = $('input[name=keterangan]').val();
+        var alamat = $('input[name=alamat]').val();
 
         if(nama != "" && prov != "" && prov_id != "" && kab != "" && kab_id != "" && kec != "" && kec_id != "" && desa != "" && desa_id != ""){
             var formdata = $('<form>').attr('method','POST').attr('action','master/lokasi/update');
@@ -216,7 +216,7 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','kec_id').val(kec_id));
             formdata.append($('<input>').attr('type','hidden').attr('name','desa').val(desa));
             formdata.append($('<input>').attr('type','hidden').attr('name','desa_id').val(desa_id));
-            formdata.append($('<input>').attr('type','hidden').attr('name','keterangan').val(keterangan));
+            formdata.append($('<input>').attr('type','hidden').attr('name','alamat').val(alamat));
             formdata.submit();
         }else{
             alert('Lengkapi data yang kosong.');

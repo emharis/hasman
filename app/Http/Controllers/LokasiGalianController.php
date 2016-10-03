@@ -28,7 +28,7 @@ class LokasiGalianController extends Controller
 					'nama' => $req->nama,
 					'kode' => $req->kode,
 					'desa_id' => $req->desa_id,
-					'keterangan' => $req->keterangan,
+					'alamat' => $req->alamat,
 				]);
 
 		return redirect('master/lokasi');
@@ -48,7 +48,7 @@ class LokasiGalianController extends Controller
 					'nama' => $req->nama,
 					'kode' => $req->kode,
 					'desa_id' => $req->desa_id,
-					'keterangan' => $req->keterangan,
+					'alamat' => $req->alamat,
 				]);
 		return redirect('master/lokasi');
 	}

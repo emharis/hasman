@@ -129,8 +129,10 @@
                                         Draft
                                     @elseif($dt->status == 'O')
                                         Open
-                                    @else
+                                    @elseif($dt->status == 'V')
                                         Validated
+                                    @else
+                                        Done
                                     @endif
                                 </td>
                                 <td class="text-center" >

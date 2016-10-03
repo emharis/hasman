@@ -51,13 +51,15 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            {{-- @if($data->status != 'D')
-                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/order/reconcile/{{$data->id}}" >Reconcile</button> 
-
-                <a class="btn btn-primary btn-sm" id="btn-validate" href="invoice/order/set-to-done/{{$data->id}}" >Set to done</a>
-
-            @endif --}}
-            <button class="btn btn-primary btn-sm" id="btn-register-payment" >Register Payment</button>
+            
+            @if($data->status == 'O') 
+                <button class="btn btn-primary btn-sm" id="btn-validate" >Validate</button>
+            @else
+                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/customer/reconcile/{{$data->id}}" >Reconcile</button>
+                @if($data->status != 'P')
+                    <a class="btn btn-primary btn-sm" id="btn-register-payment" href="invoice/customer/register-payment/{{$data->id}}" >Register Payment</a>
+                @endif
+            @endif
             <div class="btn-group">
               <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Print <span class="caret"></span>
@@ -70,7 +72,7 @@
             
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'P' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Validated</a>
@@ -83,9 +85,11 @@
         <div class="box-body">
             <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->inv_number}}</h3></label>
 
-            <input type="hidden" name="invoice_order_id" value="{{$data->id}}">
+            <input type="hidden" name="customer_invoice_id" value="{{$data->id}}">
             
-            <table class="table" id="table-master-so" >
+            <div class="row" >
+                <div class="col-sm-10 col-md-10 col-lg-10" >
+                    <table class="table" id="table-master-so" >
                         <tbody>
                             <tr>
                                 <td class="col-lg-2">
@@ -94,7 +98,6 @@
                                 <td class="col-lg-4" >
                                     {{'['.$data->kode_customer .'] ' .$data->customer}}
                                 </td>
-                                <td class="col-lg-2" ></td>
                                 <td class="col-lg-2" >
                                     <label>Order Number</label>
                                 </td>
@@ -111,7 +114,6 @@
                                     {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
                                     {{$data->kabupaten . ', ' . $data->provinsi }}
                                 </td>
-                                <td></td>
                                 <td  >
                                     <label>Order Date</label>
                                 </td>
@@ -121,7 +123,16 @@
                             </tr>
                         </tbody>
                     </table>
-            
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2" >
+                    @if($data->status != 'O')
+                        <a class="btn btn-app pull-right" href="invoice/customer/payments/{{$data->id}}" >
+                            <span class="badge bg-green">{{count($payments)}}</span>
+                            <i class="fa fa-money"></i> Payments
+                        </a>
+                    @endif
+                </div>
+            </div>
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
@@ -183,7 +194,7 @@
                        @endforeach                   
                         <tr style="border-top: solid 2px gray;" >
                             <td colspan="7" class="text-right" >
-                                <label>TOTAL</label>
+                                
                             </td>
                             <td class="text-right" style="background-color:whitesmoke;" >
                                 <label>{{$vol}}</label>
@@ -248,7 +259,7 @@
                        @endforeach                   
                         <tr style="border-top: solid 2px gray;" >
                             <td colspan="6" class="text-right" >
-                                <label>TOTAL</label>
+                                
                             </td>
                             <td class="text-right" style="background-color:whitesmoke;" >
                                 <label>{{$netto}}</label>
@@ -301,12 +312,15 @@
                        @endforeach                   
                         <tr style="border-top: solid 2px gray;" >
                             <td colspan="4" class="text-right" >
-                                <label>TOTAL</label>
+                                
                             </td>
                             <td class="text-right" style="background-color:whitesmoke;" >
                                 <label>{{$qty}}</label>
                             </td>
-                            <td colspan="2" class="text-right " style="background-color:whitesmoke;" >
+                            <td class="text-right" style="background-color:whitesmoke;" >
+                                <label>{{$qty}}</label>
+                            </td>
+                            <td  class="text-right " style="background-color:whitesmoke;" >
                                 <label class="uang" >{{$data->total}}</label>
                             </td>
                         </tr>
@@ -314,6 +328,41 @@
                 </table>
                 {{-- END OF TABLE RITASE --}}
             @endif
+            <br/>
+            <div class="row" >
+                <div class="col-sm-8 col-md-8 col-lg-8" ></div>                
+                <div class="col-sm-4 col-md-4 col-lg-4" >
+                    <table class="table " >
+                        <tbody>
+                            <tr style="border-top:solid #CACACA 2px;" >
+                                <td class="text-right" >Total</td>
+                                <td>:</td>
+                                <td class="text-right" >
+                                    <label class="uang" >{{$data->total}}</label>
+                                </td>                                
+                            </tr>
+                            @foreach($payments as $pay)
+                                <tr style="background-color:#EEF0F0;">
+                                    <td class="text-right">
+                                        <i>Paid on {{$pay->date_formatted}}</i>
+                                    </td>
+                                    <td>:</td>
+                                    <td class="text-right">
+                                        <i><span class="uang" >{{$pay->payment_amount}}</span></i>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr style="border-top:solid #CACACA 2px;" >
+                                <td class="text-right" >Amount Due</td>
+                                <td>:</td>
+                                <td class="text-right" >
+                                    <label class="uang" >{{$data->amount_due}}</label>
+                                </td>                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             
 
@@ -331,13 +380,21 @@
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
-    // // Reconcile
-    // $('#btn-reconcile').click(function(){
-    //     if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
-    //         // alert('reconcile');
-    //         location.href = $(this).data('href');
-    //     }
-    // });
+    // Reconcile
+    $('#btn-reconcile').click(function(){
+        if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
+            // alert('reconcile');
+            location.href = $(this).data('href');
+        }
+    });
+
+    // VALIDATE INVOICE 
+    $('#btn-validate').click(function(){
+        var invoice_id = $('input[name=customer_invoice_id]').val();
+        if(confirm("Anda akan mem-validasi data ini? pastikan data sudah benar & valid, data tidak dapat dirubah setelah proses ini.")){
+            location.href = "invoice/customer/validate/" + invoice_id;
+        }
+    });
 
     // -----------------------------------------------------
     // SET AUTO NUMERIC

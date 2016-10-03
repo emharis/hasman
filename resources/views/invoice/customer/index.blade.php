@@ -48,7 +48,7 @@
                                 <option disabled>──────────</option>
                                 <option value="O" >OPEN</option>
                                 <option value="V" >VALIDATED</option>
-                                <option value="D" >DONE</option>
+                                <option value="P" >PAID</option>
 
                             </select>
                         </div><!-- /btn-group -->
@@ -81,8 +81,9 @@
                             <input type="checkbox" name="ck_all" >
                         </th> --}}
                         <th style="width:25px;">No</th>
-                        <th>Customer</th>
                         <th>Number</th>
+                        <th>Customer</th>
+                        <th>Pekerjaan</th>
                         <th>Order Date</th>
                         <th>Order Number</th>
                         <th>Kalkulasi</th>
@@ -102,10 +103,13 @@
                         </td> --}}
                         <td class="row-to-edit text-right" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
+                            {{$dt->inv_number}}
+                        </td>
+                        <td class="row-to-edit" >
                             {{$dt->customer}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->inv_number}}
+                            {{$dt->pekerjaan}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}
@@ -134,7 +138,7 @@
                             @elseif($dt->status == 'V')
                                 VALIDATED
                             @else
-                                DONE
+                                PAID
                             @endif    
                         </td>
                         <td class="text-center" >

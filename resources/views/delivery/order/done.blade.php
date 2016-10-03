@@ -51,23 +51,26 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
-            @if($data->status != 'D')
-                <a  class="btn btn-primary btn-sm" href="delivery/order/validate/{{$data->id}}" id="btn-validate" >Validate</a>
+            {{-- @if($data->status != 'D') --}}
+                {{-- <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Reconcile</a> --}}
                 <a class="btn btn-success btn-sm" >Print</a>
-            @else
+            {{-- @else --}}
                 
                 {{-- Form Header --}}
-                <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->delivery_order_number}}</h3></label>
-            @endif
+                {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->delivery_order_number}}</h3></label> --}}
+            {{-- @endif --}}
+
+            <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
+            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Done</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Validated</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'O' ? 'bg-blue' : 'bg-gray'}}" >Open</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Open</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
             
@@ -77,7 +80,6 @@
             @endif
 
             <input type="hidden" name="delivery_order_id" value="{{$data->id}}">
-            <input type="hidden" name="delivery_order_number" value="{{$data->delivery_order_number}}">
             <table class="table" id="table-do-master" >
                 <tbody>
                     <tr>
@@ -105,7 +107,7 @@
                             <label>Delivery Date</label>
                         </td>
                         <td>
-                            <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : date('d-m-Y')}}">
+                            {{$data->delivery_date_formatted }}
                         </td>
                         
                     </tr>
@@ -122,8 +124,7 @@
                             <label>Lokasi Galian</label>
                         </td>
                         <td>
-                            <input type="text" name="lokasi_galian" class="form-control" value="{{$data->lokasi_galian ?  '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian : ''}}" autofocus >
-                            <input type="hidden" name="lokasi_galian_id" value="{{$data->lokasi_galian_id}}" >
+                            {{ '[' . $data->kode_lokasi_galian . '] ' . $data->lokasi_galian }}
                         </td>
                     </tr>
                     <tr>
@@ -131,13 +132,13 @@
                             <label>Armada/Driver</label>
                         </td>
                         <td colspan="3" >
-                            <input type="text" name="armada" class="form-control" value="{{ $data->armada ? '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan  : ''}}" >
-                            <input type="hidden" name="armada_id" value="{{$data->armada_id}}" >
+                            {{ '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan }}
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4" >
-                            <textarea maxlength="250" name="keterangan" class="form-control" rows="2" placeholder="Keterangan" >{{$data->keterangan}}</textarea>
+                            <label>Keterangan</label> <br/>
+                            {{$data->keterangan}}
                         </td>
                     </tr>
                     
@@ -146,27 +147,99 @@
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
-            <table id="table-product" class="table table-bordered table-condensed" >
+            @if($data->kalkulasi == 'K')
+                {{-- TABLE KUBIKASI --}}
+                <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >NO</th>
-                        <th  >MATERIAL</th>
-                        <th class="col-lg-1" >QUANTITY</th>
+                        <th rowspan="2" style="width:25px;" >NO</th>
+                        <th rowspan="2" >MATERIAL</th>
+                        <th colspan="3" class="text-center" >UKURAN</th>
+                        <th rowspan="2" >VOLUME</th>
+                        <th rowspan="2" >UNIT PRICE</th>
+                        <th rowspan="2" >TOTAL</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center" >P</th>
+                        <th class="text-center" >L</th>
+                        <th class="text-center" >T</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
                         <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
-                        <td>1</td>
+                        <td class="text-right" >{{$data->panjang}}</td>
+                        <td class="text-right" >{{$data->lebar}}</td>
+                        <td class="text-right">{{$data->tinggi}}</td>
+                        <td class="text-right">{{$data->volume}}</td>
+                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
+                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
                     </tr>
                 </tbody>
             </table>
+                {{-- END OF TABLE KUBIKASI --}}
+            @elseif($data->kalkulasi == 'T')
+            {{-- TABLE TONASE --}}
+            <table id="table-product" class="table table-bordered table-condensed" >
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width:25px;" >NO</th>
+                        <th rowspan="2" >MATERIAL</th>
+                        <th colspan="2" class="text-center" >UKURAN</th>
+                        <th rowspan="2" >NETTO</th>
+                        <th rowspan="2" >UNIT PRICE</th>
+                        <th rowspan="2" >TOTAL</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center" >GROSS</th>
+                        <th class="text-center" >TARE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
+                        <td class="text-right" >{{$data->gross}}</td>
+                        <td class="text-right" >{{$data->tarre}}</td>
+                        <td class="text-right">{{$data->netto}}</td>
+                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
+                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {{-- END OF TABLE TONASE --}}
+            @else
+            {{-- TABLE RITASE --}}
+            <table id="table-product" class="table table-bordered table-condensed" >
+                <thead>
+                    <tr>
+                        <th  style="width:25px;" >NO</th>
+                        <th >MATERIAL</th>
+                        <th  class="text-center" >QTY</th>
+                        <th  >UNIT PRICE</th>
+                        <th  >TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
+                        <td class="text-right" >{{$data->qty}}</td>
+                        <td class="text-right">{{number_format($data->unit_price,0,'.',',')}}</td>
+                        <td class="text-right">{{number_format($data->total,0,'.',',')}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {{-- END OF TABLE RITASE --}}
+            @endif
+
+            
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Cancel</a>
+            {{-- <button type="submit" class="btn btn-primary" id="btn-save" >Save</button> --}}
+            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Close</a>
         </div>
     </div><!-- /.box -->
 
@@ -177,23 +250,23 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span></button> --}}
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
             <h4 class="modal-title">Validate Delivery Order</h4>
           </div>
           <form name="form_create_pekerjaan" method="POST" action="delivery/order/to-validate" >
             <input type="hidden" name="delivery_id" value="{{$data->id}}"  >
             <div class="modal-body">
-                <table class="table table-bordered table-condensed" id="table-kalkulasi" >
+                <table class="table table-bordered table-condensed" >
                     <tbody>
                         <tr>
-                            <td><label>No Nota</label></td>
+                            <td>No Nota</td>
                             <td>
-                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control" value="CUST/" >
+                                <input type="text" autocomplete="off" name="no_nota_timbang" class="form-control">
                             </td>
                         </tr>
                         <tr>
-                            <td><label>Kalkulasi</label></td>
+                            <td>Kalkulasi</td>
                             <td>
                                 <select name="kalkulasi" class="form-control" >
                                     <option value="R" >Ritase</option>
@@ -203,63 +276,45 @@
                             </td>
                         </tr>
                         <tr class="row-kubikasi" >
-                            <td>
-                                <label>Panjang</label>
-                                </td>
+                            <td>Panjang</td>
                             <td>
                                 <input type="text" name="panjang" class="form-control text-right">
                             </td>
                         </tr>
                         <tr class="row-kubikasi" >
-                            <td><label>Lebar</label></td>
+                            <td>Lebar</td>
                             <td>
                                 <input type="text" name="lebar" class="form-control text-right">
                             </td>
                         </tr>
                         <tr class="row-kubikasi" >
-                            <td><label>Tinggi</label></td>
+                            <td>Tinggi</td>
                             <td>
                                 <input type="text" name="tinggi" class="form-control text-right">
                             </td>
                         </tr>
                         <tr class="row-kubikasi" >
-                            <td><label>Volume</label></td>
+                            <td>Volume</td>
                             <td>
                                 <input type="text" name="volume" class="form-control text-right " disabled>
                             </td>
                         </tr>
                         <tr class="row-tonase" >
-                            <td><label>Gross</label></td>
+                            <td>Gross</td>
                             <td>
                                 <input type="text" name="gross" class="form-control text-right">
                             </td>
                         </tr>
                         <tr class="row-tonase" >
-                            <td><label>Tarre</label></td>
+                            <td>Tarre</td>
                             <td>
                                 <input type="text" name="tarre" class="form-control text-right">
                             </td>
                         </tr>
                         <tr class="row-tonase" >
-                            <td><label>Netto</label></td>
+                            <td>Netto</td>
                             <td>
                                 <input type="text" name="netto" class="form-control text-right" disabled>
-                            </td>
-                        </tr>
-                        <tr class="row-price" >
-                            <td>
-                                <label>Unit Price</label>
-                            </td>
-                            <td>
-                                <input type="text" name="unit_price" class="form-control text-right">
-                            </td>
-                        </tr>
-                        <tr class="row-price" >
-                            <td>
-                                <label>Total</label>
-                            </td>
-                            <td>
-                                <input type="text" name="total" class="form-control text-right" disabled>
                             </td>
                         </tr>
 
@@ -292,16 +347,11 @@
 <script type="text/javascript">
 (function ($) {
     // HIDE SOME ELEMENT
-    $('.row-tonase, .row-kubikasi, .row-price').hide();
+    $('.row-tonase, .row-kubikasi').hide();
     $('select[name=kalkulasi]').val([]);
 
     // SET AUTONUMERIC
     $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=gross], input[name=tarre], input[name=volume], input[name=netto]').autoNumeric('init');
-
-    $('input[name=unit_price], input[name=total]').autoNumeric('init',{
-        vMin:'0',
-        vMax:'9999999999'
-    });
     // END OF SET AUTONUMERIC
 
     // SET AUTOCOMPLETE PROVINSI
@@ -456,9 +506,6 @@
 
     // VALIDATE DELOIVERY ORDER
     $('#btn-validate').click(function(){
-        // set auto kode no nota
-        $('input[name=no_nota_timbang]').val('CUST/'+$('input[name=delivery_order_number]').val());
-
         $('#modal-validate').modal({
             backdrop: 'static',
             keyboard: false
@@ -471,83 +518,45 @@
 
     // KALKULASI DO
     $('select[name=kalkulasi]').change(function(){
-        // clear input
-        $('#table-kalkulasi input:not([name=no_nota_timbang])').val('');
-
         if($(this).val() == 'R'){
-            $('.row-kubikasi, .row-tonase').hide();
-            $('.row-price').show();
+            $('.row-kubikasi, .row-tonase').hide()
         }else if($(this).val() == 'K'){
             $('.row-kubikasi').show();
             $('.row-tonase').hide();
-            $('.row-price').show();
         }else{
             $('.row-kubikasi').hide();
             $('.row-tonase').show();
-            $('.row-price').show();
         }
     });
     // END OF KALKULASI DO
 
     // CALCULATE KUBIKASI
-    $('input[name=panjang], input[name=lebar], input[name=tinggi], input[name=unit_price]').keyup(function(){
+    $('input[name=panjang], input[name=lebar], input[name=tinggi]').keyup(function(){
         
-        if($('select[name=kalkulasi]').val() == 'K'){
-            var panjang = $('input[name=panjang]').autoNumeric('get');
-
-            var lebar = $('input[name=lebar]').autoNumeric('get');
-            // alert(lebar);
-            var tinggi = $('input[name=tinggi]').autoNumeric('get');
-            // alert(tinggi);
-            var volume = Number(panjang) * Number(lebar) * Number(tinggi);
-            // alert('volume ' + volume);
-            $('input[name=volume]').autoNumeric('set',volume);
-
-            // hitung total harga
-            var price = $('input[name=unit_price]').autoNumeric('get');
-            var total = Number(price) * Number(volume);
-
-            $('input[name=total]').autoNumeric('set',total);
-        }
+        var panjang = $('input[name=panjang]').autoNumeric('get');
 
         
+        var lebar = $('input[name=lebar]').autoNumeric('get');
+        // alert(lebar);
+        var tinggi = $('input[name=tinggi]').autoNumeric('get');
+        // alert(tinggi);
+        var volume = Number(panjang) * Number(lebar) * Number(tinggi);
+        // alert('volume ' + volume);
+        $('input[name=volume]').autoNumeric('set',volume);
     });
     // END OF CALCULATE KUBIKASI
-    
 
-    // CALCULATE TONASE
-    $('input[name=gross], input[name=tarre], input[name=unit_price]').keyup(function(){
-        // alert($('select[name=kalkulasi]').val());
-        if($('select[name=kalkulasi]').val() == 'T'){
-            var gross = $('input[name=gross]').autoNumeric('get');
-        
-            var tarre = $('input[name=tarre]').autoNumeric('get');
-            // alert(lebar);
-            var netto = Number(gross) - Number(tarre);
-            
-            $('input[name=netto]').autoNumeric('set',netto);
+    // RECONCILE/PEMBATALAN VALIDASI
+    //$('#btn-reconcile').click(function(){
+    //    if(confirm('Anda akan membatalkan data ini?')){
 
-            // hitung total harga
-            var price = $('input[name=unit_price]').autoNumeric('get');
-            var total = Number(price) * Number(netto);
-
-            $('input[name=total]').autoNumeric('set',total);
-        }
+    //    }else{
+    //        return false;    
+    //    }
         
     });
-    // END CALCULATE TONASE
+    // END OF RECONCILE/PEMBATALAN VALIDASI
 
-    // CALCULATE RITASE
-    $('input[name=unit_price]').keyup(function(){
-        // alert($('select[name=kalkulasi]').val());
-        if($('select[name=kalkulasi]').val() == 'R'){
-            var unit_price = $('input[name=unit_price]').autoNumeric('get');
-
-            $('input[name=total]').autoNumeric('set',unit_price);
-        }
-        
-    });
-    // END CALCULATE RITASE
 
 })(jQuery);
 </script>
