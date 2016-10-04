@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 class CustomerController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_CUSTOMER')->get();
+		$data = \DB::table('VIEW_CUSTOMER')
+				->orderBy('created_at','desc')
+				->get();
 		return view('master.customer.index',[
 				'data' => $data
 			]);

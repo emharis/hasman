@@ -114,9 +114,13 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            {{$data->pekerjaan}}<br/>
-                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                            {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @if($data->pekerjaan)
+                                {{$data->pekerjaan}}<br/>
+                                {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @else
+                                -
+                            @endif
                         </td>
                         <td>
                             <label>Lokasi Galian</label>
@@ -420,8 +424,9 @@
         var keterangan = $('textarea[name=keterangan]').val();
         var delivery_date = $('input[name=delivery_date]').val();
 
-        if(armada_id != ""
-            && lokasi_galian_id != ""
+        if(
+            // armada_id != ""
+            lokasi_galian_id != ""
             && delivery_date != ""
             // && alamat != ""
             // && provinsi_id != ""

@@ -98,9 +98,14 @@
                                     <label>Pekerjaan</label>
                                 </td>
                                 <td>
-                                    {{$data_master->pekerjaan}}<br/>
-                                    {{$data_master->alamat_pekerjaan .', ' . $data_master->desa . ', ' . $data_master->kecamatan}} <br/>
-                                    {{$data_master->kabupaten . ', ' . $data_master->provinsi }}
+                                    @if($data_master->pekerjaan)    
+                                        {{$data_master->pekerjaan}}<br/>
+                                        {{$data_master->alamat_pekerjaan .', ' . $data_master->desa . ', ' . $data_master->kecamatan}} <br/>
+                                        {{$data_master->kabupaten . ', ' . $data_master->provinsi }}
+                                    @else
+                                        -
+                                    @endif
+                                    
                                 </td>
                                 <td></td>
                                 <td></td>

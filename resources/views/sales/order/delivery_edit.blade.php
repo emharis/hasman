@@ -114,9 +114,13 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            {{$data->pekerjaan}}<br/>
-                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                            {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @if($data->pekerjaan)
+                                {{$data->pekerjaan}}<br/>
+                                {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @else
+                                -
+                            @endif
                         </td>
                         
                     </tr>

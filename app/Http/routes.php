@@ -213,6 +213,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
+    Route::get('api/get-auto-complete-product','ApiController@getAutoCompleteProduct');
     Route::get('api/get-select-customer','ApiController@getSelectCustomer');
     Route::get('api/get-select-pekerjaan/{customer_id}','ApiController@getSelectPekerjaan');
 });

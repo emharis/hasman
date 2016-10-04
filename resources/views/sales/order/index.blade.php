@@ -107,7 +107,11 @@
                             {{$dt->customer}}
                         </td>
                         <td class="row-to-edit" >
+                            @if($dt->pekerjaan)
                             {{$dt->pekerjaan}}
+                            @else
+                            -
+                            @endif
                         </td>
                         <td class="row-to-edit" >
                             @if($dt->status == 'O')

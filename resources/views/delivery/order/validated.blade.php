@@ -113,9 +113,13 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            {{$data->pekerjaan}}<br/>
-                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                            {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @if($data->pekerjaan)
+                                {{$data->pekerjaan}}<br/>
+                                {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                {{$data->kabupaten . ', ' . $data->provinsi }}
+                            @else
+                                -   
+                            @endif
                         </td>
                         <td>
                             <label>Lokasi Galian</label>
@@ -129,7 +133,11 @@
                             <label>Armada/Driver</label>
                         </td>
                         <td colspan="3" >
-                            {{ '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan }}
+                            @if($data->armada)
+                                {{ '['.$data->kode_armada . '] ' . $data->armada . ' - ' . $data->nopol . ' - [' . $data->kode_karyawan . '] ' . $data->karyawan }}
+                            @else
+                                -
+                            @endif
                         </td>
                     </tr>
                     <tr>

@@ -52,7 +52,7 @@ class SalesOrderController extends Controller
             $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);     
 
 
-			// isnert master sales
+			// isnert master sales order
 			$sales_order_id = \DB::table('sales_order')
 								->insertGetId([
 										'order_number' => $so_number,
@@ -77,7 +77,7 @@ class SalesOrderController extends Controller
 
 	public function insertDirectSales(Request $req){
 		\DB::transaction(function()use($req){
-			
+
 
 		});
 	}

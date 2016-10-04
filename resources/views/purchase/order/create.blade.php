@@ -116,7 +116,7 @@
                         <td>
                             <input autocomplete="off" type="text"  data-productid="" data-kode="" class=" form-control input-product input-sm input-clear">
                         </td>
-                        <td id="label-satuan" ></td>
+                        <td class="label-satuan" ></td>
                         {{-- <td>
                             <input type="text" readonly autocomplete="off" class="form-control text-right input-quantity-on-hand input-sm input-clear">
                         </td> --}}
@@ -395,6 +395,7 @@
     var input_unit_price;
     var input_sup;
     var input_subtotal;
+    var label_satuan;
     
     $('#btn-add-item').click(function(){
         // tampilkan form add new item
@@ -405,7 +406,8 @@
         first_col = newrow.children('td:first');
         input_product = first_col.next().children('input');
         // input_qty_on_hand = first_col.next().next().children('input');
-        input_qty = first_col.next().next().children('input');
+        input_qty = first_col.next().next().next().children('input');
+        label_satuan = first_col.next().next();
         // input_unit_price = first_col.next().next().next().next().children('input');
         // input_sup = first_col.next().next().next().next().next().children('input');
         // input_subtotal = first_col.next().next().next().next().next().next().children('input');
@@ -448,6 +450,9 @@
                 
                 // disable input_product
                 input_product.attr('readonly','readonly');
+
+                // tampilkan satuan
+                label_satuan.text(suggestions.unit);
 
                 // get quantity on hand dan tampilkan ke input-quantity-on-hand
                 // input_product.parent().next().children('input').val(suggestions.stok);

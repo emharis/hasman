@@ -73,10 +73,18 @@
                                     {{$dt->lokasi_galian}}
                                 </td> --}}
                                 <td>
-                                    {{$dt->pekerjaan}}
+                                    @if($dt->pekerjaan)
+                                        {{$dt->pekerjaan}}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                                 <td>
-                                    {{$dt->alamat_pekerjaan . ', ' . $dt->desa . ', ' . $dt->kecamatan . ', ' . $dt->kabupaten}}
+                                    @if($dt->alamat_pekerjaan)
+                                        {{$dt->alamat_pekerjaan . ', ' . $dt->desa . ', ' . $dt->kecamatan . ', ' . $dt->kabupaten}}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                                 <td>
                                     @if($dt->status == 'D')

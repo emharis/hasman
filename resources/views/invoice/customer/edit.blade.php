@@ -110,9 +110,13 @@
                                     <label>Pekerjaan</label>
                                 </td>
                                 <td>
+                                    @if($data->pekerjaan)
                                     {{$data->pekerjaan}}<br/>
                                     {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
                                     {{$data->kabupaten . ', ' . $data->provinsi }}
+                                    @else
+                                    -
+                                    @endif
                                 </td>
                                 <td  >
                                     <label>Order Date</label>
@@ -169,7 +173,11 @@
                                 {{$dt->delivery_date_formatted}}
                             </td>
                             <td>
+                                @if($dt->nopol)
                                 {{$dt->nopol}}
+                                @else
+                                -
+                                @endif
                             </td>
                             <td>
                                 {{$dt->material}}
@@ -238,7 +246,11 @@
                                 {{$dt->delivery_date_formatted}}
                             </td>
                             <td>
+                                @if($dt->nopol)
                                 {{$dt->nopol}}
+                                @else
+                                -
+                                @endif
                             </td>
                             <td>
                                 {{$dt->material}}
@@ -297,7 +309,11 @@
                                 {{$dt->delivery_date_formatted}}
                             </td>
                             <td>
+                                @if($dt->nopol)
                                 {{$dt->nopol}}
+                                @else
+                                -
+                                @endif
                             </td>
                             <td>
                                 {{$dt->material}}

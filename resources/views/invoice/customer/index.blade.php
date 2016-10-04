@@ -109,7 +109,11 @@
                             {{$dt->customer}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->pekerjaan}}
+                            @if($dt->pekerjaan)
+                                {{$dt->pekerjaan}}
+                            @else
+                                -
+                            @endif
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}

@@ -747,8 +747,8 @@
             && $('input[name=customer]').val() != null 
             && so_master.order_date != "" 
             && so_master.order_date != null 
-            && so_master.pekerjaan_id != "" 
-            && so_master.pekerjaan_id != null 
+            // && so_master.pekerjaan_id != "" 
+            // && so_master.pekerjaan_id != null 
             && so_material.material.length > 0){
 
             var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert');
