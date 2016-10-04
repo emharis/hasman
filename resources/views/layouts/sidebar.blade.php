@@ -28,19 +28,21 @@
                     <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Data Customer</a></li>        
                     <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Data Material</a></li>        
                     <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Data Alat Berat</a></li>        
+                    <li class="{{Request::is('master/unit*') ? 'active':''}}" ><a href="master/unit"><i class="fa fa-circle-o"></i> Data Product Unit</a></li>        
+                    <li class="{{Request::is('master/product*') ? 'active':''}}" ><a href="master/product"><i class="fa fa-circle-o"></i> Data Product</a></li>        
                 </ul>
             </li>
 
-            {{-- <li class="treeview {{Request::is('purchase/*') ? 'active':''}}" >
+            <li class="treeview {{Request::is('purchase/*') ? 'active':''}}" >
                 <a href="#">
-                    <i class="fa fa-money"></i>
+                    <i class="fa fa-calculator"></i>
                     <span>Purchases</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>  
+                    <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="purchase/order"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>  
                 </ul>
-            </li> --}}
+            </li>
 
             <li class="treeview {{Request::is('sales/*') ? 'active':''}}" >
                 <a href="#">
@@ -50,6 +52,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="sales/order"><i class="fa fa-circle-o"></i> Sales Orders</a></li>  
+                    {{-- <li class="{{Request::is('sales/direct-sales*') ? 'active':''}}" ><a href="sales/direct-sales"><i class="fa fa-circle-o"></i> Direct Sales</a></li>   --}}
                 </ul>
             </li>
 

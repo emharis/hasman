@@ -75,6 +75,13 @@ class SalesOrderController extends Controller
 		});
 	}
 
+	public function insertDirectSales(Request $req){
+		\DB::transaction(function()use($req){
+			
+
+		});
+	}
+
 	public function edit($id){
 		$data_master = \DB::table('VIEW_SALES_ORDER')->find($id);
 		$data_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')->where('sales_order_id',$id)->get();

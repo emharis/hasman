@@ -114,7 +114,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('material/update','MaterialController@update');
         Route::post('material/delete','MaterialController@delete');
 
-        // MATERIAL
+        // ALAT
         Route::get('alat','AlatController@index');
         Route::get('alat/create','AlatController@create');
         Route::post('alat/insert','AlatController@insert');
@@ -122,6 +122,41 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('alat/update','AlatController@update');
         Route::post('alat/delete','AlatController@delete');
 
+        // PRODUCT
+        Route::get('product','ProductController@index');
+        Route::get('product/create','ProductController@create');
+        Route::post('product/insert','ProductController@insert');
+        Route::get('product/edit/{id}','ProductController@edit');
+        Route::post('product/update','ProductController@update');
+        Route::post('product/delete','ProductController@delete');
+
+        // PRODUCT UNITS
+        Route::get('unit','ProductUnitController@index');
+        Route::get('unit/create','ProductUnitController@create');
+        Route::post('unit/insert','ProductUnitController@insert');
+        Route::get('unit/edit/{id}','ProductUnitController@edit');
+        Route::post('unit/update','ProductUnitController@update');
+        Route::post('unit/delete','ProductUnitController@delete');
+
+    });
+
+    Route::group(['prefix' => 'purchase'], function () {
+        // ORDERS
+        Route::get('order','PurchaseOrderController@index');
+        Route::post('order/delete','PurchaseOrderController@delete');
+        Route::get('order/create','PurchaseOrderController@create');
+        Route::get('order/edit/{id}','PurchaseOrderController@edit');
+        Route::get('order/validate/{id}','PurchaseOrderController@validateOrder');
+        Route::post('order/insert','PurchaseOrderController@insert');
+        Route::post('order/update','PurchaseOrderController@update');
+        Route::get('order/delivery/{so_id}','PurchaseOrderController@delivery');
+        Route::get('order/delivery/edit/{delivery_id}','PurchaseOrderController@deliveryEdit');
+        Route::post('order/delivery/update','PurchaseOrderController@deliveryUpdate');
+        Route::post('order/create-pekerjaan','PurchaseOrderController@createPekerjaan');
+        Route::get('order/filter','PurchaseOrderController@filter'); 
+        Route::get('order/reconcile/{id}','PurchaseOrderController@reconcile');    
+        Route::get('order/invoices/{purchase_order_id}','PurchaseOrderController@invoices');    
+        Route::get('order/invoices/show/{invoice_id}','PurchaseOrderController@showInvoice');    
     });
 
     Route::group(['prefix' => 'sales'], function () {
@@ -132,6 +167,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/edit/{id}','SalesOrderController@edit');
         Route::get('order/validate/{id}','SalesOrderController@validateOrder');
         Route::post('order/insert','SalesOrderController@insert');
+        Route::post('order/insert-direct-sales','SalesOrderController@insertDirectSales');
         Route::post('order/update','SalesOrderController@update');
         Route::get('order/delivery/{so_id}','SalesOrderController@delivery');
         Route::get('order/delivery/edit/{delivery_id}','SalesOrderController@deliveryEdit');
@@ -140,7 +176,10 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/filter','SalesOrderController@filter'); 
         Route::get('order/reconcile/{id}','SalesOrderController@reconcile');    
         Route::get('order/invoices/{sales_order_id}','SalesOrderController@invoices');    
-        Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');    
+        Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');   
+
+
+        // DIRECT SALES 
     });
 
     Route::group(['prefix' => 'delivery'], function () {
@@ -170,6 +209,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-kecamatan','ApiController@getAutoCompleteKecamatan');
     Route::get('api/get-auto-complete-desa','ApiController@getAutoCompleteDesa');
     Route::get('api/get-auto-complete-customer','ApiController@getAutoCompleteCustomer');
+    Route::get('api/get-auto-complete-supplier','ApiController@getAutoCompleteSupplier');
     Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');

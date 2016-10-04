@@ -43,6 +43,13 @@ class ApiController extends Controller
 		return json_encode($data_res);	
 	}
 
+	public function getAutoCompleteSupplier(Request $req){
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from supplier where nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+		
+		return json_encode($data_res);	
+	}
+
 	public function getAutoCompleteLokasiGalian(Request $req){
 		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from lokasi_galian where nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
 		$data_res = ['query'=>'Unit','suggestions' => $data];
