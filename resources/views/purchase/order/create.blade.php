@@ -127,7 +127,7 @@
                             <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" readonly="">
                         </td> --}}
                         <td>
-                            <input autocomplete="off" type="text" class="text-right form-control input-purchaseperson-unit-price input-sm input-clear">
+                            <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear">
                         </td>
                         <td>
                             <input autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear">
@@ -147,12 +147,12 @@
                 </tbody>
             </table>
 
-            {{-- <div class="row" >
+            <div class="row" >
                 <div class="col-lg-8" >
-                    <textarea name="note" class="form-control" rows="3" style="margin-top:5px;" placeholder="Note" ></textarea>
+                    {{-- <textarea name="note" class="form-control" rows="3" style="margin-top:5px;" placeholder="Note" ></textarea>
                     <i>* <span>Q.O.H : Quantity on Hand</span></i>
                     <i>&nbsp;|&nbsp;</i>
-                    <i><span>S.U.P : Salesperson Unit Price</span></i>
+                    <i><span>S.U.P : Salesperson Unit Price</span></i> --}}
                 </div>
                 <div class="col-lg-4" >
                     <table class="table table-condensed" >
@@ -184,11 +184,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-12" >
+                {{-- <div class="col-lg-12" >
                     <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
                             <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
-                </div>
-            </div> --}}
+                </div> --}}
+            </div>
 
 
 
@@ -408,9 +408,9 @@
         // input_qty_on_hand = first_col.next().next().children('input');
         input_qty = first_col.next().next().next().children('input');
         label_satuan = first_col.next().next();
-        // input_unit_price = first_col.next().next().next().next().children('input');
+        input_unit_price = first_col.next().next().next().next().children('input');
         // input_sup = first_col.next().next().next().next().next().children('input');
-        // input_subtotal = first_col.next().next().next().next().next().next().children('input');
+        input_subtotal = first_col.next().next().next().next().next().children('input');
 
         // tambahkan newrow ke table
         $(this).parent().parent().prev().after(newrow);
@@ -422,7 +422,7 @@
         //     vMax:'9999999999'
         // });
         // input_sup.autoNumeric('init',{
-        // // $('.input-purchaseperson-unit-price').autoNumeric('init',{
+        // // $('.input-unit-price').autoNumeric('init',{
         //     vMin:'0',
         //     vMax:'9999999999'
         // });
@@ -469,6 +469,16 @@
                 //set SUP default unit price
                 // input_sup.autoNumeric('set',suggestions.harga_jual);
 
+                 // input_unit_price.autoNumeric('init',{
+                input_unit_price.autoNumeric('init',{
+                    vMin:'0',
+                    vMax:'9999999999'
+                });
+                input_subtotal.autoNumeric('init',{
+                    vMin:'0',
+                    vMax:'9999999999'
+                });
+
                 // fokuskan ke input quantity
                 // input_product.parent().next().children('input').focus();
                 // alert('ok');
@@ -487,21 +497,21 @@
     });
     // END OF ~BTN ADD ITEM
 
-    // // // HITUNG SUBTOTAL
-    // $(document).on('keyup','.input-purchaseperson-unit-price, .input-quantity',function(){
-    //     generateInput($(this));
+    // // HITUNG SUBTOTAL
+    $(document).on('keyup','.input-unit-price, .input-quantity',function(){
+        // generateInput($(this));
 
-    //     // cek qty apakah melebihi batas QOH
-    //     // alert(input_qty.val() +' ' + input_qty_on_hand.val());
-    //     if(Number(input_qty.val()) > Number(input_qty_on_hand.val())){
-    //         alert('Quantity melebihi QOH.');
-    //         input_qty.val('');
-    //         input_qty.focus();
-    //     }else{
-    //         calcSubtotal($(this));
-    //     }
+        // cek qty apakah melebihi batas QOH
+        // alert(input_qty.val() +' ' + input_qty_on_hand.val());
+        // if(Number(input_qty.val()) > Number(input_qty_on_hand.val())){
+        //     alert('Quantity melebihi QOH.');
+        //     input_qty.val('');
+        //     input_qty.focus();
+        // }else{
+            calcSubtotal($(this));
+        // }
         
-    // });
+    });
     // $(document).on('input','.input-quantity',function(){
     //     calcSubtotal($(this));
     // });
@@ -510,17 +520,18 @@
         first_col = inputElm.parent().parent().children('td:first');
         input_product = first_col.next().children('input');
         // input_qty_on_hand = first_col.next().next().children('input');
-        input_qty = first_col.next().next().children('input');
-        // input_unit_price = first_col.next().next().next().next().children('input');
+        input_qty = first_col.next().next().next().children('input');
+        input_unit_price = first_col.next().next().next().next().children('input');
         // input_sup = first_col.next().next().next().next().next().children('input');
-        // input_subtotal = first_col.next().next().next().next().next().next().children('input');
+        input_subtotal = first_col.next().next().next().next().next().children('input');
     }
 
     function calcSubtotal(inputElm){
         generateInput(inputElm);
 
         // hitung sub total
-        var subtotal = Number(input_qty.val()) * Number(input_sup.autoNumeric('get'));
+        var subtotal = Number(input_qty.val()) * Number(input_unit_price.autoNumeric('get'));
+        // alert(subtotal);
 
         // tampilkan sub total
         input_subtotal.autoNumeric('set',subtotal);
@@ -530,26 +541,26 @@
     }
     // END HITUNG SUBTOTAL
 
-    // // FUNGSI HITUNG TOTAL KESELURUHAN
-    // function hitungTotal(){
-    //     var disc = $('input[name=disc]').autoNumeric('get');
-    //     var subtotal = 0;
-    //     $('input.input-subtotal').each(function(){
-    //         if($(this).parent().parent().hasClass('row-product')){
-    //             subtotal += Number($(this).autoNumeric('get'));
-    //         }
-    //     });        
-    //     // tampilkan subtotal dan total
-    //     $('.label-total-subtotal').autoNumeric('set',subtotal);
-    //     $('.label-total').autoNumeric('set',Number(subtotal) - Number(disc));
-    // }
-    // // END OF FUNGSI HITUNG TOTAL KESELURUHAN
+    // FUNGSI HITUNG TOTAL KESELURUHAN
+    function hitungTotal(){
+        var disc = $('input[name=disc]').autoNumeric('get');
+        var subtotal = 0;
+        $('input.input-subtotal').each(function(){
+            if($(this).parent().parent().hasClass('row-product')){
+                subtotal += Number($(this).autoNumeric('get'));
+            }
+        });        
+        // tampilkan subtotal dan total
+        $('.label-total-subtotal').autoNumeric('set',subtotal);
+        $('.label-total').autoNumeric('set',Number(subtotal) - Number(disc));
+    }
+    // END OF FUNGSI HITUNG TOTAL KESELURUHAN
 
-    // // INPUT DISC ON KEYUP
-    // $(document).on('keyup','input[name=disc]',function(){
-    //     hitungTotal();
-    // });
-    // // END OF INPUT DISC ON KEYUP
+    // INPUT DISC ON KEYUP
+    $(document).on('keyup','input[name=disc]',function(){
+        hitungTotal();
+    });
+    // END OF INPUT DISC ON KEYUP
 
     // DELETE ROW PRODUCT
     $(document).on('click','.btn-delete-row-product',function(){
@@ -583,31 +594,31 @@
     // BTN SAVE TRANSACTION
     $('#btn-save').click(function(){
         // cek kelengkapan data
-        var so_master = {"supplier_id":"",
+        var po_master = {"supplier_id":"",
                          // "purchaseperson_id":"",
                          "order_date":"",
-                         "pekerjaan_id":"",
+                         // "pekerjaan_id":"",
                          // "note":"",
-                         // "subtotal":"",
-                         // "disc":"",
-                         // "total":""
+                         "subtotal":"",
+                         "disc":"",
+                         "total":""
                      };
-        // set so_master data
-        so_master.supplier_id = $('input[name=supplier]').data('supplierid');
-        // so_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
-        // so_master.no_inv = $('input[name=no_inv]').val();
-        so_master.order_date = $('input[name=tanggal]').val();
-        so_master.pekerjaan_id = $('select[name=pekerjaan]').val();
-        // so_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
-        // so_master.note = $('textarea[name=note]').val();
-        // so_master.subtotal = $('.label-total-subtotal').autoNumeric('get');
-        // so_master.total = $('.label-total').autoNumeric('get');
-        // so_master.disc = $('input[name=disc]').autoNumeric('get');
+        // set po_master data
+        po_master.supplier_id = $('input[name=supplier]').data('supplierid');
+        // po_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
+        // po_master.no_inv = $('input[name=no_inv]').val();
+        po_master.order_date = $('input[name=tanggal]').val();
+        // po_master.pekerjaan_id = $('select[name=pekerjaan]').val();
+        // po_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
+        // po_master.note = $('textarea[name=note]').val();
+        po_master.subtotal = $('.label-total-subtotal').autoNumeric('get');
+        po_master.total = $('.label-total').autoNumeric('get');
+        po_master.disc = $('input[name=disc]').autoNumeric('get');
 
         // get data product;
-        var so_product = JSON.parse('{"product" : [] }');
+        var po_product = JSON.parse('{"product" : [] }');
 
-        // set data barant
+        // set data barang
         $('input.input-product').each(function(){
             if($(this).parent().parent().hasClass('row-product')){
                 generateInput($(this));
@@ -625,11 +636,11 @@
                     // && Number(input_subtotal.autoNumeric('get')) > 0 
                     ){
 
-                    so_product.product.push({
+                    po_product.product.push({
                         id:input_product.data('productid'),
                         // qoh:input_qty_on_hand.val(),
                         qty:input_qty.val(),
-                        // unit_price : input_unit_price.autoNumeric('get'),
+                        unit_price : input_unit_price.autoNumeric('get'),
                         // sup_price:input_sup.autoNumeric('get'),
                         // subtotal:input_subtotal.autoNumeric('get')
                     });
@@ -640,20 +651,20 @@
         });
 
         // save ke database
-        // alert(so_product.product.length);
-        // alert('Pekerjaan id : ' + so_master.pekerjaan_id);
-        if(so_master.supplier_id != "" 
+        // alert(po_product.product.length);
+        // alert('Pekerjaan id : ' + po_master.pekerjaan_id);
+        if(po_master.supplier_id != "" 
             && $('input[name=supplier]').val() != "" 
             && $('input[name=supplier]').val() != null 
-            && so_master.order_date != "" 
-            && so_master.order_date != null 
-            && so_master.pekerjaan_id != "" 
-            && so_master.pekerjaan_id != null 
-            && so_product.product.length > 0){
+            && po_master.order_date != "" 
+            && po_master.order_date != null 
+            // && po_master.pekerjaan_id != "" 
+            // && po_master.pekerjaan_id != null 
+            && po_product.product.length > 0){
 
             var newform = $('<form>').attr('method','POST').attr('action','purchase/order/insert');
-                newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
-                newform.append($('<input>').attr('type','hidden').attr('name','so_product').val(JSON.stringify(so_product)));
+                newform.append($('<input>').attr('type','hidden').attr('name','po_master').val(JSON.stringify(po_master)));
+                newform.append($('<input>').attr('type','hidden').attr('name','po_product').val(JSON.stringify(po_product)));
                 newform.submit();
 
         }else{

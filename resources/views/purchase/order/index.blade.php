@@ -80,10 +80,10 @@
                             <input type="checkbox" name="ck_all" >
                         </th>
                         <th style="width:25px;">No</th>
-                        <th>Nomor Order</th>
-                        <th>Tanggal</th>
-                        <th>Customer</th>
-                        <th>Pekerjaan</th>
+                        <th>Order Number</th>
+                        <th>Order Date</th>
+                        <th>Supplier</th>
+                        <th>Total</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
@@ -104,10 +104,10 @@
                             {{$dt->order_date_formatted}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->customer}}
+                            {{$dt->supplier}}
                         </td>
-                        <td class="row-to-edit" >
-                            {{$dt->pekerjaan}}
+                        <td class="row-to-edit uang text-right" >
+                            {{$dt->total}}
                         </td>
                         <td class="row-to-edit" >
                             @if($dt->status == 'O')
@@ -142,6 +142,7 @@
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 (function ($) {
@@ -197,6 +198,16 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
+
+    // SET AUTONUMERIC
+    $('.uang').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
+    $('.uang').each(function(){
+        $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
+    // END OF SET AUTONUMERIC
 
     // var TBL_KATEGORI = $('#table-data').DataTable({
     //     "columns": [
