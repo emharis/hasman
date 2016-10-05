@@ -193,7 +193,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     });
 
     Route::group(['prefix' => 'invoice'], function () {
-        // ORDERS
+        // CUSTOMER INVOICE
         Route::get('customer','CustomerInvoiceController@index');
         Route::get('customer/edit/{id}','CustomerInvoiceController@edit');
         Route::get('customer/validate/{id}','CustomerInvoiceController@toValidate');
@@ -202,6 +202,11 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('customer/payments/{invoice_id}','CustomerInvoiceController@payments');
         Route::get('customer/payments/delete/{payment_id}','CustomerInvoiceController@deletePayment');
         Route::post('customer/save-register-payment','CustomerInvoiceController@saveRegisterPayment');
+
+        // SUPPLIER BILL
+        Route::get('supplier/bill','SupplierBillController@index');
+        Route::get('supplier/bill/edit/{bill_id}','SupplierBillController@edit');
+        Route::get('supplier/bill/reg-payment/{bill_id}','SupplierBillController@regPayment');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

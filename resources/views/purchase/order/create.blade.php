@@ -77,6 +77,17 @@
                             <input type="text" name="tanggal" class="input-tanggal form-control" value="{{date('d-m-Y')}}" required>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label>Supplier Ref#</label>
+                        </td>
+                        <td>
+                            <input type="text" name="supplier_ref" class="form-control">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     {{-- <tr>
                         <td class="col-lg-2">
                             <label>Salesperson</label>
@@ -101,7 +112,7 @@
                 <thead>
                     <tr>
                         <th style="width:25px;" >NO</th>
-                        <th  >PRODUCT</th>
+                        <th>PRODUCT</th>
                         <th class="col-lg-1" >SATUAN</th>
                         <th class="col-lg-1" >QUANTITY</th>
                         <th class="col-lg-2" >UNIT PRICE</th>
@@ -596,6 +607,7 @@
         // cek kelengkapan data
         var po_master = {"supplier_id":"",
                          // "purchaseperson_id":"",
+                         "supplier_ref":"",
                          "order_date":"",
                          // "pekerjaan_id":"",
                          // "note":"",
@@ -608,6 +620,7 @@
         // po_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
         // po_master.no_inv = $('input[name=no_inv]').val();
         po_master.order_date = $('input[name=tanggal]').val();
+        po_master.supplier_ref = $('input[name=supplier_ref]').val();
         // po_master.pekerjaan_id = $('select[name=pekerjaan]').val();
         // po_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
         // po_master.note = $('textarea[name=note]').val();

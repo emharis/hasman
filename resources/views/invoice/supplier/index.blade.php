@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Purchase Orders
+        Supplier Bills
     </h1>
 </section>
 
@@ -29,8 +29,9 @@
         <div class="box-header with-border" >
             <div class="row" >
                 <div class="col-sm-6 col-md-6 col-lg-6" >
-                    <a class="btn btn-primary btn-sm" id="btn-add" href="purchase/order/create" >Create</a>
-                    <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+                    {{-- <a class="btn btn-primary btn-sm" id="btn-add" href="invoice/supplier/bill/create" >Create</a> --}}
+                    {{-- <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a> --}}
+                    <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Supplier Bills</h3></label>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6" >
                     {{-- Filter section --}}
@@ -42,12 +43,12 @@
                             <select name="select_filter_by" class="form-control" >
                                 <option value="order_number" >Nomor Order</option>
                                 <option value="order_date" >Tanggal</option>
-                                <option value="customer" >Customer</option>
+                                <option value="supplier" >Customer</option>
                                 <option value="pekerjaan" >Pekerjaan</option>
                                 <option disabled>──────────</option>
                                 <option value="O" >OPEN</option>
                                 <option value="V" >VALIDATED</option>
-                                <option value="D" >DONE</option>
+                                <option value="P" >PAID</option>
 
                             </select>
                         </div><!-- /btn-group -->
@@ -76,15 +77,16 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" class="text-center">
+                        {{-- <th style="width:25px;" class="text-center">
                             <input type="checkbox" name="ck_all" >
-                        </th>
+                        </th> --}}
                         <th style="width:25px;">No</th>
-                        <th>Order Number</th>
+                        <th>Number</th>
+                        <th>Customer</th>
                         <th>Order Date</th>
-                        <th>Supplier Ref#</th>
-                        <th>Supplier</th>
+                        <th>Order Number</th>
                         <th>Total</th>
+                        <th>Amount Due</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
@@ -92,26 +94,29 @@
                 <tbody>
                     @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
-                        <td class="text-center" >
+                        {{-- <td class="text-center" >
                             @if($dt->status == 'O')
                                 <input type="checkbox" class="ck_row" >
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="row-to-edit text-right" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
                         </td>
                         <td class="row-to-edit" >
+                            {{$dt->supplier}}
+                        </td>
+                        <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->supplier_ref}}
-                        </td>
-                        <td class="row-to-edit" >
-                            {{$dt->supplier}}
+                            {{$dt->order_number}}
                         </td>
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
+                        </td>
+                        <td class="row-to-edit uang text-right" >
+                            {{$dt->amount_due}}
                         </td>
                         <td class="row-to-edit" >
                             @if($dt->status == 'O')
@@ -119,11 +124,11 @@
                             @elseif($dt->status == 'V')
                                 VALIDATED
                             @else
-                                DONE
+                                PAID
                             @endif    
                         </td>
                         <td class="text-center" >
-                            <a class="btn btn-primary btn-xs" href="purchase/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            <a class="btn btn-primary btn-xs" href="invoice/supplier/bill/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -160,7 +165,7 @@
         $('.input-filter').removeClass('hide');
         $('.input-filter').hide();
 
-        if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
+        if(filter_by == 'order_number' || filter_by == 'supplier' || filter_by == 'pekerjaan' ){
             $('input[name=filter_string]').show();
         }else if(filter_by == 'order_date'){
             $('.input-filter-by-date').show();
@@ -168,7 +173,7 @@
             // order by status open, validated, done
             // otomatis submit tanpa tombol click
             var filter_by = $('select[name=select_filter_by]').val();
-            var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
+            var formFilter = $('<form>').attr('method','GET').attr('action','invoice/supplier/bill/filter');
             formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
             formFilter.submit();
         }
@@ -177,7 +182,7 @@
 
     $('#btn-submit-filter').click(function(){
         var filter_by = $('select[name=select_filter_by]').val();
-        var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
+        var formFilter = $('<form>').attr('method','GET').attr('action','invoice/supplier/bill/filter');
 
         if(filter_by == 'order_date'){
             formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
@@ -195,6 +200,20 @@
     // END OF FILTER SECTION
     // ==========================================================================
 
+    // -----------------------------------------------------
+    // SET AUTO NUMERIC
+    // =====================================================
+    $('.uang').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
+
+    // normalize
+    $('.uang').each(function(){
+        $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
+    // END OF AUTONUMERIC
+
     // SET DATEPICKER
     $('.input-tanggal').datepicker({
         format: 'dd-mm-yyyy',
@@ -202,16 +221,6 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
-
-    // SET AUTONUMERIC
-    $('.uang').autoNumeric('init',{
-        vMin:'0',
-        vMax:'9999999999'
-    });
-    $('.uang').each(function(){
-        $(this).autoNumeric('set',$(this).autoNumeric('get'));
-    });
-    // END OF SET AUTONUMERIC
 
     // var TBL_KATEGORI = $('#table-data').DataTable({
     //     "columns": [
@@ -259,7 +268,7 @@
     $('.row-to-edit').click(function(){        
         var row = $(this).parent();        
         var data_id = row.data('id');            
-        location.href = 'purchase/order/edit/' + data_id ;        
+        location.href = 'invoice/supplier/bill/edit/' + data_id ;        
     });
 
     // Delete Data Lokasi
@@ -273,7 +282,7 @@
                 dataid.push(newdata);
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','purchase/order/delete');
+            var deleteForm = $('<form>').attr('method','POST').attr('action','invoice/supplier/bill/delete');
             deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
             deleteForm.submit();
         }

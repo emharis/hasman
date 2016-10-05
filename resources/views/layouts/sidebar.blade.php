@@ -75,7 +75,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{Request::is('invoice/customer*') ? 'active':''}}" ><a href="invoice/customer"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>  
-                    {{-- <li class="{{Request::is('invoice/supplier-invoice*') ? 'active':''}}" ><a href="invoice/supplier-bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>   --}}
+                    <li class="{{Request::is('invoice/supplier/bill*') ? 'active':''}}" ><a href="invoice/supplier/bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>  
                 </ul>
             </li>
 

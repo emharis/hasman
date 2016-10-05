@@ -29,6 +29,10 @@
     #table-master-so tr td{
         vertical-align: top;
     }
+
+    #table-invoice-detail thead tr th{
+        text-align: center;
+    }
 </style>
 
 @append
@@ -37,7 +41,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="purchase/order" >Sales Orders</a> <i class="fa fa-angle-double-right" ></i> {{$data_master->order_number}}
+        <a href="invoice/supplier/bill" >Supplier Bills</a> 
+         <i class="fa fa-angle-double-right" ></i> 
+         {{$data->bill_number}}
     </h1>
 </section>
 
@@ -47,37 +53,23 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
+            <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
              
-            <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
+            {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label> --}}
+            {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a> --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Validated</a>
-
-            <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-
-            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Open</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
-            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'O' ? 'bg-blue' : 'bg-gray'}}"" >Open</a>
+
         </div>
         <div class="box-body">
+            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
 
-            <input type="hidden" name="purchase_order_id" value="{{$data_master->id}}">
-            {{-- <div class="row" > --}}
-                {{-- <div class="col-sm-8 col-md-8 col-lg-8"> --}}
-                    
-                {{-- </div> --}}
-                {{-- <div class="col-sm-4 col-md-4 col-lg-4" > --}}
-                    {{-- INVOICES SHORTCUT --}}
-                    {{-- <a class="btn btn-app pull-right" href="purchase/order/invoices/show/{{$data_master->id}}" >
-                            <span class="badge bg-green">1</span>
-                            <i class="fa fa-newspaper-o"></i> Invoices
-                        </a> --}}
-                {{-- </div> --}}
-            {{-- </div> --}}
+            <input type="hidden" name="invoice_order_id" value="{{$data->id}}">
             
             <table class="table" id="table-master-so" >
                         <tbody>
@@ -86,13 +78,14 @@
                                     <label>Supplier</label>
                                 </td>
                                 <td class="col-lg-4" >
-                                    {{'['.$data_master->kode_supplier .'] ' .$data_master->supplier}}
+                                    {{'['.$data->kode_supplier .'] ' .$data->supplier}}
+                                </td>
+                                <td class="col-lg-2" ></td>
+                                <td class="col-lg-2" >
+                                    <label>Order Number</label>
                                 </td>
                                 <td class="col-lg-2" >
-                                    <label>Order Date</label>
-                                </td>
-                                <td class="col-lg-2" >
-                                    {{$data_master->order_date_formatted}}
+                                    {{$data->order_number}}
                                 </td>
                             </tr>
                             <tr>
@@ -100,7 +93,7 @@
                                     <label>Supplier Ref#</label>
                                 </td>
                                 <td>
-                                    {{$data_master->supplier_ref}}
+                                    {{$purchase_order->supplier_ref}}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -109,6 +102,7 @@
                             
                         </tbody>
                     </table>
+            
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
@@ -165,7 +159,7 @@
                                     <label>Subtotal :</label>
                                 </td>
                                 <td class="label-total-subtotal text-right uang" >
-                                    {{$data_master->subtotal}}
+                                    {{-- {{$data->subtotal}} --}}
                                 </td>
                             </tr>
                             <tr>
@@ -173,7 +167,7 @@
                                     <label>Disc :</label>
                                 </td>
                                 <td class="text-right uang" >
-                                   {{$data_master->disc}}
+                                   {{$data->disc}}
                                 </td>
                             </tr>
                             <tr>
@@ -181,22 +175,26 @@
                                     Total :
                                 </td>
                                 <td class="label-total text-right uang" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
-                                    {{$data_master->total}}
+                                    {{$data->total}}
                                 </td>
                             </tr>
+                            {{-- Paid row --}}
+                            <tr>
+                                <td class="text-right" style="border-top:solid darkgray 1px;" >
+                                    Amount due :
+                                </td>
+                                <td class="label-total text-right uang" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
+                                    {{$data->amount_due}}
+                                </td>
+                            </tr>
+
                         </tbody>
                     </table>
-                </div>
-                {{-- <div class="col-lg-12" >
-                    <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-                            <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
-                </div> --}}
-            </div>
-
+                </div>            
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="purchase/order" >Close</a>
+            <a class="btn btn-danger" href="invoice/supplier/bill/invoices/{{$purchase_order->id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 
@@ -206,24 +204,31 @@
 
 @section('scripts')
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
-
 <script type="text/javascript">
 (function ($) {
-    // Reconcile
-    $('#btn-reconcile').click(function(){
-        if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
-            // alert('reconcile');
-            location.href = $(this).data('href');
-        }
-    });
+    // // Reconcile
+    // $('#btn-reconcile').click(function(){
+    //     if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
+    //         // alert('reconcile');
+    //         location.href = $(this).data('href');
+    //     }
+    // });
 
-    // AUTO NUMERIC
+    // -----------------------------------------------------
+    // SET AUTO NUMERIC
+    // =====================================================
     $('.uang').autoNumeric('init',{
         vMin:'0',
         vMax:'9999999999'
     });
+    // normalize
     $('.uang').each(function(){
         $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
+
+    // Register payment
+    $('#btn-reg-payment').click(function(){
+        location.href = $(this).data('href');
     });
 
 })(jQuery);

@@ -43,7 +43,7 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >New</h4></label> --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
+            <button class="btn btn-primary btn-sm" id="btn-validate-po" data-href="purchase/order/validate/{{$data_master->id}}" >Validate</button>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
@@ -60,6 +60,22 @@
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
+            <div class="row">
+                <div class="col-sm-10 col-md-10 col-lg-10" >
+                    <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2" >
+                    {{-- INVOICE SHORTCUT --}}
+                    {{-- <a class="btn btn-app pull-right" href="sales/order/delivery/{{$data_master->id}}" >
+                        <span class="badge bg-green">0</span>
+                        <i class="fa fa-truck"></i> Delivery
+                    </a> --}}
+                </div>
+            </div>
+
+            {{-- hidden field --}}
+            <input type="hidden" name="purchase_order_id" value="{{$data_master->id}}">
+
             <table class="table" >
                 <tbody>
                     <tr>
@@ -76,6 +92,17 @@
                         <td class="col-lg-2" >
                             <input type="text" name="tanggal" class="input-tanggal form-control" value="{{$data_master->order_date_formatted}}" required>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Supplier Ref#</label>
+                        </td>
+                        <td>
+                            <input type="text" name="supplier_ref" class="form-control" value="{{$data_master->supplier_ref}}">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     {{-- <tr>
                         <td class="col-lg-2">
@@ -138,10 +165,10 @@
                     </tr>
                     <?php $rownum=1; ?>
                     @foreach($data_detail as $dt)
-                    <tr   >
+                    <tr class="row-product">
                         <td class="text-right" >{{$rownum++}}</td>
                         <td>
-                            <input autocomplete="off" type="text"  data-productid="{{$dt->product_id}}" data-kode="{{$dt->kode_product}}" class=" form-control input-product input-sm input-clear" value="{{$dt->product}}" >
+                            <input autocomplete="off" type="text"  data-productid="{{$dt->product_id}}" data-kode="{{$dt->kode_product}}" class=" form-control input-product input-sm input-clear" value="{{'[' . $dt->kode_product .'] ' . $dt->product}}" readonly >
                         </td>
                         <td class="label-satuan" >{{$dt->product_unit}}</td>
                         <td>
@@ -610,13 +637,13 @@
     
     // BTN CANCEL SAVE
     $('#btn-cancel-save').click(function(){
-        if(confirm('Anda akan membabtalkan transaksi ini?')){
+        // if(confirm('Anda akan membabtalkan transaksi ini?')){
             location.href = "purchase/order";
-        }else
-        {
+        // }else
+        // {
 
-        return false
-        }
+        // return false
+        // }
     });
     // END OF BTN CANCEL SAVE
 
@@ -626,6 +653,8 @@
         // cek kelengkapan data
         var po_master = {"supplier_id":"",
                          // "purchaseperson_id":"",
+                         "purchase_order_id":"",
+                         "supplier_ref":"",
                          "order_date":"",
                          // "pekerjaan_id":"",
                          // "note":"",
@@ -634,10 +663,12 @@
                          "total":""
                      };
         // set po_master data
+        po_master.purchase_order_id = $('input[name=purchase_order_id]').val();
         po_master.supplier_id = $('input[name=supplier]').data('supplierid');
         // po_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
         // po_master.no_inv = $('input[name=no_inv]').val();
         po_master.order_date = $('input[name=tanggal]').val();
+        po_master.supplier_ref = $('input[name=supplier_ref]').val();
         // po_master.pekerjaan_id = $('select[name=pekerjaan]').val();
         // po_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
         // po_master.note = $('textarea[name=note]').val();
@@ -692,7 +723,7 @@
             // && po_master.pekerjaan_id != null 
             && po_product.product.length > 0){
 
-            var newform = $('<form>').attr('method','POST').attr('action','purchase/order/insert');
+            var newform = $('<form>').attr('method','POST').attr('action','purchase/order/update');
                 newform.append($('<input>').attr('type','hidden').attr('name','po_master').val(JSON.stringify(po_master)));
                 newform.append($('<input>').attr('type','hidden').attr('name','po_product').val(JSON.stringify(po_product)));
                 newform.submit();
@@ -725,6 +756,12 @@
         $('#modal-pekerjaan').modal('hide');
     });
     // END OF SAVE ADD PEKERJAAN
+
+    // VALIDATE PURCHASE ORDER
+    $('#btn-validate-po').click(function(){
+        location.href = $(this).data('href');
+    });
+    // END OF VALIDATE PURCHASE ORDER
     
 
 

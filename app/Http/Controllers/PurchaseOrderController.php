@@ -50,6 +50,7 @@ class PurchaseOrderController extends Controller
 			// isnert master purchase
 			$purchase_order_id = \DB::table('purchase_order')
 								->insertGetId([
+										'supplier_ref' => $po_master->supplier_ref,
 										'order_number' => $po_number,
 										'order_date' => $fix_order_date,
 										'supplier_id' => $po_master->supplier_id,
@@ -92,25 +93,23 @@ class PurchaseOrderController extends Controller
 				// 'select_pekerjaan' => $select_pekerjaan
 			]);
 		}elseif($data_master->status == 'V' ){
-		// }elseif($data_master->status == 'V'){
-			// get jumlah DO
-			$delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
+		// // }elseif($data_master->status == 'V'){
+		// 	// get jumlah DO
+		// 	$delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
 			return view('purchase.order.validated',[
 					'data_master' => $data_master,
 					'data_detail' => $data_detail,
-					'select_pekerjaan' => $select_pekerjaan,
-					'delivery_order_count' => $delivery_order_count,
-				]);
+					]);
 		}elseif($data_master->status == 'D'){
-			$delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
-			$invoices_count = \DB::table('supplier_invoices')->where('order_id',$id)->count();
-			return view('purchase.order.validated',[
-					'data_master' => $data_master,
-					'data_detail' => $data_detail,
-					'select_pekerjaan' => $select_pekerjaan,
-					'delivery_order_count' => $delivery_order_count,
-					'invoices_count' => $invoices_count,
-				]);
+			// $delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
+			// $invoices_count = \DB::table('supplier_invoices')->where('order_id',$id)->count();
+			// return view('purchase.order.validated',[
+			// 		'data_master' => $data_master,
+			// 		'data_detail' => $data_detail,
+			// 		'select_pekerjaan' => $select_pekerjaan,
+			// 		'delivery_order_count' => $delivery_order_count,
+			// 		'invoices_count' => $invoices_count,
+			// 	]);
 		}
 
 		
@@ -119,7 +118,7 @@ class PurchaseOrderController extends Controller
 	public function update(Request $req){
 		return \DB::transaction(function()use($req){
 			$po_master = json_decode($req->po_master);
-            $po_product = json_decode($req->po_product)->material;
+            $po_product = json_decode($req->po_product)->product;
 
 			// generate tanggal
             $order_date = $po_master->order_date;
@@ -132,11 +131,15 @@ class PurchaseOrderController extends Controller
 			\DB::table('purchase_order')
 				->where('id',$po_master->purchase_order_id)
 				->update([
+						'supplier_ref' => $po_master->supplier_ref,
 						'order_date' => $fix_order_date,
 						'supplier_id' => $po_master->supplier_id,
-						'pekerjaan_id' => $po_master->pekerjaan_id,
+						'subtotal' => $po_master->subtotal,
+						'disc' => $po_master->disc,
+						'total' => $po_master->total,
+						
 					]);
-			// delete data material yang lama
+			// delete data product yang lama
 			\DB::table('purchase_order_detail')
 			->where('purchase_order_id',$po_master->purchase_order_id)
 			->delete();
@@ -146,8 +149,9 @@ class PurchaseOrderController extends Controller
 				\DB::table('purchase_order_detail')
 					->insert([
 							'purchase_order_id' => $po_master->purchase_order_id,
-							'material_id' => $dt->id,
+							'product_id' => $dt->id,
 							'qty' => $dt->qty,
+							'unit_price' => $dt->unit_price,
 						]);
 			}
 
@@ -162,52 +166,56 @@ class PurchaseOrderController extends Controller
 				'status' => 'V'
 			]);
 
+			$purchase_order = \DB::table('purchase_order')->find($id);
+
 			// GENERATE 1 INVOICE
 			// =======================================================================
 			// generate supplier invoice
-			// $invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
-			// $invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
-			// \DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
+			$supplier_bill_counter = \DB::table('appsetting')->where('name','supplier_bill_counter')->first()->value;
+			$bill_number = 'BILL/' . date('Y') . '/000' . $supplier_bill_counter++;
+			\DB::table('appsetting')->where('name','supplier_bill_counter')->update(['value'=>$supplier_bill_counter]);
 
-			// $supplier_invoice_id = \DB::table('supplier_invoices')->insertGetId([
-			// 		'inv_number' => $invoice_number,
-			// 		'order_id' => $id,
-			// 		'status' => 'D'
-			// 	]);
+			$supplier_bill_id = \DB::table('supplier_bill')->insertGetId([
+					'bill_number' => $bill_number,
+					'purchase_order_id' => $id,
+					'status' => 'O',
+					'total' => $purchase_order->total,
+					'amount_due' => $purchase_order->total,
+				]);
 
 			// generate & insert delivery order for this purchase order
-			$purchase_order_detail = \DB::table('purchase_order_detail')->where('purchase_order_id',$id)->get();
-			foreach($purchase_order_detail as $dt){
-				// insert delivery order 
-				for($i=0;$i<$dt->qty;$i++){
-					// generate delivery order number
-					$do_counter = \DB::table('appsetting')->where('name','do_counter')->first()->value;
-            		$do_prefix = \DB::table('appsetting')->where('name','do_prefix')->first()->value;
-            		$do_number = $do_prefix . '/' . date('Y') . '/000' . $do_counter++;
+			// $purchase_order_detail = \DB::table('purchase_order_detail')->where('purchase_order_id',$id)->get();
+			// foreach($purchase_order_detail as $dt){
+			// 	// insert delivery order 
+			// 	for($i=0;$i<$dt->qty;$i++){
+			// 		// generate delivery order number
+			// 		$do_counter = \DB::table('appsetting')->where('name','do_counter')->first()->value;
+   //          		$do_prefix = \DB::table('appsetting')->where('name','do_prefix')->first()->value;
+   //          		$do_number = $do_prefix . '/' . date('Y') . '/000' . $do_counter++;
 
-		            // update po_counter
-		            \DB::table('appsetting')->where('name','do_counter')->update(['value'=>$do_counter]);
+		 //            // update po_counter
+		 //            \DB::table('appsetting')->where('name','do_counter')->update(['value'=>$do_counter]);
 
-		            // Create & insert delivery order
-					$do_id = \DB::table('delivery_order')
-					->insertGetId([
-							'purchase_order_id' => $id,
-							'delivery_order_number' => $do_number,
-							'material_id' => $dt->material_id,
-							'qty' => 1,
-							'status' => 'D',
-						]);
+		 //            // Create & insert delivery order
+			// 		$do_id = \DB::table('delivery_order')
+			// 		->insertGetId([
+			// 				'purchase_order_id' => $id,
+			// 				'delivery_order_number' => $do_number,
+			// 				'product_id' => $dt->product_id,
+			// 				'qty' => 1,
+			// 				'status' => 'D',
+			// 			]);
 
-					// // generate Invoice detail
-					// \DB::table('supplier_invoice_detail')->insert([
-					// 		'supplier_invoice_id' => $supplier_invoice_id,
-					// 		'delivery_order_id' => $do_id,
-					// 		'qty' => 1
-					// 	]);
-				}
-			}
-			// END GENERATE 1 INVOICE
-			// =======================================================================
+			// 		// // generate Invoice detail
+			// 		// \DB::table('supplier_invoice_detail')->insert([
+			// 		// 		'supplier_invoice_id' => $supplier_invoice_id,
+			// 		// 		'delivery_order_id' => $do_id,
+			// 		// 		'qty' => 1
+			// 		// 	]);
+			// 	}
+			// }
+			// // END GENERATE 1 INVOICE
+			// // =======================================================================
 
 		return redirect()->back();
 
@@ -380,8 +388,8 @@ class PurchaseOrderController extends Controller
 
 	public function invoices($purchase_order_id){
 		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
-				->where('order_id',$purchase_order_id)
+		$data = \DB::table('VIEW_SUPPLIER_BILL')
+				->where('purchase_order_id',$purchase_order_id)
 				->get();
 		return view('purchase.order.invoices',[
 				'data' => $data,
@@ -389,13 +397,15 @@ class PurchaseOrderController extends Controller
 			]);
 	}
 
-	public function showInvoice($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
-				->find($invoice_id);
-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
-				->where('supplier_invoice_id',$invoice_id)
+	public function showInvoice($purchase_order_id){
+		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
+		$data = \DB::table('VIEW_SUPPLIER_BILL')
+				->where('purchase_order_id',$purchase_order_id)
+				->first();
+		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
+				->where('purchase_order_id',$purchase_order_id)
 				->get();
-		$purchase_order = \DB::table('purchase_order')->find($data->order_id);
+		
 
 		return view('purchase.order.invoice-show',[
 				'data' => $data,
