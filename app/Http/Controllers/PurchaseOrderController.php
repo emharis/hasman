@@ -14,7 +14,7 @@ class PurchaseOrderController extends Controller
 		$data = \DB::table('VIEW_PURCHASE_ORDER')
 					->orderBy('order_date','desc')
 					->paginate($paging_item_number);
-		
+
 		return view('purchase.order.index',[
 				'data' => $data,
 				'paging_item_number' => $paging_item_number
@@ -23,7 +23,7 @@ class PurchaseOrderController extends Controller
 
 	public function create(){
 		return view('purchase.order.create',[
-				
+
 			]);
 	}
 
@@ -44,7 +44,7 @@ class PurchaseOrderController extends Controller
             $order_date = $po_master->order_date;
             $arr_tgl = explode('-',$order_date);
             $fix_order_date = new \DateTime();
-            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);     
+            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
 
 
 			// isnert master purchase
@@ -112,7 +112,7 @@ class PurchaseOrderController extends Controller
 			// 	]);
 		}
 
-		
+
 	}
 
 	public function update(Request $req){
@@ -124,7 +124,7 @@ class PurchaseOrderController extends Controller
             $order_date = $po_master->order_date;
             $arr_tgl = explode('-',$order_date);
             $fix_order_date = new \DateTime();
-            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);     
+            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
 
 
 			// update master purchase
@@ -137,7 +137,7 @@ class PurchaseOrderController extends Controller
 						'subtotal' => $po_master->subtotal,
 						'disc' => $po_master->disc,
 						'total' => $po_master->total,
-						
+
 					]);
 			// delete data product yang lama
 			\DB::table('purchase_order_detail')
@@ -186,7 +186,7 @@ class PurchaseOrderController extends Controller
 			// generate & insert delivery order for this purchase order
 			// $purchase_order_detail = \DB::table('purchase_order_detail')->where('purchase_order_id',$id)->get();
 			// foreach($purchase_order_detail as $dt){
-			// 	// insert delivery order 
+			// 	// insert delivery order
 			// 	for($i=0;$i<$dt->qty;$i++){
 			// 		// generate delivery order number
 			// 		$do_counter = \DB::table('appsetting')->where('name','do_counter')->first()->value;
@@ -220,7 +220,7 @@ class PurchaseOrderController extends Controller
 		return redirect()->back();
 
 		});
-		
+
 	}
 
 	public function delivery($po_id){
@@ -245,9 +245,9 @@ class PurchaseOrderController extends Controller
 		}else{
 			return view('purchase.order.delivery_edit',[
 				'data' => $data
-			]);	
+			]);
 		}
-		
+
 	}
 
 	public function deliveryUpdate(Request $req){
@@ -256,7 +256,7 @@ class PurchaseOrderController extends Controller
             $delivery_date = $req->delivery_date;
             $arr_tgl = explode('-',$delivery_date);
             $fix_delivery_date = new \DateTime();
-            $fix_delivery_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]); 
+            $fix_delivery_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
 
 			\DB::table('delivery_order')
 				->where('id',$req->delivery_order_id)
@@ -298,9 +298,9 @@ class PurchaseOrderController extends Controller
 				\DB::table('purchase_order')->delete($dt->id);
 			}
 
-			return redirect()->back();	
+			return redirect()->back();
 		});
-		
+
 	}
 
 	// Filter  with Pagination
@@ -313,12 +313,12 @@ class PurchaseOrderController extends Controller
 		// echo '<br/>';
 		// echo $req->date_end;
 
-		 $paging_item_number = \DB::table('appsetting')->where('name','paging_item_number')->first()->value; 
+		 $paging_item_number = \DB::table('appsetting')->where('name','paging_item_number')->first()->value;
 
          if($req->filter_by == 'order_date'){
          	// generate tanggal
             $date_start = $req->date_start;
-            $arr_tgl = explode('-',$date_start);  
+            $arr_tgl = explode('-',$date_start);
             $date_start = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
 
             $date_end = $req->date_end;
@@ -405,13 +405,38 @@ class PurchaseOrderController extends Controller
 		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
 				->where('purchase_order_id',$purchase_order_id)
 				->get();
-		
+
 
 		return view('purchase.order.invoice-show',[
 				'data' => $data,
 				'data_detail' => $data_detail,
 				'purchase_order' => $purchase_order,
 			]);
+	}
+
+	// check apakah Purchase order dapat di hapus
+	public function canDelete($order_id){
+		// get jumlah payment
+		$bill = \DB::table('supplier_bill')->where('purchase_order_id',$order_id)->first();
+		$payments = \DB::table('supplier_payment')->where('supplier_bill_id',$bill->id)->get();
+
+		// echo count($payments);
+		// return count($payments);
+		return count($payments) == 0 ? 'true' : 'false';
+	}
+
+	public function cancelOrder($purchase_order_id){
+		return \DB::transaction(function()use($purchase_order_id){
+			// delete supplier bill
+			\DB::table('supplier_bill')
+					->where('purchase_order_id',$purchase_order_id)
+					->delete();
+
+			// delete purchase order
+			\DB::table('purchase_order')->delete($purchase_order_id);
+
+			return redirect('purchase/order');
+		});
 	}
 
 

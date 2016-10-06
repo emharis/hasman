@@ -157,6 +157,8 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/reconcile/{id}','PurchaseOrderController@reconcile');
         Route::get('order/invoices/{purchase_order_id}','PurchaseOrderController@invoices');
         Route::get('order/invoices/show/{invoice_id}','PurchaseOrderController@showInvoice');
+        Route::get('order/can-delete/{order_id}','PurchaseOrderController@canDelete');
+        Route::get('order/cancel-order/{purchase_order_id}','PurchaseOrderController@cancelOrder');
     });
 
     Route::group(['prefix' => 'sales'], function () {

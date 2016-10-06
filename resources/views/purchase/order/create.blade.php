@@ -16,10 +16,10 @@
     }
 
     input.input-clear {
-        display: block; 
-        padding: 0; 
-        margin: 0; 
-        border: 0; 
+        display: block;
+        padding: 0;
+        margin: 0;
+        border: 0;
         width: 100%;
         background-color:#EEF0F0;
         float:right;
@@ -153,8 +153,8 @@
                             <a id="btn-add-item" href="#">Add an item</a>
                         </td>
                     </tr>
-                    
-                    
+
+
                 </tbody>
             </table>
 
@@ -173,7 +173,7 @@
                                     <label>Subtotal :</label>
                                 </td>
                                 <td class="label-total-subtotal text-right" >
-                                    
+
                                 </td>
                             </tr>
                             <tr>
@@ -181,7 +181,7 @@
                                     <label>Disc :</label>
                                 </td>
                                 <td >
-                                   <input style="font-size:14px;" type="text" name="disc" class="input-sm form-control text-right input-clear"> 
+                                   <input style="font-size:14px;" type="text" name="disc" class="input-sm form-control text-right input-clear">
                                 </td>
                             </tr>
                             <tr>
@@ -189,7 +189,7 @@
                                     Total :
                                 </td>
                                 <td class="label-total text-right" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
-                                    
+
                                 </td>
                             </tr>
                         </tbody>
@@ -305,7 +305,7 @@
     // SET AUTOCOMPLETE PROVINSI
     $('input[name=provinsi]').autocomplete({
         serviceUrl: 'api/get-auto-complete-provinsi',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=provinsi]').val();
                     }
@@ -321,14 +321,14 @@
     // SET AUTOCOMPLETE KABUPATEN
     $('input[name=kabupaten]').autocomplete({
         serviceUrl: 'api/get-auto-complete-kabupaten',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=kabupaten]').val();
                     },
                     'provinsi_id': function() {
                         return $('input[name=provinsi_id]').val();
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier
@@ -341,14 +341,14 @@
     // SET AUTOCOMPLETE KECAMATAN
     $('input[name=kecamatan]').autocomplete({
         serviceUrl: 'api/get-auto-complete-kecamatan',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=kecamatan]').val();
                     },
                     'kabupaten_id': function() {
                         return $('input[name=kabupaten_id]').val();
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier
@@ -361,14 +361,14 @@
     // SET AUTOCOMPLETE DESA
     $('input[name=desa]').autocomplete({
         serviceUrl: 'api/get-auto-complete-desa',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=desa]').val();
                     },
                     'kecamatan_id': function() {
                         return $('input[name=kecamatan_id]').val();
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier
@@ -407,7 +407,7 @@
     var input_sup;
     var input_subtotal;
     var label_satuan;
-    
+
     $('#btn-add-item').click(function(){
         // tampilkan form add new item
         var newrow = $('#row-add-product').clone();
@@ -441,15 +441,15 @@
         // // $('.input-subtotal').autoNumeric('init',{
         //     vMin:'0',
         //     vMax:'9999999999'
-        // });       
+        // });
 
         // Tampilkan & Reorder Row Number
         rownumReorder();
-       
+
         // format autocomplete
         input_product.autocomplete({
             serviceUrl: 'api/get-auto-complete-product',
-            params: {  
+            params: {
                         'nama' : function() {
                                     return input_product.val();
                                 },
@@ -458,7 +458,7 @@
             onSelect:function(suggestions){
                 input_product.data('productid',suggestions.data);
                 input_product.data('kode',suggestions.kode);
-                
+
                 // disable input_product
                 input_product.attr('readonly','readonly');
 
@@ -499,7 +499,7 @@
             }
         });
 
-        
+
 
         // fokuskan ke input product
         input_product.focus();
@@ -521,7 +521,7 @@
         // }else{
             calcSubtotal($(this));
         // }
-        
+
     });
     // $(document).on('input','.input-quantity',function(){
     //     calcSubtotal($(this));
@@ -560,7 +560,7 @@
             if($(this).parent().parent().hasClass('row-product')){
                 subtotal += Number($(this).autoNumeric('get'));
             }
-        });        
+        });
         // tampilkan subtotal dan total
         $('.label-total-subtotal').autoNumeric('set',subtotal);
         $('.label-total').autoNumeric('set',Number(subtotal) - Number(disc));
@@ -588,16 +588,16 @@
     });
     // END OF DELETE ROW PRODUCT
 
-    
+
     // BTN CANCEL SAVE
     $('#btn-cancel-save').click(function(){
-        if(confirm('Anda akan membabtalkan transaksi ini?')){
+        // if(confirm('Anda akan membabtalkan transaksi ini?')){
             location.href = "purchase/order";
-        }else
-        {
-
-        return false
-        }
+        // }else
+        // {
+        //
+        // return false
+        // }
     });
     // END OF BTN CANCEL SAVE
 
@@ -636,17 +636,17 @@
             if($(this).parent().parent().hasClass('row-product')){
                 generateInput($(this));
 
-                if(input_product.data('productid') != "" 
-                    // && input_qty_on_hand.val() != "" 
-                    // && Number(input_qty_on_hand.val()) > 0 
-                    && input_qty.val() != "" 
-                    && Number(input_qty.val()) > 0 
-                    // &&input_unit_price.val() != "" 
-                    // && Number(input_unit_price.autoNumeric('get')) > 0 
-                    // && input_sup.val() != "" 
-                    // && Number(input_sup.autoNumeric('get')) > 0 
-                    // && input_subtotal.val() != "" 
-                    // && Number(input_subtotal.autoNumeric('get')) > 0 
+                if(input_product.data('productid') != ""
+                    // && input_qty_on_hand.val() != ""
+                    // && Number(input_qty_on_hand.val()) > 0
+                    && input_qty.val() != ""
+                    && Number(input_qty.val()) > 0
+                    // &&input_unit_price.val() != ""
+                    // && Number(input_unit_price.autoNumeric('get')) > 0
+                    // && input_sup.val() != ""
+                    // && Number(input_sup.autoNumeric('get')) > 0
+                    // && input_subtotal.val() != ""
+                    // && Number(input_subtotal.autoNumeric('get')) > 0
                     ){
 
                     po_product.product.push({
@@ -659,20 +659,20 @@
                     });
 
                 }
-                
+
             }
         });
 
         // save ke database
         // alert(po_product.product.length);
         // alert('Pekerjaan id : ' + po_master.pekerjaan_id);
-        if(po_master.supplier_id != "" 
-            && $('input[name=supplier]').val() != "" 
-            && $('input[name=supplier]').val() != null 
-            && po_master.order_date != "" 
-            && po_master.order_date != null 
-            // && po_master.pekerjaan_id != "" 
-            // && po_master.pekerjaan_id != null 
+        if(po_master.supplier_id != ""
+            && $('input[name=supplier]').val() != ""
+            && $('input[name=supplier]').val() != null
+            && po_master.order_date != ""
+            && po_master.order_date != null
+            // && po_master.pekerjaan_id != ""
+            // && po_master.pekerjaan_id != null
             && po_product.product.length > 0){
 
             var newform = $('<form>').attr('method','POST').attr('action','purchase/order/insert');
@@ -708,10 +708,10 @@
         $('#modal-pekerjaan').modal('hide');
     });
     // END OF SAVE ADD PEKERJAAN
-    
 
 
-    
+
+
 
     // // $('#btn-test').click(function(){
     // //     hitungTotal();

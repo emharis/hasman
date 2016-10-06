@@ -15,10 +15,10 @@
     }
 
     input.input-clear {
-        display: block; 
-        padding: 0; 
-        margin: 0; 
-        border: 0; 
+        display: block;
+        padding: 0;
+        margin: 0;
+        border: 0;
         width: 100%;
         background-color:#EEF0F0;
         float:right;
@@ -37,7 +37,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="purchase/order" >Sales Orders</a> <i class="fa fa-angle-double-right" ></i> {{$data_master->order_number}}
+        <a href="purchase/order" >Sales Orders</a>
+        <i class="fa fa-angle-double-right" ></i>
+        {{$data_master->order_number}}
     </h1>
 </section>
 
@@ -47,8 +49,9 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
-             
+            <button class="btn btn-danger btn-sm " id="btn-cancel-order" data-href="purchase/order/cancel-order/{{$data_master->id}}" >Cancel Order</button>
+            <button class="btn btn-success btn-sm" >Print</button>
+
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
 
@@ -64,11 +67,14 @@
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
+          <label>
+            <h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3>
+          </label>
 
             <input type="hidden" name="purchase_order_id" value="{{$data_master->id}}">
             {{-- <div class="row" > --}}
                 {{-- <div class="col-sm-8 col-md-8 col-lg-8"> --}}
-                    
+
                 {{-- </div> --}}
                 {{-- <div class="col-sm-4 col-md-4 col-lg-4" > --}}
                     {{-- INVOICES SHORTCUT --}}
@@ -78,7 +84,7 @@
                         </a> --}}
                 {{-- </div> --}}
             {{-- </div> --}}
-            
+
             <table class="table" id="table-master-so" >
                         <tbody>
                             <tr>
@@ -106,7 +112,7 @@
                                 <td></td>
                                 <td></td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
 
@@ -136,7 +142,7 @@
                         <td class="text-right" >
                             {{$dt->qty}}
                         </td>
-                        <td class="text-right uang" >  
+                        <td class="text-right uang" >
                             {{$dt->unit_price}}
                         </td>
                         <td class="uang text-right" >
@@ -144,9 +150,9 @@
                         </td>
                     </tr>
                     @endforeach
-                    
-                    
-                    
+
+
+
                 </tbody>
             </table>
 
@@ -224,6 +230,25 @@
     });
     $('.uang').each(function(){
         $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
+
+    // CANCEL ORDER
+    $('#btn-cancel-order').click(function(){
+      if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
+        // check can delete
+        var purchase_order_id = $('input[name=purchase_order_id]').val();
+        // location.href = "purchase/order/can-delete/" + purchase_order_id;
+
+        $.get("purchase/order/can-delete/" + purchase_order_id,null,function(res){
+            if(res == 'false'){
+              alert('Data purchase order ini tidak dapat dihapus. \nAnda harus menghapus data invoice yang berhubungan dengan purchase order ini terlebih dahulu.');
+            }else{
+              location.href = "purchase/order/cancel-order/" + purchase_order_id;
+            }
+        });
+
+
+      }
     });
 
 })(jQuery);
