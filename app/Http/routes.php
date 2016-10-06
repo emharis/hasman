@@ -213,6 +213,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('supplier/bill/payments/{bill_id}','SupplierBillController@payments');
         Route::get('supplier/bill/payment/show/{payment_id}','SupplierBillController@showPayment');
         Route::get('supplier/bill/payment/delete/{payment_id}','SupplierBillController@deletePayment');
+        Route::get('supplier/bill/cancel-order/{bill_id}','SupplierBillController@cancelOrder');
 
     });
 

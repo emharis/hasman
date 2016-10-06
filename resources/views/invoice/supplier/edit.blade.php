@@ -57,8 +57,11 @@
               <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
             @else
             {{-- Tampilkan header --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
+            {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label> --}}
             @endif
+
+            <button class="btn btn-danger btn-sm" id="btn-cancel-bill" data-href="invoice/supplier/bill/cancel-bill/{{$data->id}}" >Cancel Bill</button>
+
             {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label> --}}
             {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a> --}}
 
@@ -71,14 +74,11 @@
 
         </div>
         <div class="box-body">
-            @if($data->status == 'O')
-              <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
-            @endif
-
             <input type="hidden" name="invoice_order_id" value="{{$data->id}}">
 
             <div class="row" >
               <div class="col-sm-10 col-md-10 col-lg-10" >
+                <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
                 <table class="table" id="table-master-so" >
                     <tbody>
                         <tr>
@@ -232,8 +232,17 @@
 
 @section('scripts')
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 (function ($) {
+    // cancel bill
+    $('#btn-cancel-bill').click(function(){
+      var invoice_order_id = $('input[name=invoice_order_id]').val();
+      if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){
+        location.href = "invoice/supplier/bill/cancel-order/"+invoice_order_id;
+      }
+    });
+
     // // Reconcile
     // $('#btn-reconcile').click(function(){
     //     if(confirm('Anda akan membatalkan data ini? \nData yang telah tersimpan akan dihapus & tidak dapat dikembalikan.')){

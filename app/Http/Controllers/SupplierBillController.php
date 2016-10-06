@@ -116,6 +116,56 @@ class SupplierBillController extends Controller
 
 	}
 
+	// DELETE PAYMENT
+	public function deletePayment($payment_id){
+		return \DB::transaction(function()use($payment_id){
+			// get data payment
+			$payment = \DB::table('supplier_payment')->find($payment_id);
+
+			//get data supplier bill
+			$supplier_bill = \DB::table('supplier_bill')->find($payment->supplier_bill_id);
+
+			// delete from table payment
+			\DB::table('supplier_payment')
+				->delete($payment_id);
+
+			//  update amount due dan update status di supplier bill
+			\DB::table('supplier_bill')
+				->where('id',$supplier_bill->id)
+				->update([
+						'status' => 'O',
+						'amount_due' => \DB::raw('amount_due + ' . $payment->payment_amount)
+					]);
+
+			return redirect()->back();
+
+		});
+	}
+
+	// CANCEL ORDER
+	public function cancelOrder($bill_id){
+			return \DB::transaction(function()use($bill_id){
+				// delete payments
+				\DB::table('supplier_payment')
+						->where('supplier_bill_id',$bill_id)
+						->delete();
+
+				// update status purchase order
+				$bill = \DB::table('supplier_bill')->find($bill_id);
+				\DB::table('purchase_order')
+					->where('id',$bill->purchase_order_id)
+					->update([
+						'status' => 'O'
+					]);
+
+				// delete bill
+				\DB::table('supplier_bill')
+						->delete($bill_id);
+
+				return redirect('invoice/supplier/bill');
+			});
+	}
+
 	// public function edit($bill_id){
 	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
 	// 			->find($bill_id);
@@ -247,31 +297,7 @@ class SupplierBillController extends Controller
 	// 	});
 	// }
 
-	// DELETE PAYMENT
-	public function deletePayment($payment_id){
-		return \DB::transaction(function()use($payment_id){
-			// get data payment
-			$payment = \DB::table('supplier_payment')->find($payment_id);
 
-			//get data supplier bill
-			$supplier_bill = \DB::table('supplier_bill')->find($payment->supplier_bill_id);
-
-			// delete from table payment
-			\DB::table('supplier_payment')
-				->delete($payment_id);
-
-			//  update amount due dan update status di supplier bill
-			\DB::table('supplier_bill')
-				->where('id',$supplier_bill->id)
-				->update([
-						'status' => 'O',
-						'amount_due' => \DB::raw('amount_due + ' . $payment->payment_amount)
-					]);
-
-			return redirect()->back();
-
-		});
-	}
 
 	// // RECONCILE SUPPLIER BILL
 	// public function reconcile($bill_id){
