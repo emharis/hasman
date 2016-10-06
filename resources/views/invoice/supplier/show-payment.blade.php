@@ -15,10 +15,10 @@
     }
 
     input.input-clear {
-        display: block; 
-        padding: 0; 
-        margin: 0; 
-        border: 0; 
+        display: block;
+        padding: 0;
+        margin: 0;
+        border: 0;
         width: 100%;
         background-color:#EEF0F0;
         float:right;
@@ -33,11 +33,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="invoice/supplier/bill" >Supplier Bills</a> 
-        <i class="fa fa-angle-double-right" ></i> 
-        <a href="invoice/supplier/bill/edit/{{$data->id}}" >{{$data->bill_number}}</a> 
-        <i class="fa fa-angle-double-right" ></i> 
-        Register Payment
+      <a href="invoice/supplier/bill" >Supplier Bills</a>
+      <i class="fa fa-angle-double-right" ></i>
+      <a href="invoice/supplier/bill/edit/{{$data->supplier_bill_id}}" >{{$data->bill_number}}</a>
+      <i class="fa fa-angle-double-right" ></i>
+      <a href="invoice/supplier/bill/payments/{{$data->supplier_bill_id}}" >Payments</a>
+      <i class="fa fa-angle-double-right" ></i>
+      {{$data->payment_number}}
     </h1>
 </section>
 
@@ -51,23 +53,23 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             {{-- <a class="btn btn-primary" style="margin-top:0;" id="btn-reg-payment" href="sales/order/reg-payment/{{$so_master->id}}" >Register Payment</a> --}}
 
-            <label> 
-                <small>Register Payment</small> 
-                <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >{{$data->bill_number}}</h4>
+            <label>
+                {{-- <small>Register Payment</small> --}}
+                <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >{{$data->payment_number}}</h4>
             </label>
 
             {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label> --}}
             {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'P' ? 'bg-blue' : 'bg-gray'}}" >Paid</a> --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Posted</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Posted</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
             {{-- <form method="POST" action="sales/order/save-payment" > --}}
-                
+
                 <table class="table" >
                     <tbody>
                         <tr>
@@ -82,32 +84,35 @@
                                 <label>Payment Date</label>
                             </td>
                             <td class="col-lg-3" >
-                                <input type="text" name="payment_date" class="form-control input-tanggal" value="{{date('d-m-Y')}}" required>
+                              {{$data->payment_date_formatted}}
+                                {{-- <input type="text" name="payment_date" class="form-control input-tanggal" value="{{date('d-m-Y')}}" required> --}}
                             </td>
                         </tr>
                         <tr>
                             <td >
-                                <label>Amount Due</label>
+                                <label>Payment Amount</label>
                             </td>
-                            <td  >
-                                <input type="text" name="amount_due" class="form-control text-right" value="{{$data->amount_due}}" readonly>
+                            <td class="uang" >
+                                {{$data->payment_amount}}
+                                {{-- <input type="text" name="amount_due" class="form-control text-right" value="{{$data->amount_due}}" readonly> --}}
                             </td>
                             <td  ></td>
                             <td >
-                                <label>Payment Amount</label>
+                                {{-- <label>Payment Amount</label> --}}
                             </td>
                             <td >
-                                <input type="text" name="payment_amount" class="form-control text-right" value="{{$data->amount_due}}" autofocus required>
+                                {{-- <input type="text" name="payment_amount" class="form-control text-right" value="{{$data->amount_due}}" autofocus required> --}}
                             </td>
                         </tr>
 
                         <tr>
                             <td colspan="5" >
-                                <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-                                <a class="btn btn-danger" id="btn-cancel" href="invoice/supplier/bill/edit/{{$data->id}}" >Cancel</a>
+                                {{-- <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
+                                <a class="btn btn-danger" id="btn-cancel" href="invoice/supplier/bill/edit/{{$data->id}}" >Cancel</a> --}}
+                                <a class="btn btn-danger" href="invoice/supplier/bill/payments/{{$data->supplier_bill_id}}" >Close</a>
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             {{-- </form> --}}
@@ -141,10 +146,11 @@
     // -----------------------------------------------------
     // SET AUTO NUMERIC
     // =====================================================
-    $('input[name=payment_amount], input[name=amount_due]').autoNumeric('init',{
+    $('.uang').autoNumeric('init',{
         vMin:'0',
         vMax:'9999999999'
     });
+    $('.uang').autoNumeric('set',$('.uang').autoNumeric('get'));
     // END OF AUTONUMERIC
 
     // CEK PAYMENT AMOUNT APAKAH LEBIH BESAR DARI AMOUNT DUE
@@ -154,7 +160,7 @@
         // var so_master_id = $('input[name=so_master_id]').val();
         var payment_date = $('input[name=payment_date]').val();
         var supplier_bill_id = $('input[name=supplier_bill_id]').val();
-        
+
         if(Number(payment_amount) > Number(amount_due)){
             alert('Payment amount lebih besar dari amount due.');
             // fokuskan

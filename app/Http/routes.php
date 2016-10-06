@@ -153,10 +153,10 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/delivery/edit/{delivery_id}','PurchaseOrderController@deliveryEdit');
         Route::post('order/delivery/update','PurchaseOrderController@deliveryUpdate');
         Route::post('order/create-pekerjaan','PurchaseOrderController@createPekerjaan');
-        Route::get('order/filter','PurchaseOrderController@filter'); 
-        Route::get('order/reconcile/{id}','PurchaseOrderController@reconcile');    
-        Route::get('order/invoices/{purchase_order_id}','PurchaseOrderController@invoices');    
-        Route::get('order/invoices/show/{invoice_id}','PurchaseOrderController@showInvoice');    
+        Route::get('order/filter','PurchaseOrderController@filter');
+        Route::get('order/reconcile/{id}','PurchaseOrderController@reconcile');
+        Route::get('order/invoices/{purchase_order_id}','PurchaseOrderController@invoices');
+        Route::get('order/invoices/show/{invoice_id}','PurchaseOrderController@showInvoice');
     });
 
     Route::group(['prefix' => 'sales'], function () {
@@ -173,13 +173,13 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/delivery/edit/{delivery_id}','SalesOrderController@deliveryEdit');
         Route::post('order/delivery/update','SalesOrderController@deliveryUpdate');
         Route::post('order/create-pekerjaan','SalesOrderController@createPekerjaan');
-        Route::get('order/filter','SalesOrderController@filter'); 
-        Route::get('order/reconcile/{id}','SalesOrderController@reconcile');    
-        Route::get('order/invoices/{sales_order_id}','SalesOrderController@invoices');    
-        Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');   
+        Route::get('order/filter','SalesOrderController@filter');
+        Route::get('order/reconcile/{id}','SalesOrderController@reconcile');
+        Route::get('order/invoices/{sales_order_id}','SalesOrderController@invoices');
+        Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');
 
 
-        // DIRECT SALES 
+        // DIRECT SALES
     });
 
     Route::group(['prefix' => 'delivery'], function () {
@@ -189,7 +189,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('order/update','DeliveryOrderController@update');
         Route::post('order/to-validate','DeliveryOrderController@toValidate');
         Route::get('order/reconcile/{id}','DeliveryOrderController@reconcile');
-        Route::get('order/filter','DeliveryOrderController@filter');     
+        Route::get('order/filter','DeliveryOrderController@filter');
     });
 
     Route::group(['prefix' => 'invoice'], function () {
@@ -207,6 +207,11 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('supplier/bill','SupplierBillController@index');
         Route::get('supplier/bill/edit/{bill_id}','SupplierBillController@edit');
         Route::get('supplier/bill/reg-payment/{bill_id}','SupplierBillController@regPayment');
+        Route::post('supplier/bill/save-register-payment','SupplierBillController@saveRegPayment');
+        Route::get('supplier/bill/payments/{bill_id}','SupplierBillController@payments');
+        Route::get('supplier/bill/payment/show/{payment_id}','SupplierBillController@showPayment');
+        Route::get('supplier/bill/payment/delete/{payment_id}','SupplierBillController@deletePayment');
+
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');
@@ -222,5 +227,3 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-select-customer','ApiController@getSelectCustomer');
     Route::get('api/get-select-pekerjaan/{customer_id}','ApiController@getSelectPekerjaan');
 });
-
-

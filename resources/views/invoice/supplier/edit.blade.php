@@ -15,10 +15,10 @@
     }
 
     input.input-clear {
-        display: block; 
-        padding: 0; 
-        margin: 0; 
-        border: 0; 
+        display: block;
+        padding: 0;
+        margin: 0;
+        border: 0;
         width: 100%;
         background-color:#EEF0F0;
         float:right;
@@ -41,8 +41,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="invoice/supplier/bill" >Supplier Bills</a> 
-         <i class="fa fa-angle-double-right" ></i> 
+        <a href="invoice/supplier/bill" >Supplier Bills</a>
+         <i class="fa fa-angle-double-right" ></i>
          {{$data->bill_number}}
     </h1>
 </section>
@@ -53,13 +53,17 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
-             
+            @if($data->status == 'O')
+              <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
+            @else
+            {{-- Tampilkan header --}}
+            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
+            @endif
             {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label> --}}
             {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a> --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'P' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
@@ -67,42 +71,56 @@
 
         </div>
         <div class="box-body">
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
+            @if($data->status == 'O')
+              <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label>
+            @endif
 
             <input type="hidden" name="invoice_order_id" value="{{$data->id}}">
-            
-            <table class="table" id="table-master-so" >
-                        <tbody>
-                            <tr>
-                                <td class="col-lg-2">
-                                    <label>Supplier</label>
-                                </td>
-                                <td class="col-lg-4" >
-                                    {{'['.$data->kode_supplier .'] ' .$data->supplier}}
-                                </td>
-                                <td class="col-lg-2" ></td>
-                                <td class="col-lg-2" >
-                                    <label>Order Number</label>
-                                </td>
-                                <td class="col-lg-2" >
-                                    {{$data->order_number}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Supplier Ref#</label>
-                                </td>
-                                <td>
-                                    {{$purchase_order->supplier_ref}}
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-            
+
+            <div class="row" >
+              <div class="col-sm-10 col-md-10 col-lg-10" >
+                <table class="table" id="table-master-so" >
+                    <tbody>
+                        <tr>
+                            <td class="col-lg-2">
+                                <label>Supplier</label>
+                            </td>
+                            <td class="col-lg-4" >
+                                {{'['.$data->kode_supplier .'] ' .$data->supplier}}
+                            </td>
+                            <td class="col-lg-2" ></td>
+                            <td class="col-lg-2" >
+                                <label>Order Number</label>
+                            </td>
+                            <td class="col-lg-2" >
+                                {{$data->order_number}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Supplier Ref#</label>
+                            </td>
+                            <td>
+                                {{$purchase_order->supplier_ref}}
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                  </table>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2" >
+                @if(count($payments) > 0)
+                  <a class="btn btn-app pull-right" href="invoice/supplier/bill/payments/{{$data->id}}" >
+                      <span class="badge bg-green">{{count($payments)}}</span>
+                      <i class="fa fa-money"></i> Payments
+                  </a>
+                @endif
+              </div>
+            </div>
+
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
@@ -130,7 +148,7 @@
                         <td class="text-right" >
                             {{$dt->qty}}
                         </td>
-                        <td class="text-right uang" >  
+                        <td class="text-right uang" >
                             {{$dt->unit_price}}
                         </td>
                         <td class="uang text-right" >
@@ -138,9 +156,9 @@
                         </td>
                     </tr>
                     @endforeach
-                    
-                    
-                    
+
+
+
                 </tbody>
             </table>
 
@@ -179,6 +197,16 @@
                                 </td>
                             </tr>
                             {{-- Paid row --}}
+                            @foreach($payments as $pay)
+                            <tr style="background-color:#EEF0F0;">
+                                    <td class="text-right">
+                                        <i>Paid on {{$pay->date_formatted}}</i> :
+                                    </td>
+                                    <td class="text-right">
+                                        <i><span class="uang" >{{$pay->payment_amount}}</span></i>
+                                    </td>
+                                </tr>
+                            @endforeach
                             <tr>
                                 <td class="text-right" style="border-top:solid darkgray 1px;" >
                                     Amount due :
@@ -190,11 +218,11 @@
 
                         </tbody>
                     </table>
-                </div>            
+                </div>
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="invoice/supplier/bill/invoices/{{$purchase_order->id}}" >Close</a>
+            <a class="btn btn-danger" href="invoice/supplier/bill" >Close</a>
         </div>
     </div><!-- /.box -->
 
