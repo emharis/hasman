@@ -9,9 +9,9 @@
             <li class="{{Request::is('home') ? 'active':''}}" >
                 <a href="home"> <i class="fa fa-home"></i> <span>Home</span> </a>
             </li>
-            
-            
-            
+
+
+
             <!--Menu Inventory-->
             <li class="treeview {{Request::is('master/*') ? 'active':''}}" >
                 <a href="#">
@@ -20,16 +20,16 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('master/lokasi*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Data Lokasi Galian</a></li>        
-                    <li class="{{Request::is('master/armada*') ? 'active':''}}" ><a href="master/armada"><i class="fa fa-circle-o"></i> Data Armada</a></li>        
-                    <li class="{{Request::is('master/jabatan*') ? 'active':''}}" ><a href="master/jabatan"><i class="fa fa-circle-o"></i> Data Jabatan</a></li>        
-                    <li class="{{Request::is('master/karyawan*') ? 'active':''}}" ><a href="master/karyawan"><i class="fa fa-circle-o"></i> Data Karyawan</a></li>        
-                    <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Data Supplier</a></li>        
-                    <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Data Customer</a></li>        
-                    <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Data Material</a></li>        
-                    <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Data Alat Berat</a></li>        
-                    <li class="{{Request::is('master/unit*') ? 'active':''}}" ><a href="master/unit"><i class="fa fa-circle-o"></i> Data Product Unit</a></li>        
-                    <li class="{{Request::is('master/product*') ? 'active':''}}" ><a href="master/product"><i class="fa fa-circle-o"></i> Data Product</a></li>        
+                    <li class="{{Request::is('master/lokasi*') ? 'active':''}}" ><a href="master/lokasi"><i class="fa fa-circle-o"></i> Data Lokasi Galian</a></li>
+                    <li class="{{Request::is('master/armada*') ? 'active':''}}" ><a href="master/armada"><i class="fa fa-circle-o"></i> Data Armada</a></li>
+                    <li class="{{Request::is('master/jabatan*') ? 'active':''}}" ><a href="master/jabatan"><i class="fa fa-circle-o"></i> Data Jabatan</a></li>
+                    <li class="{{Request::is('master/karyawan*') ? 'active':''}}" ><a href="master/karyawan"><i class="fa fa-circle-o"></i> Data Karyawan</a></li>
+                    <li class="{{Request::is('master/supplier*') ? 'active':''}}" ><a href="master/supplier"><i class="fa fa-circle-o"></i> Data Supplier</a></li>
+                    <li class="{{Request::is('master/customer*') ? 'active':''}}" ><a href="master/customer"><i class="fa fa-circle-o"></i> Data Customer</a></li>
+                    <li class="{{Request::is('master/material*') ? 'active':''}}" ><a href="master/material"><i class="fa fa-circle-o"></i> Data Material</a></li>
+                    <li class="{{Request::is('master/alat*') ? 'active':''}}" ><a href="master/alat"><i class="fa fa-circle-o"></i> Data Alat Berat</a></li>
+                    <li class="{{Request::is('master/unit*') ? 'active':''}}" ><a href="master/unit"><i class="fa fa-circle-o"></i> Data Product Unit</a></li>
+                    <li class="{{Request::is('master/product*') ? 'active':''}}" ><a href="master/product"><i class="fa fa-circle-o"></i> Data Product</a></li>
                 </ul>
             </li>
 
@@ -40,7 +40,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="purchase/order"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>  
+                    <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="purchase/order"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>
                 </ul>
             </li>
 
@@ -51,7 +51,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="sales/order"><i class="fa fa-circle-o"></i> Sales Orders</a></li>  
+                    <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="sales/order"><i class="fa fa-circle-o"></i> Sales Orders</a></li>
                     {{-- <li class="{{Request::is('sales/direct-sales*') ? 'active':''}}" ><a href="sales/direct-sales"><i class="fa fa-circle-o"></i> Direct Sales</a></li>   --}}
                 </ul>
             </li>
@@ -63,7 +63,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('delivery/order*') ? 'active':''}}" ><a href="delivery/order"><i class="fa fa-circle-o"></i> Delivery Order</a></li>  
+                    <li class="{{Request::is('delivery/order*') ? 'active':''}}" ><a href="delivery/order"><i class="fa fa-circle-o"></i> Delivery Order</a></li>
                 </ul>
             </li>
 
@@ -74,8 +74,20 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('invoice/customer*') ? 'active':''}}" ><a href="invoice/customer"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>  
-                    <li class="{{Request::is('invoice/supplier/bill*') ? 'active':''}}" ><a href="invoice/supplier/bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>  
+                    <li class="{{Request::is('invoice/customer*') ? 'active':''}}" ><a href="invoice/customer"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>
+                    <li class="{{Request::is('invoice/supplier/bill*') ? 'active':''}}" ><a href="invoice/supplier/bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{Request::is('attendance/*') ? 'active':''}}" >
+                <a href="#">
+                    <i class="fa fa-calendar-check-o"></i>
+                    <span>Attendance</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{Request::is('attendance/setting*') ? 'active':''}}" ><a href="attendance/setting"><i class="fa fa-circle-o"></i> Setting</a></li>
+                    <li class="{{Request::is('attendance/attend*') ? 'active':''}}" ><a href="attendance/attend"><i class="fa fa-circle-o"></i> Attend Now</a></li>
                 </ul>
             </li>
 
@@ -86,10 +98,10 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('setting/user*') ? 'active':''}}" ><a href="setting/user"><i class="fa fa-circle-o"></i> User</a></li>  
+                    <li class="{{Request::is('setting/user*') ? 'active':''}}" ><a href="setting/user"><i class="fa fa-circle-o"></i> User</a></li>
                 </ul>
             </li>
-           
+
         </ul>
     </section>
     <!-- /.sidebar -->

@@ -161,6 +161,15 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/cancel-order/{purchase_order_id}','PurchaseOrderController@cancelOrder');
     });
 
+    Route::group(['prefix' => 'attendance'], function () {
+        // SETTING
+        Route::get('setting','AttendanceController@setting');
+        Route::post('update-time-setting','AttendanceController@updateTimeSetting');
+        Route::post('setting/insert-holiday','AttendanceController@insertHoliday');
+        Route::get('setting/delete-holiday/{holiday_id}','AttendanceController@deleteHoliday');
+
+    });
+
     Route::group(['prefix' => 'sales'], function () {
         // ORDERS
         Route::get('order','SalesOrderController@index');
