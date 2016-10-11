@@ -77,7 +77,10 @@
                 <th class="col-sm-1 col-md-1 col-lg-1">Kode</th>
                 <th>Karyawan</th>
                 <th class="col-sm-1 col-md-1 col-lg-1 text-center" >
-                    <input type="checkbox" id="ck-all" />
+                    Pagi
+                </th>
+                <th class="col-sm-1 col-md-1 col-lg-1 text-center" >
+                    Siang
                 </th>
               </tr>
             </thead>
@@ -141,7 +144,7 @@
         var data_presensi = JSON.parse(res);
         var tablePresensi = $('#table-presensi tbody');
         $('.data-presensi').hide();
-        $('#ck-all').prop('checked',false);
+        // $('#ck-all').prop('checked',false);
         tablePresensi.empty();
         $.each(data_presensi.presensi,function(i,data){
           // // dengan datatable
@@ -156,10 +159,17 @@
                                   .append($('<td>').text(data.nama))
                                   .append($('<td>').addClass('text-center').append($('<input>')
                                                                                   .attr('data-karyawanid',data.id)
-                                                                                  .addClass('ck-row')
+                                                                                  .addClass('ck-row ck-row-pagi')
                                                                                   .attr('type','checkbox')
-                                                                                  .attr('name','ck_hadir_' + data.id)
-                                                                                  .prop('checked',data.status == 'Y' && true)
+                                                                                  .attr('name','ck_hadir_pagi_' + data.id)
+                                                                                  .prop('checked',data.pagi == 'Y' && true)
+                                                                                ))
+                                  .append($('<td>').addClass('text-center').append($('<input>')
+                                                                                  .attr('data-karyawanid',data.id)
+                                                                                  .addClass('ck-row ck-row-siang')
+                                                                                  .attr('type','checkbox')
+                                                                                  .attr('name','ck_hadir_siang_' + data.id)
+                                                                                  .prop('checked',data.siang == 'Y' && true)
                                                                                 ))
                               );
         });
@@ -196,10 +206,10 @@
 
   });
 
-  // check all
-  $('#ck-all').change(function(){
-    $('.ck-row').prop('checked',$(this).is(':checked'));
-  });
+  //// check all
+  // $('#ck-all').change(function(){
+  //   $('.ck-row').prop('checked',$(this).is(':checked'));
+  // });
 
   // save data presensi
   $('#btn-save-presensi').click(function(){
@@ -208,10 +218,11 @@
     var tanggal = $('input[name=tanggal]').val();
     data_master.tanggal = tanggal;
 
-    $('.ck-row').each(function(i,data){
+    $('.ck-row-pagi').each(function(i,data){
       data_presensi.presensi.push({
           karyawan_id : $(this).data('karyawanid'),
-          kehadiran : $(this).is(':checked')
+          pagi : $(this).is(':checked'),
+          siang : $(this).parent().next().children('input').is(':checked')
       });
     });
 

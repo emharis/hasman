@@ -114,7 +114,8 @@ class AttendanceController extends Controller
 						->insert([
 							'tgl' => $tanggal,
 							'karyawan_id' => $dt->karyawan_id,
-							'status' => $dt->kehadiran == 'true' ? 'Y':'N'
+							'pagi' => $dt->pagi == 'true' ? 'Y':'N',
+							'siang' => $dt->siang == 'true' ? 'Y':'N',
 						]);
 			}
 
