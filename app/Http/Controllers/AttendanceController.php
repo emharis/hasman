@@ -85,7 +85,74 @@ class AttendanceController extends Controller
 
 	// TAMPILKAN FORM ABSENSI
 	public function attend(){
-		return redirect('attendance/attend/index');
+		$libur_sabtu = \DB::table('appsetting')->where('name','attendance_libur_sabtu')->first()->value;
+		$libur_minggu = \DB::table('appsetting')->where('name','attendance_libur_minggu')->first()->value;
+		return view('attendance/attend/index',[
+			'libur_sabtu' => $libur_sabtu,
+			'libur_minggu' => $libur_minggu,
+		]);
+	}
+
+	public function insertAttend(Request $req){
+		return \DB::transaction(function()use($req){
+			// generate date
+			$tanggal = $req->tanggal;
+			$arr_tgl = explode('-',$tanggal);
+			$tanggal = new \DateTime();
+			$tanggal->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+
+			// delete data sebelumnya
+			\DB::table('attend')
+				->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
+				->delete();
+
+			// insert data baru
+			$data_presensi = json_decode($req->data_presensi);
+			// echo var_dump($data_presensi->presensi);
+			foreach($data_presensi->presensi as $dt){
+					\DB::table('attend')
+						->insert([
+							'tgl' => $tanggal,
+							'karyawan_id' => $dt->karyawan_id,
+							'status' => $dt->kehadiran == 'true' ? 'Y':'N'
+						]);
+			}
+
+			return redirect()->back();
+		});
+	}
+
+	public function getAttendanceTable($tgl){
+		// generate date
+		$tanggal = $tgl;
+		$arr_tgl = explode('-',$tanggal);
+		$tanggal = new \DateTime();
+		$tanggal->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+
+		$data = json_decode('{"presensi":"","status":""}');
+		$data->presensi = \DB::table('VIEW_ATTEND')
+						->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
+						->where('jabatan_id',4)
+						->get();
+		$data->status = 'P';
+
+		if(count($data->presensi) == 0){
+			$data->presensi = \DB::select('SELECT
+								karyawan.id,
+								karyawan.kode,
+								karyawan.nama,
+								karyawan.jabatan_id,
+								jabatan.nama AS jabatan
+							FROM
+								karyawan
+								INNER JOIN jabatan
+								 ON karyawan.jabatan_id = jabatan.id
+							where jabatan_id = 4
+								 ');
+			$data->status = 'D';
+		}
+
+		return json_encode($data);
 	}
 
 }

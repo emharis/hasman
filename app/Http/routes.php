@@ -167,7 +167,10 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('update-time-setting','AttendanceController@updateTimeSetting');
         Route::post('setting/insert-holiday','AttendanceController@insertHoliday');
         Route::get('setting/delete-holiday/{holiday_id}','AttendanceController@deleteHoliday');
-
+        // ATTENDANCE
+        Route::get('attend','AttendanceController@attend');
+        Route::post('attend/insert','AttendanceController@insertAttend');
+        Route::get('get-attendance-table/{tanggal}','AttendanceController@getAttendanceTable');
     });
 
     Route::group(['prefix' => 'sales'], function () {

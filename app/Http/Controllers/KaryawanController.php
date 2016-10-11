@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class KaryawanController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_KARYAWAN')->get();
+		$data = \DB::table('VIEW_KARYAWAN')->orderBy('created_at','desc')->get();
 		return view('master.karyawan.index',[
 				'data' => $data
 			]);
@@ -21,7 +21,7 @@ class KaryawanController extends Controller
 		foreach($jabatans as $dt){
 			$selectJabatan[$dt->id] = $dt->nama;
 		}
-		
+
 		return view('master.karyawan.create',[
 				'selectJabatan' => $selectJabatan
 			]);
@@ -31,10 +31,14 @@ class KaryawanController extends Controller
 		return \DB::transaction(function()use($req){
 
 			// generate tanggal
-            $tgl_lahir = $req->tgl_lahir;
-            $arr_tgl = explode('-',$tgl_lahir);
-            $fix_tgl_lahir = new \DateTime();
-            $fix_tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+			if($req->tgl_lahir != "" ){
+	      $tgl_lahir = $req->tgl_lahir;
+	      $arr_tgl = explode('-',$tgl_lahir);
+	      $fix_tgl_lahir = new \DateTime();
+	      $fix_tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+			}else{
+				$fix_tgl_lahir = 'NULL';
+			}
 
 			$karyawan_id = \DB::table('karyawan')
 			->insertGetId([
@@ -58,19 +62,19 @@ class KaryawanController extends Controller
 				$foto->move(
 					base_path() . '/public/foto_karyawan/', $foto_name
 				);
-				
+
 				// update ke table karyawan
 				\DB::table('karyawan')
 					->where('id',$karyawan_id)->update([
 						'foto' => $foto_name
 					]);
 			}
-			
+
 
 			return redirect('master/karyawan');
 
 		});
-		
+
 	}
 
 	public function edit($id){
@@ -92,14 +96,14 @@ class KaryawanController extends Controller
 	public function update(Request $req){
 		return \DB::transaction(function()use($req){
 			// generate tanggal
-            $tgl_lahir = $req->tgl_lahir;	
+            $tgl_lahir = $req->tgl_lahir;
 			if($req->tgl_lahir != ""){
-				
+
 	            $arr_tgl = explode('-',$tgl_lahir);
 	            $tgl_lahir = new \DateTime();
 	            $tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
         	}
-            
+
 			\DB::table('karyawan')
 			->where('id',$req->id)
 			->update([
@@ -130,7 +134,7 @@ class KaryawanController extends Controller
 				$foto->move(
 					base_path() . '/public/foto_karyawan/', $foto_name
 				);
-				
+
 				// update ke table karyawan
 				\DB::table('karyawan')
 					->where('id',$req->id)->update([
@@ -140,7 +144,7 @@ class KaryawanController extends Controller
 
 			return redirect('master/karyawan');
 		});
-		
+
 	}
 
 	public function delete(Request $req){

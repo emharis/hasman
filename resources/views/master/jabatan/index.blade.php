@@ -48,7 +48,9 @@
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         <td>
                             @if($dt->ref == 0)
+                                @if($dt->id > 4)
                                 <input type="checkbox" class="ck_row" >
+                                @endif
                             @endif
                         </td>
                         <td class="row-to-edit" >{{$rownum++}}</td>
@@ -106,7 +108,7 @@
 
     function showOptionButton(){
         var checkedCk = $('input.ck_row:checked');
-        
+
         if(checkedCk.length > 0){
             // tampilkan option button
             $('#btn-delete').removeClass('hide');
@@ -116,10 +118,10 @@
     }
 
     // Row Clicked
-    $(document).on('click','.row-to-edit',function(){        
-        var row = $(this).parent();        
-        var data_id = row.data('id');            
-        location.href = 'master/jabatan/edit/' + data_id ;        
+    $(document).on('click','.row-to-edit',function(){
+        var row = $(this).parent();
+        var data_id = row.data('id');
+        location.href = 'master/jabatan/edit/' + data_id ;
     });
 
     // Delete Data Lokasi
@@ -142,7 +144,7 @@
         return false;
     });
 
-    
+
 
 })(jQuery);
 </script>

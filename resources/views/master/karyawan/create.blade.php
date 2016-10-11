@@ -6,7 +6,7 @@
     .col-top-item{
         cursor:pointer;
         border: thin solid #CCCCCC;
-        
+
     }
     .table-top-item > tbody > tr > td{
         border-top-color: #CCCCCC;
@@ -18,7 +18,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="master/karyawan" >Data Karyawan</a> 
+        <a href="master/karyawan" >Data Karyawan</a>
         <i class="fa fa-angle-double-right" ></i> Create
     </h1>
 </section>
@@ -48,7 +48,7 @@
                     <td>
                         <input type="text" name="panggilan" class="form-control"  autocomplete="off" required >
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -57,7 +57,16 @@
                     <td>
                         <input type="text" name="kode" class="form-control"  autocomplete="off" required >
                     </td>
-                    
+
+                </tr>
+                <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Jabatan</label>
+                    </td>
+                    <td>
+                        {!! Form::select('jabatan',$selectJabatan,null,['class'=>'form-control']) !!}
+                    </td>
+
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -66,7 +75,7 @@
                     <td>
                         <input type="text" name="ktp" class="form-control"  autocomplete="off"  >
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -81,7 +90,7 @@
                             </div>
                         </div>
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -106,7 +115,7 @@
                     <td>
                         <input type="text" name="kabupaten" class="form-control " data-id="" >
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -123,15 +132,6 @@
                     <td>
                         <input type="text" name="desa" class="form-control " data-id="" >
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-lg-2 col-md-2 col-sm-2" >
-                        <label>Jabatan</label>
-                    </td>
-                    <td>
-                        {!! Form::select('jabatan',$selectJabatan,null,['class'=>'form-control']) !!}
-                    </td>
-                    
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -173,9 +173,9 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
-   
-    // SAVE 
-   
+
+    // SAVE
+
     $('#btn-save').click(function(){
         // cek kelengkapan data
         var nama = $('input[name=nama]').val();
@@ -229,7 +229,7 @@
     // SET AUTOCOMPLETE PROVINSI
     $('input[name=provinsi]').autocomplete({
         serviceUrl: 'api/get-auto-complete-provinsi',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=provinsi]').val();
                     }
@@ -245,14 +245,14 @@
     // SET AUTOCOMPLETE KABUPATEN
     $('input[name=kabupaten]').autocomplete({
         serviceUrl: 'api/get-auto-complete-kabupaten',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=kabupaten]').val();
                     },
                     'provinsi_id': function() {
                         return $('input[name=provinsi]').data('id');
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier
@@ -265,14 +265,14 @@
     // SET AUTOCOMPLETE KECAMATAN
     $('input[name=kecamatan]').autocomplete({
         serviceUrl: 'api/get-auto-complete-kecamatan',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=kecamatan]').val();
                     },
                     'kabupaten_id': function() {
                         return $('input[name=kabupaten]').data('id');
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier
@@ -285,14 +285,14 @@
     // SET AUTOCOMPLETE KECAMATAN
     $('input[name=desa]').autocomplete({
         serviceUrl: 'api/get-auto-complete-desa',
-        params: {  
+        params: {
                     'nama': function() {
                         return $('input[name=desa]').val();
                     },
                     'kecamatan_id': function() {
                         return $('input[name=kecamatan]').data('id');
                     },
-                    
+
                 },
         onSelect:function(suggestions){
             // // set data supplier

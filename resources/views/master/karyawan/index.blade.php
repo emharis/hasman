@@ -70,7 +70,9 @@
                             {{$dt->jabatan}}
                         </td>
                         <td class="row-to-edit" >
+                          @if($dt->alamat)
                             {{$dt->alamat . ', ' . $dt->desa . ', ' . $dt->kecamatan  }}
+                          @endif
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->telp}}
@@ -107,7 +109,7 @@
             null,
             null,
             null,
-            {className: "text-center"} 
+            {className: "text-center"}
         ],
         order: [[ 1, 'asc' ]],
     });
@@ -130,7 +132,7 @@
 
     function showOptionButton(){
         var checkedCk = $('input.ck_row:checked');
-        
+
         if(checkedCk.length > 0){
             // tampilkan option button
             $('#btn-delete').removeClass('hide');
@@ -140,10 +142,10 @@
     }
 
     // Row Clicked
-    $(document).on('click','.row-to-edit',function(){        
-        var row = $(this).parent();        
-        var data_id = row.data('id');            
-        location.href = 'master/karyawan/edit/' + data_id ;        
+    $(document).on('click','.row-to-edit',function(){
+        var row = $(this).parent();
+        var data_id = row.data('id');
+        location.href = 'master/karyawan/edit/' + data_id ;
     });
 
     // Delete Data Lokasi
@@ -166,7 +168,7 @@
         return false;
     });
 
-    
+
 
 })(jQuery);
 </script>
