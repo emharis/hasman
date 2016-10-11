@@ -173,6 +173,16 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('get-attendance-table/{tanggal}','AttendanceController@getAttendanceTable');
     });
 
+    Route::group(['prefix' => 'payroll'], function () {
+        // PAYROLL STAFF
+        Route::get('staff','PayrollController@staff');
+
+        // PAYROLL DRIVER
+        Route::get('driver','PayrollController@driver');
+        Route::get('driver/create','PayrollController@driverCreate');
+
+    });
+
     Route::group(['prefix' => 'sales'], function () {
         // ORDERS
         Route::get('order','SalesOrderController@index');
@@ -236,6 +246,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-customer','ApiController@getAutoCompleteCustomer');
     Route::get('api/get-auto-complete-supplier','ApiController@getAutoCompleteSupplier');
     Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
+    Route::get('api/get-auto-complete-driver','ApiController@getAutoCompleteDriver');
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
     Route::get('api/get-auto-complete-product','ApiController@getAutoCompleteProduct');

@@ -52,6 +52,7 @@ class KaryawanController extends Controller
 					'jabatan_id' => $req->jabatan,
 					'tgl_lahir' => $fix_tgl_lahir,
 					'tempat_lahir' => $req->tempat_lahir,
+					'gaji_pokok' => $req->gaji_pokok,
 				]);
 
 			//insert foto
@@ -117,6 +118,7 @@ class KaryawanController extends Controller
 					'jabatan_id' => $req->jabatan,
 					'tgl_lahir' => $tgl_lahir,
 					'tempat_lahir' => $req->tempat_lahir,
+					'gaji_pokok' => $req->gaji_pokok,
 				]);
 
 			$foto_lama = \DB::table('karyawan')->find($req->id)->foto;

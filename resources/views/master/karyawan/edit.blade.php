@@ -71,6 +71,14 @@
 
                 </tr>
                 <tr>
+                  <td>
+                    <label>Gaji/Harian</label>
+                  </td>
+                  <td>
+                    <input name="gaji_pokok" class="form-control input-uang" value="{{$data->gaji_pokok}}" />
+                  </td>
+                </tr>
+                <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>KTP</label>
                     </td>
@@ -165,6 +173,7 @@
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
 
@@ -175,6 +184,12 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
+
+    // SET AUTONUMERIC GAJI POKOK
+    $('.input-uang').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
 
      // SAVE
 
@@ -198,6 +213,7 @@
         var telp = $('input[name=telp]').val();
         var tgl_lahir = $('input[name=tgl_lahir]').val();
         var tempat_lahir = $('input[name=tempat_lahir]').val();
+        var gaji_pokok = $('input[name=gaji_pokok]').autoNumeric('get');
 
         if(nama != "" && kode != ""){
 
@@ -221,6 +237,7 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','telp').val(telp));
             formdata.append($('<input>').attr('type','hidden').attr('name','tgl_lahir').val(tgl_lahir));
             formdata.append($('<input>').attr('type','hidden').attr('name','tempat_lahir').val(tempat_lahir));
+            formdata.append($('<input>').attr('type','hidden').attr('name','gaji_pokok').val(gaji_pokok));
             formdata.append($('input[name=foto]'));
             formdata.submit();
         }else{
