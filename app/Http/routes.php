@@ -180,6 +180,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         // PAYROLL DRIVER
         Route::get('driver','PayrollController@driver');
         Route::get('driver/create','PayrollController@driverCreate');
+        Route::get('driver/get-delivery-order/{driver_id}/{tanggal}','PayrollController@getDeliveryOrderList');
 
     });
 

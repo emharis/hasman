@@ -28,7 +28,7 @@
         <div class="box-header with-border" >
             <div class="row" >
                 <div class="col-sm-6 col-md-6 col-lg-6" >
-                    
+                    <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Delivery Orders</h3></label>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6" >
                     {{-- Filter section --}}
@@ -169,9 +169,9 @@
     //         {className: "text-left"},
     //         null,
     //         null,
-    //         null,   
-    //         null,   
-    //         null,   
+    //         null,
+    //         null,
+    //         null,
     //         null,
     //         null,
     //         // null,
@@ -192,11 +192,11 @@
         $('.input-filter').removeClass('hide');
         $('.input-filter').hide();
 
-        if(filter_by == 'delivery_order_number' 
-                    || filter_by == 'order_number' 
-                    || filter_by == 'customer' 
-                    || filter_by == 'material' 
-                    || filter_by == 'nopol' 
+        if(filter_by == 'delivery_order_number'
+                    || filter_by == 'order_number'
+                    || filter_by == 'customer'
+                    || filter_by == 'material'
+                    || filter_by == 'nopol'
                     || filter_by == 'pekerjaan' ){
             $('input[name=filter_string]').show();
         }else if(filter_by == 'order_date' || filter_by == 'delivery_date'){
@@ -258,7 +258,7 @@
 
     function showOptionButton(){
         var checkedCk = $('input.ck_row:checked');
-        
+
         if(checkedCk.length > 0){
             // tampilkan option button
             $('#btn-delete').removeClass('hide');
@@ -268,10 +268,10 @@
     }
 
     // Row Clicked
-    $('.row-to-edit').click(function(){   
-        var row = $(this);        
-        var data_id = row.data('id');            
-        location.href = 'delivery/order/edit/' + data_id ;        
+    $('.row-to-edit').click(function(){
+        var row = $(this);
+        var data_id = row.data('id');
+        location.href = 'delivery/order/edit/' + data_id ;
         // alert('delivery/order/edit/' + data_id)
     });
 
@@ -295,7 +295,7 @@
         return false;
     });
 
-    
+
 
 })(jQuery);
 </script>
