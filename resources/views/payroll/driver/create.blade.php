@@ -117,16 +117,20 @@
             <table id="table-delivery" class="table table-bordered table-condensed data-delivery hide" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >NO</th>
-                        <th>MATERIAL</th>
-                        <th>PEKERJAAN</th>
-                        <th>TUJUAN</th>
-                        <th>KALKULASI</th>
-                        <th>VOL</th>
-                        <th>NETTO</th>
-                        <th>RIT</th>
-                        <th>HARGA</th>
-                        <th>JUMLAH</th>
+                        <th rowspan="2" style="width:25px;" >NO</th>
+                        <th rowspan="2" >MATERIAL</th>
+                        <th rowspan="2" >PEKERJAAN</th>
+                        <th rowspan="2" >TUJUAN</th>
+                        <th>KUBIKASI</th>
+                        <th>TONASE</th>
+                        <th>RITASE</th>
+                        <th rowspan="2" >HARGA</th>
+                        <th rowspan="2" >JUMLAH</th>
+                    </tr>
+                    <tr>
+                      <th>VOL</th>
+                      <th>NETTO</th>
+                      <th>RIT</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -740,7 +744,7 @@
                                   .append($('<td>').html($(this)[0].material))
                                   .append($('<td>').html($(this)[0].pekerjaan))
                                   .append($('<td>').html($(this)[0].kecamatan))
-                                  .append($('<td>').html($(this)[0].kalkulasi == 'K' && 'KUBIKASI' || $(this)[0].kalkulasi == 'T' && 'TONASE' || "RITASE" ))
+                                  // .append($('<td>').html($(this)[0].kalkulasi == 'K' && 'KUBIKASI' || $(this)[0].kalkulasi == 'T' && 'TONASE' || "RITASE" ))
                                   .append($('<td>').html($(this)[0].kalkulasi == 'K' && $(this)[0].sum_volume || '-'))
                                   .append($('<td>').html($(this)[0].kalkulasi == 'T' && $(this)[0].sum_netto || '-'))
                                   .append($('<td>').html($(this)[0].kalkulasi == 'R'&& $(this)[0].sum_qty || '-'))
