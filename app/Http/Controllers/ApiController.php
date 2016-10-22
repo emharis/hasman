@@ -75,7 +75,7 @@ class ApiController extends Controller
 
 	public function getAutoCompleteDriver(Request $req){
 
-		$data = \DB::select('select id as data,concat("[",kode,"] ", nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama 
+		$data = \DB::select('select id as data,concat("[",kode,"] ", nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama , nopol
 				from VIEW_ARMADA
 				where karyawan_id is not NULL and (
 				nama like "%'.$req->get('nama').'%"
@@ -84,6 +84,13 @@ class ApiController extends Controller
 				or karyawan like "%'.$req->get('nama').'%"
 				or nopol like "%'.$req->get('nama').'%"
 				)');
+		$data_res = ['query'=>'Unit','suggestions' => $data];
+
+		return json_encode($data_res);
+	}
+
+	public function getAutoCompleteStaff(Request $req){
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from VIEW_KARYAWAN where jabatan_id = 4 and nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%"');
 		$data_res = ['query'=>'Unit','suggestions' => $data];
 
 		return json_encode($data_res);

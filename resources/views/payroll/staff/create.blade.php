@@ -27,7 +27,7 @@
         padding-left: 5px;
     }
 
-    #table-delivery tr th{
+    #table-attendance tr th{
       text-align: center;
     }
 
@@ -40,7 +40,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="payroll/driver" >Driver Payroll</a>
+        <a href="payroll/staff" >Staff Payroll</a>
         <i class="fa fa-angle-double-right" ></i>
         New
     </h1>
@@ -64,10 +64,10 @@
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Driver</label>
+                            <label>Staff</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="driver" autofocus class="form-control " data-driverid="" required>
+                            <input type="text" name="staff" autofocus class="form-control " data-staffid="" required>
                         </td>
                         <td class="col-lg-2" >
                             <label>Payment Date</label>
@@ -122,7 +122,7 @@
                     <tr>
                       <td></td>
                       <td>
-                        <button class="btn btn-primary" id="btn-show-delivery" >Show</button>
+                        <button class="btn btn-primary" id="btn-show" >Show</button>
                       </td>
                       <td></td>
                       <td></td>
@@ -130,9 +130,9 @@
                 </tbody>
             </table>
 
-            <h4 class="page-header data-delivery hide" style="font-size:14px;color:#3C8DBC"><strong>DELIVERY DETAILS</strong></h4>
+            <h4 class="page-header data-attendance hide" style="font-size:14px;color:#3C8DBC"><strong>DELIVERY DETAILS</strong></h4>
 
-            <table id="table-delivery" class="table table-bordered table-condensed data-delivery hide" >
+            <table id="table-attendance" class="table table-bordered table-condensed data-attendance hide" >
                 <thead>
                     <tr>
                         <th rowspan="2" style="width:25px;" >NO</th>
@@ -152,7 +152,7 @@
                 <tbody></tbody>
             </table>
 
-            <div class="row data-delivery hide" >
+            <div class="row data-attendance hide" >
                 <div class="col-lg-8" >
                     {{-- <textarea name="note" class="form-control" rows="3" style="margin-top:5px;" placeholder="Note" ></textarea>
                     <i>* <span>Q.O.H : Quantity on Hand</span></i>
@@ -225,9 +225,9 @@
 
 
         </div><!-- /.box-body -->
-        <div class="box-footer data-delivery hide" >
+        <div class="box-footer data-attendance hide" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="payroll/driver" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="payroll/staff" >Cancel</a>
         </div>
     </div><!-- /.box -->
 
@@ -280,15 +280,15 @@
     // END OF START DATE CHANGE
 
     // SET AUTOCOMPLETE SUPPLIER
-    $('input[name=driver]').autocomplete({
-        serviceUrl: 'api/get-auto-complete-driver',
+    $('input[name=staff]').autocomplete({
+        serviceUrl: 'api/get-auto-complete-staff',
         params: {  'nama': function() {
-                        return $('input[name=driver]').val();
+                        return $('input[name=staff]').val();
                     }
                 },
         onSelect:function(suggestions){
-            // set data driver
-            $('input[name=driver]').data('driverid',suggestions.data);
+            // set data staff
+            $('input[name=staff]').data('staffid',suggestions.data);
 
             // get data pekerjaan
             // fillSelectPekerjaan(suggestions.data);
@@ -298,13 +298,13 @@
             // $('#btn-add-pekerjaan').removeAttr('disabled');
 
             //set data pekerjaan id
-            $('form[name=form_create_pekerjaan] input[name=driver_id]').val(suggestions.data);
+            $('form[name=form_create_pekerjaan] input[name=staff_id]').val(suggestions.data);
         }
 
     });
 
-    // function fillSelectPekerjaan(driver_id){
-    //     $.get('api/get-select-pekerjaan/' + driver_id,null,function(datares){
+    // function fillSelectPekerjaan(staff_id){
+    //     $.get('api/get-select-pekerjaan/' + staff_id,null,function(datares){
     //             var data_pekerjaan = JSON.parse(datares);
     //             // insert select option
     //             $('select[name=pekerjaan]').empty();
@@ -327,7 +327,7 @@
     //                 }
     //             },
     //     onSelect:function(suggestions){
-    //         // set data driver
+    //         // set data staff
     //         $('input[name=purchaseperson]').data('purchasepersonid',suggestions.data);
     //     }
 
@@ -343,7 +343,7 @@
     //                 }
     //             },
     //     onSelect:function(suggestions){
-    //         // // set data driver
+    //         // // set data staff
     //         $('input[name=provinsi_id]').val(suggestions.data);
     //     }
     //
@@ -363,7 +363,7 @@
     //
     //             },
     //     onSelect:function(suggestions){
-    //         // // set data driver
+    //         // // set data staff
     //         $('input[name=kabupaten_id]').val(suggestions.data);
     //     }
     //
@@ -383,7 +383,7 @@
     //
     //             },
     //     onSelect:function(suggestions){
-    //         // // set data driver
+    //         // // set data staff
     //         $('input[name=kecamatan_id]').val(suggestions.data);
     //     }
     //
@@ -403,7 +403,7 @@
     //
     //             },
     //     onSelect:function(suggestions){
-    //         // // set data driver
+    //         // // set data staff
     //         $('input[name=desa_id]').val(suggestions.data);
     //         // alert($('input[name=desa]').data('id'));
     //
@@ -637,9 +637,9 @@
     // BTN SAVE TRANSACTION
     // $('#btn-save').click(function(){
     //     // cek kelengkapan data
-    //     var po_master = {"driver_id":"",
+    //     var po_master = {"staff_id":"",
     //                      // "purchaseperson_id":"",
-    //                      "driver_ref":"",
+    //                      "staff_ref":"",
     //                      "order_date":"",
     //                      // "pekerjaan_id":"",
     //                      // "note":"",
@@ -648,11 +648,11 @@
     //                      "total":""
     //                  };
     //     // set po_master data
-    //     po_master.driver_id = $('input[name=driver]').data('driverid');
+    //     po_master.staff_id = $('input[name=staff]').data('staffid');
     //     // po_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
     //     // po_master.no_inv = $('input[name=no_inv]').val();
     //     po_master.order_date = $('input[name=tanggal]').val();
-    //     po_master.driver_ref = $('input[name=driver_ref]').val();
+    //     po_master.staff_ref = $('input[name=staff_ref]').val();
     //     // po_master.pekerjaan_id = $('select[name=pekerjaan]').val();
     //     // po_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
     //     // po_master.note = $('textarea[name=note]').val();
@@ -698,9 +698,9 @@
         // save ke database
         // alert(po_product.product.length);
         // alert('Pekerjaan id : ' + po_master.pekerjaan_id);
-    //     if(po_master.driver_id != ""
-    //         && $('input[name=driver]').val() != ""
-    //         && $('input[name=driver]').val() != null
+    //     if(po_master.staff_id != ""
+    //         && $('input[name=staff]').val() != ""
+    //         && $('input[name=staff]').val() != null
     //         && po_master.order_date != ""
     //         && po_master.order_date != null
     //         // && po_master.pekerjaan_id != ""
@@ -723,7 +723,7 @@
 
 
     // CEK INPUT CUSTOMER APAKAH KOSONG ATAU TIDAK
-    // $('input[name=driver]').keyup(function(){
+    // $('input[name=staff]').keyup(function(){
     //     if($(this).val() == ""){
     //         // disable input pekerjaan
     //         $('select[name=pekerjaan]').empty();
@@ -735,7 +735,7 @@
 
     // SAVE ADD PEKERJAAN
     // $('form[name=form_create_pekerjaan]').ajaxForm(function(res){
-    //     fillSelectPekerjaan($('form[name=form_create_pekerjaan] input[name=driver_id]').val());
+    //     fillSelectPekerjaan($('form[name=form_create_pekerjaan] input[name=staff_id]').val());
     //     // close modal
     //     $('#modal-pekerjaan').modal('hide');
     // });
@@ -753,27 +753,31 @@
 
 
     // GET DATA DELIVERY DRIVER
-    $('#btn-show-delivery').click(function(){
-      var driver_id = $('input[name=driver]').data('driverid');
-      var driver = $('input[name=driver]').val();
+    $('#btn-show').click(function(){
+      var staff_id = $('input[name=staff]').data('staffid');
+      var staff = $('input[name=staff]').val();
       var tanggal = $('input[name=payment_date]').val();
       var start_date = $('input[name=start_date]').val();
       var end_date = $('input[name=end_date]').val();
 
-      if(driver_id != "" && driver != "" && tanggal != "" && start_date != "" && end_date != ""){
+      if(staff_id != "" && staff != "" && tanggal != "" && start_date != "" && end_date != ""){
 
-        var url = 'payroll/driver/get-delivery-order/' + driver_id + "/" + start_date + "/" + end_date;
+        var url = 'payroll/staff/get-attendance/' + staff_id + "/" + start_date + "/" + end_date;
+
+// alert(url);
 
         $.get(url,null,function(res){
-          $('.data-delivery').hide();
-          $('#table-delivery tbody').empty();
+            alert(res);
+
+          $('.data-attendance').hide();
+          $('#table-attendance tbody').empty();
 
           // alert('ok');
           var data_do = JSON.parse(res);
-          var table_delivery = $('#table-delivery tbody');
+          var table_attendance = $('#table-attendance tbody');
           var rownum=1;
           $.each(data_do,function(){
-            table_delivery.append($('<tr>').addClass('row-material').attr('data-materialid',$(this)[0].material_id).attr('data-kalkulasi',$(this)[0].kalkulasi).attr('data-pekerjaanid',$(this)[0].pekerjaan_id)
+            table_attendance.append($('<tr>').addClass('row-material').attr('data-materialid',$(this)[0].material_id).attr('data-kalkulasi',$(this)[0].kalkulasi).attr('data-pekerjaanid',$(this)[0].pekerjaan_id)
                                   .append($('<td>').text(rownum++))
                                   .append($('<td>').html($(this)[0].material))
                                   .append($('<td>').html($(this)[0].pekerjaan))
@@ -795,9 +799,9 @@
           $('input[name=sisa_bayaran]').val('');
           $('input[name=input_dp]').val('');
 
-          // tampilkan table data delivery
-          $('.data-delivery').removeClass('hide');
-          $('.data-delivery').fadeIn(250);
+          // tampilkan table data attendance
+          $('.data-attendance').removeClass('hide');
+          $('.data-attendance').fadeIn(250);
 
           // format auto numeric uang
           $('.uang').autoNumeric('init',{
@@ -806,11 +810,11 @@
           });
 
           // disable input
-          $('input[name=driver]').attr('readonly','readonly');
+          $('input[name=staff]').attr('readonly','readonly');
           $('input[name=payment_date]').attr('readonly','readonly');
           $('input[name=start_date]').attr('readonly','readonly');
           $('input[name=end_date]').attr('readonly','readonly');
-          $('#btn-show-delivery').attr('disabled','disabled')
+          $('#btn-show').attr('disabled','disabled')
 
         });
         // location.href = url;
@@ -884,7 +888,7 @@
                        "dp":"",
                        "saldo":""
                    };
-      payroll.karyawan_id = $('input[name=driver]').data('driverid');
+      payroll.karyawan_id = $('input[name=staff]').data('staffid');
       payroll.payment_date = $('input[name=payment_date]').val();
       payroll.start_date = $('input[name=start_date]').val();
       payroll.end_date = $('input[name=end_date]').val();
@@ -925,7 +929,7 @@
 
       // submitting data
       if(can_save){
-        var newform = $('<form>').attr('method','POST').attr('action','payroll/driver/insert');
+        var newform = $('<form>').attr('method','POST').attr('action','payroll/staff/insert');
         newform.append($('<input>').attr('type','hidden').attr('name','payroll').val(JSON.stringify(payroll)));
         newform.append($('<input>').attr('type','hidden').attr('name','payroll_detail').val(JSON.stringify(payroll_detail)));
         newform.submit();

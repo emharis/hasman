@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Payroll
+        Staff Payroll
     </h1>
 </section>
 
@@ -26,7 +26,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="master/alat/create" >Create</a>
+            <a class="btn btn-primary btn-sm" id="btn-add" href="payroll/staff/create" >Create</a>
             <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
             <div class="clearfix" ></div>
             <br/>
@@ -60,7 +60,7 @@
                             {{$dt->nama}}
                         </td>
                         <td >
-                            <a class="btn btn-primary btn-xs" href="master/alat/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            <a class="btn btn-primary btn-xs" href="payroll/staff/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach

@@ -175,12 +175,23 @@ Route::group(['middleware' => ['web','auth']], function () {
 
     Route::group(['prefix' => 'payroll'], function () {
         // PAYROLL STAFF
-        Route::get('staff','PayrollController@staff');
+        // Route::get('staff','PayrollDriverController@staff');
 
         // PAYROLL DRIVER
-        Route::get('driver','PayrollController@driver');
-        Route::get('driver/create','PayrollController@driverCreate');
-        Route::get('driver/get-delivery-order/{driver_id}/{tanggal}','PayrollController@getDeliveryOrderList');
+        Route::get('driver','PayrollDriverController@driver');
+        Route::get('driver/create','PayrollDriverController@driverCreate');
+        Route::post('driver/insert','PayrollDriverController@insert');
+        Route::post('driver/update','PayrollDriverController@update');
+        Route::get('driver/delete/{payroll_id}','PayrollDriverController@deletePayroll');
+        Route::get('driver/edit/{payroll_id}','PayrollDriverController@edit');
+        Route::get('driver/validate/{payroll_id}','PayrollDriverController@validatePayroll');
+        Route::get('driver/cancel-payroll/{payroll_id}','PayrollDriverController@cancelPayroll');
+        Route::get('driver/get-delivery-order/{driver_id}/{start_date}/{end_date}','PayrollDriverController@getDeliveryOrderList');
+
+        // PAYROLL STAFF
+        Route::get('staff','PayrollStaffController@index');
+        Route::get('staff/create','PayrollStaffController@create');
+        Route::get('staff/get-attendance/{staff_id}/{awal}/{akhir}','PayrollStaffController@getAttendance');
 
     });
 
@@ -251,6 +262,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
     Route::get('api/get-auto-complete-product','ApiController@getAutoCompleteProduct');
+    Route::get('api/get-auto-complete-staff','ApiController@getAutoCompleteStaff');
     Route::get('api/get-select-customer','ApiController@getSelectCustomer');
     Route::get('api/get-select-pekerjaan/{customer_id}','ApiController@getSelectPekerjaan');
 });
