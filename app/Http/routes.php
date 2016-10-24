@@ -191,7 +191,13 @@ Route::group(['middleware' => ['web','auth']], function () {
         // PAYROLL STAFF
         Route::get('staff','PayrollStaffController@index');
         Route::get('staff/create','PayrollStaffController@create');
+        Route::get('staff/edit/{payroll_id}','PayrollStaffController@edit');
+        Route::post('staff/insert','PayrollStaffController@insert');
+        Route::post('staff/update','PayrollStaffController@update');
         Route::get('staff/get-attendance/{staff_id}/{awal}/{akhir}','PayrollStaffController@getAttendance');
+        Route::get('staff/get-workday/{staff_id}/{awal}/{akhir}','PayrollStaffController@getWorkday');
+        Route::get('staff/validate/{payroll_id}','PayrollStaffController@validatePayroll');
+        Route::get('staff/cancel-payroll/{payroll_id}','PayrollStaffController@cancelPayroll');
 
     });
 

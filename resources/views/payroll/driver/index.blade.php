@@ -44,7 +44,7 @@
                         <th>Payment Date</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Saldo</th>
+                        <th>Amount</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>

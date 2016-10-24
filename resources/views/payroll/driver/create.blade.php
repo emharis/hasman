@@ -130,7 +130,7 @@
                 </tbody>
             </table>
 
-            <h4 class="page-header data-delivery hide" style="font-size:14px;color:#3C8DBC"><strong>DELIVERY DETAILS</strong></h4>
+            <h4 class="page-header data-delivery hide" style="font-size:14px;color:#3C8DBC"><strong>PAYROLL DETAILS</strong></h4>
 
             <table id="table-delivery" class="table table-bordered table-condensed data-delivery hide" >
                 <thead>

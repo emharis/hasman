@@ -46,7 +46,7 @@
     <h1>
         <a href="payroll/staff" >Staff Payroll</a>
         <i class="fa fa-angle-double-right" ></i>
-        New
+        {{$data->payroll_number}}
     </h1>
 </section>
 
@@ -55,18 +55,21 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >New</h4></label> --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >New</h3></label>
+            
+            <button class="btn btn-primary" id="btn-validate" data-href="payroll/staff/validate/{{$data->id}}" >Validate</button>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Paid</a>
             
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Open</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Open</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
+          <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->payroll_number}}</h3></label>
+          <input type="hidden" name="payroll_id" value="{{$data->id}}">
             <table class="table" >
                 <tbody>
                     <tr>
@@ -74,13 +77,13 @@
                             <label>Staff</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="staff" autofocus class="form-control " data-staffid="" required>
+                            <input type="text" name="staff" autofocus class="form-control " data-staffid="{{$data->karyawan_id}}" required readonly value="{{$data->nama_karyawan}}">
                         </td>
                         <td class="col-lg-2" >
                             <label>Payment Date</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="payment_date" class="input-tanggal form-control" value="{{date('d-m-Y')}}" required>
+                            <input type="text" name="payment_date" class="input-tanggal form-control" value="{{$data->payment_date_formatted}}" required >
                         </td>
                     </tr>
                     <tr>
@@ -88,22 +91,14 @@
                         <label>Start Date</label>
                       </td>
                       <td>
-                        <input type="text" name="start_date" class="input-tanggal form-control"  />
+                        <input type="text" name="start_date" class="input-tanggal form-control" readonly value="{{$data->start_date_formatted}}"  />
                       </td>
                       <td>
                         <label>End Date</label>
                       </td>
                       <td>
-                        <input type="text" name="end_date" class="form-control input-tanggal" />
+                        <input type="text" name="end_date" class="form-control input-tanggal" readonly value="{{$data->end_date_formatted}}" />
                       </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>
-                        <button class="btn btn-primary" id="btn-show" >Show</button>
-                      </td>
-                      <td></td>
-                      <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -114,7 +109,7 @@
         
     </div><!-- /.box -->
 
-    <div class="box box-solid data-payroll hide" >
+    <div class="box box-solid data-payroll" >
         <div class="box-header with-border" >
              <h4 class="page-header " style="font-size:14px;color:#3C8DBC"><strong>PAYROLL DETAILS</strong></h4>
         </div>
@@ -136,16 +131,16 @@
                 <tbody>
                     <tr>
                         <td>Basic pay per day</td>
-                        <td class="text-right uang" id="label-basic-pay" ></td>
+                        <td class="text-right uang" id="label-basic-pay" >{{$data->basicpay}}</td>
                         <td></td>
                         <td>Potongan Bon</td>
                         <td class="text-right col-sm-2 col-md-2 col-lg-2" >
-                            <input type="text" class="form-control uang text-right" name="input_potongan" id="input-potongan" >
+                            <input type="text" class="form-control uang text-right" name="input_potongan" id="input-potongan" value="{{$data->potongan_bon}}" >
                         </td>
                     </tr>
                     <tr>
                         <td>Day work</td>
-                        <td class="text-right" id="label-day-work" ></td>
+                        <td class="text-right" id="label-day-work" >{{(int)$data->daywork}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -154,12 +149,12 @@
                         <td>
                             <label>Total Earnings</label>
                         </td>
-                        <td id="label-total-pendapatan" class="uang text-right" ></td>
+                        <td id="label-total-pendapatan" class="uang text-right" >{{$data->daywork * $data->basicpay}}</td>
                         <td></td>
                         <td>
                             <label>Total Deductions</label>
                         </td>
-                        <td id="label-total-potongan" class="uang text-right" > </td>
+                        <td id="label-total-potongan" class="uang text-right" >{{$data->potongan_bon}}</td>
                     </tr>
                     <tr style="background-color: whitesmoke;" >
                         <td  ></td>
@@ -169,7 +164,7 @@
                             <label><h4>Net Pay</h4></label>
                         </td>
                         <td style="border-top: solid darkgrey thin;" class="text-right" >
-                            <h4 class="uang" id="label-net-pay"></h4>
+                            <h4 class="uang" id="label-net-pay">{{$data->saldo}}</h4>
                         </td>
                     </tr>
                     {{-- <tr></tr> --}}
@@ -179,7 +174,7 @@
         </div>
         <div class="box-footer  " >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="payroll/staff" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="payroll/staff" >Close</a>
         </div>
     </div>
 
@@ -259,6 +254,10 @@
       $('.uang').autoNumeric('init',{
           vMin:'0',
           vMax:'9999999999'
+      });
+
+      $('.uang').each(function(){
+        $(this).autoNumeric('set',$(this).autoNumeric('get'));
       });
 
 
@@ -366,7 +365,9 @@
 
     // SAVE PAYROLL
     $('#btn-save').click(function(){
-      var payroll = {"karyawan_id":"",
+      var payroll = {
+                      "payroll_id":"",
+                      "karyawan_id":"",
                        "start_date":"",
                        "end_date":"",
                        "payment_date":"",
@@ -375,6 +376,7 @@
                        "net_pay":"",
                        "potongan_bon":"",
                    };
+      payroll.payroll_id = $('input[name=payroll_id]').val();
       payroll.karyawan_id = $('input[name=staff]').data('staffid');
       payroll.payment_date = $('input[name=payment_date]').val();
       payroll.start_date = $('input[name=start_date]').val();
@@ -389,7 +391,7 @@
       
       // submitting data
       // if(){
-        var newform = $('<form>').attr('method','POST').attr('action','payroll/staff/insert');
+        var newform = $('<form>').attr('method','POST').attr('action','payroll/staff/update');
         newform.append($('<input>').attr('type','hidden').attr('name','payroll').val(JSON.stringify(payroll)));
         // newform.append($('<input>').attr('type','hidden').attr('name','payroll_detail').val(JSON.stringify(payroll_detail)));
         newform.submit();
@@ -401,6 +403,12 @@
       // alert(JSON.stringify(payroll_detail));
 
 
+    });
+
+    // VALIDATE PAYROLL
+    $('#btn-validate').click(function(){
+      // alert('oj');
+      location.href = $(this).data('href');
     });
 
 })(jQuery);
