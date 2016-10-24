@@ -9,9 +9,7 @@
             <li class="{{Request::is('home') ? 'active':''}}" >
                 <a href="home"> <i class="fa fa-home"></i> <span>Home</span> </a>
             </li>
-
-
-
+            
             <!--Menu Inventory-->
             <li class="treeview {{Request::is('master/*') ? 'active':''}}" >
                 <a href="#">
@@ -101,6 +99,10 @@
                     <li class="{{Request::is('payroll/staff*') ? 'active':''}}" ><a href="payroll/staff"><i class="fa fa-circle-o"></i> Staff</a></li>
                     <li class="{{Request::is('payroll/driver*') ? 'active':''}}" ><a href="payroll/driver"><i class="fa fa-circle-o"></i> Driver</a></li>
                 </ul>
+            </li>
+
+            <li class="{{Request::is('cashbook') ? 'active':''}}" >
+                <a href="cashbook"> <i class="fa fa-book"></i> <span>Cashbook</span> </a>
             </li>
 
             <li class="treeview {{Request::is('setting/*') ? 'active':''}}" >

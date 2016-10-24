@@ -56,6 +56,7 @@ Route::get('logout', function() {
 
 Route::group(['middleware' => ['web','auth']], function () {
 	Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
+    Route::get('cashbook', 'CashbookController@index');
 
     Route::group(['prefix' => 'master'], function () {
         // LOKASI GALIAN
