@@ -56,7 +56,15 @@ Route::get('logout', function() {
 
 Route::group(['middleware' => ['web','auth']], function () {
 	Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
-    Route::get('cashbook', 'CashbookController@index');
+
+    Route::group(['prefix' => 'cashbook'], function () {
+        Route::get('/', 'CashbookController@index');
+        Route::get('create', 'CashbookController@create');
+        Route::post('insert', 'CashbookController@insert');
+        Route::post('update', 'CashbookController@update');
+        Route::get('edit/{cashbook_id}', 'CashbookController@edit');
+        Route::get('delete/{cashbook_id}', 'CashbookController@delete');
+    });
 
     Route::group(['prefix' => 'master'], function () {
         // LOKASI GALIAN

@@ -85,6 +85,7 @@
 
 <script type="text/javascript">
 (function ($) {
+    // alert('ter');
 
     var TBL_KATEGORI = $('#table-data').DataTable({
         "columns": [
@@ -97,8 +98,12 @@
             {className: "text-center"}
             // {className: "text-center"}
         ],
-        order: [[ 1, 'asc' ]],
+        order: [[ 1, 'asc' ]]
+        
     });
+    // TBL_KATEGORI.fnPageChange('last');
+    // TBL_KATEGORI.fnPageChange(2,true);
+    // alert('complete');
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){
