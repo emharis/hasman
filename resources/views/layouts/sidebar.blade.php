@@ -65,6 +65,10 @@
                 </ul>
             </li>
 
+            <li class="{{Request::is('dailyhd') ? 'active':''}}" >
+                <a href="dailyhd"> <i class="ft-excafator"></i> <span>Harian Alat Berat</span> </a>
+            </li>
+
             <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-newspaper-o"></i>
@@ -103,6 +107,19 @@
 
             <li class="{{Request::is('cashbook') ? 'active':''}}" >
                 <a href="cashbook"> <i class="fa fa-book"></i> <span>Cashbook</span> </a>
+            </li>
+
+            <li class="treeview {{Request::is('report/*') ? 'active':''}}" >
+                <a href="#">
+                    <i class="fa fa-print"></i>
+                    <span>Reports</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{Request::is('report/purchase*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Purchase Order</a></li>
+                    <li class="{{Request::is('report/sales*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Sales Order</a></li>
+                    <li class="{{Request::is('report/delivery*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Delivery Order</a></li>
+                </ul>
             </li>
 
             <li class="treeview {{Request::is('setting/*') ? 'active':''}}" >

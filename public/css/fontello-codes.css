@@ -1,0 +1,3 @@
+
+.ft-rupiah:before { content: '\e800'; } /* '' */
+.ft-excafator:before { content: '\e801'; } /* '' */

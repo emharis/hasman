@@ -9,11 +9,15 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        {{-- Fontello --}}
+        {{-- <link rel="stylesheet" href="css/fontello-codes.css"> --}}
+        <link rel="stylesheet" href="css/fontello.css">
         <!-- Font Awesome -->
         {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> --}}
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="css/ionicons.min.css">
+        
 
         <!-- FAVICON -->
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -112,6 +116,29 @@
             .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover{
               background-color: #F1F1F1!important;
               color:#878D95!important;
+            }
+
+            /*multiple form-control on input-group*/
+            .input-group-field {
+                display: table-cell;
+                vertical-align: middle;
+                /*border-radius:4px;*/
+                min-width:1%;
+                white-space: nowrap;
+            }
+            .input-group-field .form-control {
+                border-radius: inherit !important;
+            }
+            .input-group-field:not(:first-child):not(:last-child) {
+                border-radius:0;
+            }
+            .input-group-field:not(:first-child):not(:last-child) .form-control {
+                border-left-width: 0;
+                border-right-width: 0;
+            }
+            .input-group-field:last-child {
+                border-top-left-radius:0;
+                border-bottom-left-radius:0;
             }
         </style>
 

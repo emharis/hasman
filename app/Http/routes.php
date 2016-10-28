@@ -55,8 +55,14 @@ Route::get('logout', function() {
 });
 
 Route::group(['middleware' => ['web','auth']], function () {
-	Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
+    Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
 
+    Route::group(['prefix' => 'dailyhd'], function () {
+        Route::get('/','DailyhdController@index');
+        Route::get('create','DailyhdController@create');
+        Route::post('insert','DailyhdController@insert');
+    });
+    
     Route::group(['prefix' => 'cashbook'], function () {
         Route::get('/', 'CashbookController@index');
         Route::get('create', 'CashbookController@create');
@@ -266,6 +272,13 @@ Route::group(['middleware' => ['web','auth']], function () {
 
     });
 
+    Route::group(['prefix' => 'report'], function () {
+        // REPORT PURCHASE
+        Route::get('purchase','ReportPurchaseController@index');
+        Route::post('purchase/filter-by-date','ReportPurchaseController@filterByDate');
+        Route::get('purchase/filter-by-date/pdf/{start}/{end}','ReportPurchaseController@filterByDateToPdf');
+    });
+
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');
     Route::get('api/get-auto-complete-kabupaten','ApiController@getAutoCompleteKabupaten');
     Route::get('api/get-auto-complete-kecamatan','ApiController@getAutoCompleteKecamatan');
@@ -273,6 +286,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-customer','ApiController@getAutoCompleteCustomer');
     Route::get('api/get-auto-complete-supplier','ApiController@getAutoCompleteSupplier');
     Route::get('api/get-auto-complete-armada','ApiController@getAutoCompleteArmada');
+    Route::get('api/get-auto-complete-alat','ApiController@getAutoCompleteAlat');
     Route::get('api/get-auto-complete-driver','ApiController@getAutoCompleteDriver');
     Route::get('api/get-auto-complete-lokasi-galian','ApiController@getAutoCompleteLokasiGalian');
     Route::get('api/get-auto-complete-material','ApiController@getAutoCompleteMaterial');
