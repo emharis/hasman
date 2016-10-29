@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.45 on 2016-10-27.
+ * Generated for Laravel 5.2.45 on 2016-10-29.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -13997,6 +13997,434 @@ namespace {
          */
         public static function stream($filename = 'document.pdf'){
             return \Barryvdh\DomPDF\PDF::stream($filename);
+        }
+        
+    }
+
+
+    class Fpdf extends \Codedge\Fpdf\Facades\Fpdf{
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetMargins($left, $top, $right = null){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetMargins($left, $top, $right);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetLeftMargin($margin){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetLeftMargin($margin);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetTopMargin($margin){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetTopMargin($margin);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetRightMargin($margin){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetRightMargin($margin);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetAutoPageBreak($auto, $margin = 0){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetAutoPageBreak($auto, $margin);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetDisplayMode($zoom, $layout = 'default'){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetDisplayMode($zoom, $layout);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetCompression($compress){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetCompression($compress);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetTitle($title, $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetTitle($title, $isUTF8);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetAuthor($author, $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetAuthor($author, $isUTF8);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetSubject($subject, $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetSubject($subject, $isUTF8);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetKeywords($keywords, $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetKeywords($keywords, $isUTF8);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetCreator($creator, $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetCreator($creator, $isUTF8);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function AliasNbPages($alias = '{nb}'){
+            return \Codedge\Fpdf\Fpdf\FPDF::AliasNbPages($alias);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Error($msg){
+            return \Codedge\Fpdf\Fpdf\FPDF::Error($msg);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Close(){
+            return \Codedge\Fpdf\Fpdf\FPDF::Close();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function AddPage($orientation = '', $size = '', $rotation = 0){
+            return \Codedge\Fpdf\Fpdf\FPDF::AddPage($orientation, $size, $rotation);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Header(){
+            return \Codedge\Fpdf\Fpdf\FPDF::Header();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Footer(){
+            return \Codedge\Fpdf\Fpdf\FPDF::Footer();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function PageNo(){
+            return \Codedge\Fpdf\Fpdf\FPDF::PageNo();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetDrawColor($r, $g = null, $b = null){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetDrawColor($r, $g, $b);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetFillColor($r, $g = null, $b = null){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetFillColor($r, $g, $b);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetTextColor($r, $g = null, $b = null){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetTextColor($r, $g, $b);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function GetStringWidth($s){
+            return \Codedge\Fpdf\Fpdf\FPDF::GetStringWidth($s);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetLineWidth($width){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetLineWidth($width);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Line($x1, $y1, $x2, $y2){
+            return \Codedge\Fpdf\Fpdf\FPDF::Line($x1, $y1, $x2, $y2);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Rect($x, $y, $w, $h, $style = ''){
+            return \Codedge\Fpdf\Fpdf\FPDF::Rect($x, $y, $w, $h, $style);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function AddFont($family, $style = '', $file = ''){
+            return \Codedge\Fpdf\Fpdf\FPDF::AddFont($family, $style, $file);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetFont($family, $style = '', $size = 0){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetFont($family, $style, $size);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetFontSize($size){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetFontSize($size);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function AddLink(){
+            return \Codedge\Fpdf\Fpdf\FPDF::AddLink();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetLink($link, $y = 0, $page = -1){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetLink($link, $y, $page);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Link($x, $y, $w, $h, $link){
+            return \Codedge\Fpdf\Fpdf\FPDF::Link($x, $y, $w, $h, $link);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Text($x, $y, $txt){
+            return \Codedge\Fpdf\Fpdf\FPDF::Text($x, $y, $txt);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function AcceptPageBreak(){
+            return \Codedge\Fpdf\Fpdf\FPDF::AcceptPageBreak();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''){
+            return \Codedge\Fpdf\Fpdf\FPDF::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::MultiCell($w, $h, $txt, $border, $align, $fill);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Write($h, $txt, $link = ''){
+            return \Codedge\Fpdf\Fpdf\FPDF::Write($h, $txt, $link);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Ln($h = null){
+            return \Codedge\Fpdf\Fpdf\FPDF::Ln($h);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Image($file, $x = null, $y = null, $w = 0, $h = 0, $type = '', $link = ''){
+            return \Codedge\Fpdf\Fpdf\FPDF::Image($file, $x, $y, $w, $h, $type, $link);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function GetPageWidth(){
+            return \Codedge\Fpdf\Fpdf\FPDF::GetPageWidth();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function GetPageHeight(){
+            return \Codedge\Fpdf\Fpdf\FPDF::GetPageHeight();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function GetX(){
+            return \Codedge\Fpdf\Fpdf\FPDF::GetX();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetX($x){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetX($x);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function GetY(){
+            return \Codedge\Fpdf\Fpdf\FPDF::GetY();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetY($y, $resetX = true){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetY($y, $resetX);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function SetXY($x, $y){
+            return \Codedge\Fpdf\Fpdf\FPDF::SetXY($x, $y);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function Output($dest = '', $name = '', $isUTF8 = false){
+            return \Codedge\Fpdf\Fpdf\FPDF::Output($dest, $name, $isUTF8);
         }
         
     }

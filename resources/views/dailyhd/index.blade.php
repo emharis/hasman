@@ -38,14 +38,14 @@
                         <th style="width:25px;">
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th  >Ref#</th>
                         <th  >Tanggal</th>
                         <th>Alat</th>
                         <th>Lokasi</th>
-                        <th>Jam Kerja</th>
+                       {{--  <th>Jam Kerja</th>
                         <th>Solar</th>
-                        <th>Oli</th>
+                        <th>Oli</th> --}}
                         <th>Pengawas</th>
                         <th>Operator</th>
                         <th>Status</th>
@@ -60,7 +60,7 @@
                                 <input type="checkbox" class="ck_row" >
                             {{-- @endif --}}
                         </td>
-                        <td class="row-to-edit" >{{$rownum++}}</td>
+                        {{-- <td class="row-to-edit" >{{$rownum++}}</td> --}}
                         <td class="row-to-edit" >
                             {{$dt->ref}}
                         </td>
@@ -68,12 +68,12 @@
                             {{$dt->tanggal_formatted}}
                         </td>
                         <td>
-                            {{$dt->alat}}
+                            {{'['.$dt->kode_alat . '] ' .$dt->alat}}
                         </td>
                         <td>
-                            {{$dt->lokasi}}
+                            {{'['.$dt->kode_lokasi . '] ' .$dt->lokasi}}
                         </td>
-                        <td class="text-right" >
+                        {{-- <td class="text-right" >
                             {{$dt->jam_kerja}}
                         </td>
                         <td class="text-right" >
@@ -81,12 +81,12 @@
                         </td>
                         <td class="text-right" >
                             {{$dt->oli}}
+                        </td> --}}
+                        <td>
+                            {{'['.$dt->kode_pengawas . '] ' .$dt->nama_pengawas}}
                         </td>
                         <td>
-                            {{$dt->nama_pengawas}}
-                        </td>
-                        <td>
-                            {{$dt->nama_operator}}
+                            {{'['.$dt->kode_operator . '] ' .$dt->nama_operator}}
                         </td>
                         <td>
                             @if($dt->status == 'O')
@@ -117,7 +117,7 @@
 <script type="text/javascript">
 (function ($) {
 
-    var TBL_KATEGORI = $('#table-data').DataTable({
+    var TBL_DATA = $('#table-data').DataTable({
         sort:false
     });
 
@@ -165,10 +165,15 @@
                 var newdata = {"id":data_id}
                 dataid.push(newdata);
                 var row = $(this).parent().parent();
-                row.fadeOut(250,function(){
-                    row.remove();
+                row.fadeOut(150,function(){
+                    TBL_DATA.row( row ).remove().draw();      
                 });
+                
             });
+
+            // remove check all & btn delete
+            $('input[name=ck_all]').prop('checked',false);
+            $('input[name=ck_all]').trigger('change');
 
             // var deleteForm = $('<form>').attr('method','POST').attr('action','dailyhd/delete');
             // deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
@@ -176,7 +181,15 @@
             
             $.post('dailyhd/delete',{
                 'dataid' : JSON.stringify(dataid)
-            },function(){});
+            },function(){
+                // reorder row number
+                // var rownum=1;
+                // TBL_DATA.rows().iterator( 'row', function ( context, index ) {
+                //     this.cell(index,1).data(rownum++);
+                //     // this.invalidate();
+                // } );                
+                // TBL_DATA.draw();
+            });
         }
 
         e.preventDefault();

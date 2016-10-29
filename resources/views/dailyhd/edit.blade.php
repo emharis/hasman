@@ -70,6 +70,25 @@
                                 <input type="text" name="lokasi" class="form-control"  value="{{'[' . $data->kode_lokasi . '] ' . $data->lokasi}}" required readonly>
                                 <input type="hidden" name="lokasi_id" class="form-control" required  value="{{$data->lokasi_galian_id}}">
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Pengawas</label>
+                            </td>
+                            <td>
+                                <input type="text" name="pengawas" class="form-control" value="{{'['.$data->kode_pengawas . '] ' . $data->nama_pengawas}}" readonly required>
+                                <input type="hidden" name="pengawas_id" class="form-control" value="{{$data->pengawas_id}}" required>
+                            </td>
+                            <td>
+                                <label>Operator</label>
+                            </td>
+                            <td>
+                                <input type="text" name="operator" class="form-control" value="{{'['.$data->kode_operator .'] ' . $data->nama_operator}}" readonly required>
+                                <input type="hidden" name="operator_id" class="form-control" value="{{$data->operator_id}}" required>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         <tr>
                             <td>
                                 <label>Jam Kerja</label>
@@ -106,24 +125,7 @@
                                 <input type="text " name="total_jam_kerja" class="form-control" value="{{$data->jam_kerja}}" readonly>
                             </td>
                         </tr>   
-                        <tr>
-                            <td>
-                                <label>Pengawas</label>
-                            </td>
-                            <td>
-                                <input type="text" name="pengawas" class="form-control" value="{{'['.$data->kode_pengawas . '] ' . $data->nama_pengawas}}" readonly required>
-                                <input type="hidden" name="pengawas_id" class="form-control" value="{{$data->pengawas_id}}" required>
-                            </td>
-                            <td>
-                                <label>Operator</label>
-                            </td>
-                            <td>
-                                <input type="text" name="operator" class="form-control" value="{{'['.$data->kode_operator .'] ' . $data->nama_operator}}" readonly required>
-                                <input type="hidden" name="operator_id" class="form-control" value="{{$data->operator_id}}" required>
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        
                         <tr>
                             
                             <td>

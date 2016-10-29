@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2016-10-27.
+    * Generated on 2016-10-29.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -121,6 +121,7 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'fpdf' instanceof \Codedge\Fpdf\Fpdf\FPDF,
         ],
         \Illuminate\Contracts\Container\Container::make('') => [
             '' == '@',
@@ -234,6 +235,7 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'fpdf' instanceof \Codedge\Fpdf\Fpdf\FPDF,
         ],
         \App::make('') => [
             '' == '@',
@@ -347,6 +349,7 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'fpdf' instanceof \Codedge\Fpdf\Fpdf\FPDF,
         ],
         \app('') => [
             '' == '@',
@@ -460,6 +463,7 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'fpdf' instanceof \Codedge\Fpdf\Fpdf\FPDF,
         ],
     ];
 }

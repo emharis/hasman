@@ -67,6 +67,25 @@
                             <input type="text" name="lokasi" class="form-control" required>
                             <input type="hidden" name="lokasi_id" class="form-control" required>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Pengawas</label>
+                        </td>
+                        <td>
+                            <input type="text" name="pengawas" class="form-control" required>
+                            <input type="hidden" name="pengawas_id" class="form-control" required>
+                        </td>
+                        <td>
+                            <label>Operator</label>
+                        </td>
+                        <td>
+                            <input type="text" name="operator" class="form-control" required>
+                            <input type="hidden" name="operator_id" class="form-control" required>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td>
                             <label>Jam Kerja</label>
@@ -103,44 +122,6 @@
                             <input type="text " name="total_jam_kerja" class="form-control" readonly>
                         </td>
                     </tr>
-                    {{-- <tr>
-                        <td>
-                            <label>Istirahat</label>
-                        </td>
-                        <td>
-                            <input type="text" name="istirahat" class="form-control input-time" required>
-                        </td>
-                        <td>
-                            <label>-</label>
-                        </td>
-                        <td>
-                            <input type="text" name="istirahat_selesai" class="form-control input-time" required>
-                        </td>
-                        <td>
-                            <label>Total Jam Kerja</label>
-                        </td>
-                        <td>
-                            <input type="text " name="total_jam_kerja" class="form-control" readonly>
-                        </td>
-                    </tr> --}}
-                    <tr>
-                        <td>
-                            <label>Pengawas</label>
-                        </td>
-                        <td>
-                            <input type="text" name="pengawas" class="form-control" required>
-                            <input type="hidden" name="pengawas_id" class="form-control" required>
-                        </td>
-                        <td>
-                            <label>Operator</label>
-                        </td>
-                        <td>
-                            <input type="text" name="operator" class="form-control" required>
-                            <input type="hidden" name="operator_id" class="form-control" required>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
                     <tr>
                         
                         <td>
@@ -158,8 +139,6 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    
-                    
                     <tr>
                         <td>
                             <label>Keterangan</label>
@@ -264,7 +243,7 @@
                     // disabled alat 
                     $('input[name=alat]').attr('readonly','readonly');
                     // focuskan ke input lokasi
-                    $('input[name=lokasi]').focus();
+                    // $('input[name=lokasi]').focus();
             //     };
             // });
 
@@ -283,7 +262,7 @@
             $('input[name=lokasi_id]').val(suggestions.data);
             $('input[name=lokasi]').attr('readonly','readonly');
             // focuskan ke input jam mulai
-            $('input[name=mulai]').focus();
+            // $('input[name=pengawas]').focus();
         }
 
     });
