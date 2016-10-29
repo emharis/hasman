@@ -124,24 +124,6 @@
                         </td>
                     </tr> --}}
                     <tr>
-                        
-                        <td>
-                            <label>Solar (liter)</label>
-                        </td>
-                        <td>
-                            <input type="text" name="solar" class="form-control text-right input-liter" >
-                        </td>
-                        <td>
-                            <label>Oli (liter)</label>
-                        </td>
-                        <td>
-                            <input type="text" name="oli" class="form-control text-right input-liter">
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    
-                    <tr>
                         <td>
                             <label>Pengawas</label>
                         </td>
@@ -159,6 +141,25 @@
                         <td></td>
                         <td></td>
                     </tr>
+                    <tr>
+                        
+                        <td>
+                            <label>Solar (liter)</label>
+                        </td>
+                        <td>
+                            <input type="text" name="solar" class="form-control text-right input-liter" >
+                        </td>
+                        <td>
+                            <label>Oli (liter)</label>
+                        </td>
+                        <td>
+                            <input type="text" name="oli" class="form-control text-right input-liter">
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    
+                    
                     <tr>
                         <td>
                             <label>Keterangan</label>
@@ -223,6 +224,7 @@
                 },
         onSelect:function(suggestions){
             $('input[name=pengawas_id]').val(suggestions.data);
+            $('input[name=pengawas]').attr('readonly','readonly');
         }
 
     });
@@ -235,6 +237,7 @@
                 },
         onSelect:function(suggestions){
             $('input[name=operator_id]').val(suggestions.data);
+            $('input[name=operator]').attr('readonly','readonly');
         }
 
     });
@@ -246,7 +249,26 @@
                     }
                 },
         onSelect:function(suggestions){
-            $('input[name=alat_id]').val(suggestions.data);
+            // cek duplikasi data
+            var tanggal = $('input[name=tanggal]').val();
+            var alat_id = suggestions.data;
+
+            // $.get('dailyhd/cek-duplikasi/' + tanggal +'/' + alat_id,null,function(res){
+            //     if(res == 'true'){
+                    // data sudah tersimpan
+                //     alert('Data alat di tanggal ini telah tersedia.');
+                //     $('input[name=alat]').val('');
+
+                // }else{
+                    $('input[name=alat_id]').val(suggestions.data);
+                    // disabled alat 
+                    $('input[name=alat]').attr('readonly','readonly');
+                    // focuskan ke input lokasi
+                    $('input[name=lokasi]').focus();
+            //     };
+            // });
+
+            // $('input[name=alat_id]').val(suggestions.data);
         }
 
     });
@@ -259,6 +281,9 @@
                 },
         onSelect:function(suggestions){
             $('input[name=lokasi_id]').val(suggestions.data);
+            $('input[name=lokasi]').attr('readonly','readonly');
+            // focuskan ke input jam mulai
+            $('input[name=mulai]').focus();
         }
 
     });

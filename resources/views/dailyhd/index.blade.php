@@ -27,7 +27,7 @@
     <div class="box box-solid">
         <div class="box-body">
             <a class="btn btn-primary btn-sm" id="btn-add" href="dailyhd/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+            <button class="btn btn-danger btn-sm hide" id="btn-delete" >Delete</button>
             <div class="clearfix" ></div>
             <br/>
 
@@ -49,7 +49,7 @@
                         <th>Pengawas</th>
                         <th>Operator</th>
                         <th>Status</th>
-                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                        <th style="width:25px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,7 +95,7 @@
                                 Validated
                             @endif
                         </td>
-                        <td >
+                        <td class="text-center">
                             <a class="btn btn-primary btn-xs" href="dailyhd/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
@@ -164,11 +164,19 @@
                 // alert(data_id);
                 var newdata = {"id":data_id}
                 dataid.push(newdata);
+                var row = $(this).parent().parent();
+                row.fadeOut(250,function(){
+                    row.remove();
+                });
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','dailyhd/delete');
-            deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
-            deleteForm.submit();
+            // var deleteForm = $('<form>').attr('method','POST').attr('action','dailyhd/delete');
+            // deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
+            // deleteForm.submit();
+            
+            $.post('dailyhd/delete',{
+                'dataid' : JSON.stringify(dataid)
+            },function(){});
         }
 
         e.preventDefault();

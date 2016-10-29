@@ -131,8 +131,10 @@
                                         Open
                                     @elseif($dt->status == 'V')
                                         Validated
-                                    @else
+                                    @elseif($dt->status == 'DN')
                                         Done
+                                    @else
+                                        <label class="label label-danger" >ERROR</label>
                                     @endif
                                 </td>
                                 <td class="text-center" >

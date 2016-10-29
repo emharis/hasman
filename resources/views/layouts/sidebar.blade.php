@@ -5,7 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         {{-- <img src="img/logo-bg-white.png" class="img-responsive"> --}}
         <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
+            {{-- <li class="header">MAIN NAVIGATION</li> --}}
             <li class="{{Request::is('home') ? 'active':''}}" >
                 <a href="home"> <i class="fa fa-home"></i> <span>Home</span> </a>
             </li>

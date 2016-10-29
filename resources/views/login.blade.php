@@ -23,13 +23,23 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+      body{
+        background: url({{$login_background}}) no-repeat center center fixed !important; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
+    </style>
   </head>
   <body class="hold-transition login-page">
     <div class="login-box">
-      <div class="login-logo">
+      
+      <div class="login-box-body">
+        <div class="login-logo">
         <img src="img/logo.png" class="img-responsive">
       </div><!-- /.login-logo -->
-      <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
         <form action="login" method="post">
           <div class="form-group has-feedback">

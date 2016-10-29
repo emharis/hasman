@@ -1,10 +1,10 @@
 <header class="main-header">
     <!-- Logo -->
-    <a  class="logo">
+    <a  class="logo" style="background-color: #1A2226;" >
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>HM</b></span>
+        {{-- <span class="logo-mini"><b>HM</b></span> --}}
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>UD HASIL MANCING</b></span>
+        <span class="logo-lg" style="color: #3B5D61;font-size: 0.7em;" ><b>MAIN NAVIGATION</b></span>
 
     </a>
     <!-- Header Navbar: style can be found in header.less -->
@@ -15,6 +15,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; " >UD HASIL MANCING</span>
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">

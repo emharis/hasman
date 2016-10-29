@@ -26,7 +26,8 @@ Route::get('/', function() {
 });
 
 Route::get('login', function () {
-    return view('login');
+    $login_background = \DB::table('appsetting')->whereName('login_background')->first()->value;
+    return view('login',['login_background'=>$login_background]);
 });
 
 Route::post('login', function() {
@@ -60,7 +61,12 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::group(['prefix' => 'dailyhd'], function () {
         Route::get('/','DailyhdController@index');
         Route::get('create','DailyhdController@create');
+        Route::get('edit/{id}','DailyhdController@edit');
+        Route::get('cek-duplikasi/{tanggal}/{id}','DailyhdController@cekDuplikasi');
         Route::post('insert','DailyhdController@insert');
+        Route::post('update','DailyhdController@update');
+        Route::post('delete','DailyhdController@delete');
+        Route::post('validate','DailyhdController@toValidate');
     });
     
     Route::group(['prefix' => 'cashbook'], function () {
