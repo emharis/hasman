@@ -38,14 +38,14 @@
                         <th style="width:25px;" class="text-center"  >
                             <input type="checkbox" name="ck_all" style="margin:0;padding:0;margin-left: 15px;"  >
                         </th>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th class="col-sm-2 col-md-2 col-lg-2" >Ref #</th>
                         <th>Nama</th>
                         <th>Payment Date</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Amount</th>
                         <th>Status</th>
+                        <th>Amount</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
                                 <input type="checkbox" class="ck_row" >
                             @endif
                         </td>
-                        <td class="row-to-edit" >{{$rownum++}}</td>
+                        {{-- <td class="row-to-edit" >{{$rownum++}}</td> --}}
                         <td class="row-to-edit" >
                             {{$dt->payroll_number}}
                         </td>
@@ -67,14 +67,14 @@
                         <td>{{$dt->payment_date_formatted}}</td>
                         <td>{{$dt->start_date_formatted}}</td>
                         <td>{{$dt->end_date_formatted}}</td>
-                        <td class="text-right uang" >{{$dt->saldo}}</td>
-                        <td>
+                        <td class="text-center" >
                             @if($dt->status == 'O')
-                                Open
+                                <label class="label label-warning" >OPEN</label>
                             @else
-                                Paid
+                                <label class="label label-success" >PAID</label>
                             @endif
                         </td>
+                        <td class="text-right uang" >{{$dt->saldo}}</td>
                         <td class="text-center" >
                             <a class="btn btn-primary btn-xs" href="payroll/staff/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>

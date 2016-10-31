@@ -85,13 +85,13 @@
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
                         </td>
-                        <td class="row-to-edit" >
+                        <td class="row-to-edit text-center " >
                             @if($dt->status == 'O')
-                                OPEN
+                                <label class="label label-danger" >OPEN</label>
                             @elseif($dt->status == 'V')
-                                VALIDATED
+                                <label class="label label-warning" >VALIDATED</label>
                             @else
-                                DONE
+                                <label class="label label-success" >DONE</label>
                             @endif    
                         </td>
                         <td class="text-center" >

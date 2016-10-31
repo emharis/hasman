@@ -32,7 +32,7 @@
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >
                     <tr>
-                        <td class="bg-orange text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
+                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
                             AMOUNT DUE
                         </td>
@@ -44,7 +44,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="pull-right" style="margin-right: 5px;" >
+            {{-- <div class="pull-right" style="margin-right: 5px;" >
                 <table style="background-color: #ECF0F5;" >
                     <tr>
                         <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
@@ -73,7 +73,7 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div> --}}
         </div>
         <div class="box-body">
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
@@ -90,8 +90,8 @@
                         <th>SO Ref#</th>
                         <th>Kalkulasi</th>
                         <th>Total</th>
-                        <th>Amount Due</th>
                         <th>Status</th>
+                        <th>Amount Due</th>
                         <th style="width: 25px;" ></th>
                     </tr>
                 </thead>
@@ -135,19 +135,19 @@
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
                         </td>
+                        <td class="row-to-edit text-center" >
+                            @if($dt->status == 'D')
+                                <label class="label bg-yellow" >DRAFT</label>
+                            @elseif($dt->status == 'O')
+                                <label class="label label-warning" >OPEN</label>
+                            @elseif($dt->status == 'V')
+                                <label class="label label-danger" >VALIDATED</label>
+                            @elseif($dt->status == 'P')
+                                <label class="label label-success" >PAID</label>
+                            @endif    
+                        </td>
                         <td class="row-to-edit uang text-right" >
                             {{$dt->amount_due}}
-                        </td>
-                        <td class="row-to-edit" >
-                            @if($dt->status == 'D')
-                                DRAFT
-                            @elseif($dt->status == 'O')
-                                OPEN
-                            @elseif($dt->status == 'V')
-                                VALIDATED
-                            @elseif($dt->status == 'P')
-                                PAID
-                            @endif    
                         </td>
                         <td class="text-center" >
                             <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>

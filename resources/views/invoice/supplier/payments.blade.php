@@ -41,27 +41,24 @@
             <table class="table table-bordered table-condensed table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th>Payment Date</th>
-                        <th>Number</th>
+                        <th>Ref#</th>
+                        <th>Status</th>                        
                         <th>Payment Amount</th>
-                        <th>Status</th>
-                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                        <th style="width: 25px;" ></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php $total = 0; ?>
                    @foreach($payments as $dt)
                         <tr>
-                            <td>{{$rownum++}}</td>
+                            {{-- <td>{{$rownum++}}</td> --}}
                             <td>
                                 {{$dt->payment_date_formatted}}
                             </td>
                             <td>
                                 {{$dt->payment_number}}
-                            </td>
-                            <td class="uang text-right" >
-                                {{$dt->payment_amount}}
                             </td>
                             <td>
                                 @if($dt->status == 'P')
@@ -70,8 +67,12 @@
                                     Draft
                                 @endif
                             </td>
+                            <td class="uang text-right" >
+                                {{$dt->payment_amount}}
+                            </td>
+                            
                             <td class="text-center" >
-                                <a class="btn btn-primary btn-xs btn-show-payment" href="invoice/supplier/bill/payment/show/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                                {{-- <a class="btn btn-primary btn-xs btn-show-payment" href="invoice/supplier/bill/payment/show/{{$dt->id}}" ><i class="fa fa-edit" ></i></a> --}}
                                 <a class="btn btn-danger btn-xs btn-delete-payment" href="invoice/supplier/bill/payment/delete/{{$dt->id}}" ><i class="fa fa-trash-o" ></i></a>
                             </td>
                         </tr>
@@ -82,7 +83,7 @@
                         <td class=" text-right" >
                             <label class="uang" >{{$total}}</label>
                         </td>
-                        <td colspan="2" ></td>
+                        <td ></td>
                     </tr>
                 </tbody>
             </table>

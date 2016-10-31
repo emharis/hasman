@@ -41,32 +41,29 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th>Payment Date</th>
-                        <th>Number</th>
-                        <th>Ref #</th>
-                        <th>Payment Amount</th>
+                        <th>Ref#</th>
+                        {{-- <th>Invoice Ref #</th> --}}
                         <th>Status</th>
-                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                        <th>Payment Amount</th>                        
+                        <th ></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php $total = 0; ?>
                    @foreach($payments as $dt)
                         <tr>
-                            <td>{{$rownum++}}</td>
+                            {{-- <td>{{$rownum++}}</td> --}}
                             <td>
                                 {{$dt->date_formatted}}
                             </td>
                             <td>
                                 {{$dt->payment_number}}
                             </td>
-                            <td>
+                            {{-- <td>
                                 {{$dt->inv_number}}
-                            </td>
-                            <td class="uang text-right" >
-                                {{$dt->payment_amount}}
-                            </td>
+                            </td> --}}
                             <td>
                                 @if($dt->status == 'P')
                                     Posted
@@ -74,19 +71,23 @@
                                     Draft
                                 @endif
                             </td>
+                            <td class="uang text-right" >
+                                {{$dt->payment_amount}}
+                            </td>
+                            
                             <td class="text-center" >
-                                <a class="btn btn-primary btn-xs" href="invoice/customer/payment/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                                {{-- <a class="btn btn-primary btn-xs" href="invoice/customer/payment/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a> --}}
                                 <a class="btn btn-danger btn-xs btn-delete-payment" href="invoice/customer/payments/delete/{{$dt->id}}" ><i class="fa fa-trash-o" ></i></a>
                             </td>
                         </tr>
                         <?php $total+=$dt->payment_amount; ?>
                    @endforeach
                     <tr style="background-color: #EFEFF7;border-top: 2px solid #CACACA;" >
-                        <td colspan="4" ></td>
+                        <td colspan="3" ></td>
                         <td class=" text-right" >
                             <label class="uang" >{{$total}}</label>
                         </td>
-                        <td colspan="2" ></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>

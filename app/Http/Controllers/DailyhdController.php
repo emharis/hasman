@@ -136,7 +136,8 @@ class DailyhdController extends Controller
 				'status' => 'V'
 			]);
 
-		return redirect('dailyhd');
+		// return redirect('dailyhd');
+		return redirect()->back();
 	}
 
 }

@@ -26,7 +26,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Delivery Orders</h3></label> --}}
+            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Delivery Orders</h3></label> &nbsp;
             <button class="btn btn-danger hide" id="btn-delete" href="#" >Delete</button>
 
             <div class="pull-right" >
@@ -54,9 +54,9 @@
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
                         <th>Ref#</th>
-                        <th>Sales Order Date</th>
+                        <th>SO Date</th>
                         <th>Delivery Date</th>
-                        <th>Sales Order Ref#</th>
+                        <th>SO Ref#</th>
                         <th>Customer</th>
                         <th>Material</th>
                         <th>Pekerjaan</th>
@@ -102,15 +102,15 @@
                                 <td>
                                     {{$dt->lokasi_galian}}
                                 </td> --}}
-                                <td>
+                                <td class="text-center" >
                                     @if($dt->status == 'D')
-                                        Draft
+                                        <label class="label bg-yellow" >DRAFT</label>
                                     @elseif($dt->status == 'O')
-                                        Open
+                                        <label class="label label-warning" >OPEN</label>
                                     @elseif($dt->status == 'V')
-                                        Validated
+                                        <label class="label label-danger" >VALIDATED</label>
                                     @elseif($dt->status == 'DN')
-                                        Done
+                                        <label class="label label-success" >DONE</label>
                                     @else
                                         <label class="label label-danger" >ERROR</label>
                                     @endif

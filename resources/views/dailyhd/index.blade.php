@@ -26,7 +26,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="dailyhd/create" >Create</a>
+            <a class="btn btn-primary" id="btn-add" href="dailyhd/create" >Create</a>
             <button class="btn btn-danger btn-sm hide" id="btn-delete" >Delete</button>
             <div class="clearfix" ></div>
             <br/>
@@ -88,11 +88,11 @@
                         <td>
                             {{'['.$dt->kode_operator . '] ' .$dt->nama_operator}}
                         </td>
-                        <td>
+                        <td class="text-center" >
                             @if($dt->status == 'O')
-                                Open
+                                <label class="label label-warning" >OPEN</label>
                             @else
-                                Validated
+                                <label class="label label-success" >VALIDATED</label>
                             @endif
                         </td>
                         <td class="text-center">

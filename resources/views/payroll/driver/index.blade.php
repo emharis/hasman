@@ -36,17 +36,17 @@
                 <thead>
                     <tr>
                         <th style="width:25px;" class="text-center" >
-                            <input type="checkbox" name="ck_all"  >
+                            <input type="checkbox" name="ck_all" style="margin:0;padding:0;margin-left: 15px;"  >
                         </th>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th class="col-sm-2 col-md-2 col-lg-2" >Ref #</th>
                         <th>Nama</th>
                         <th>Payment Date</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Amount</th>
                         <th>Status</th>
-                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
+                        <th>Amount</th>
+                        <th style="width: 25px;" ></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +57,7 @@
                             <input type="checkbox" class="ck-row"  />
                           @endif
                         </td>
-                        <td>{{$rownum++}}</td>
+                        {{-- <td>{{$rownum++}}</td> --}}
                         <td>{{$dt->payroll_number}}</td>
                         <td>
                           {{'['.$dt->kode_karyawan . '] ' . $dt->nama_karyawan}}
@@ -67,7 +67,6 @@
                         </td>
                         <td>{{$dt->start_date_formatted}}</td>
                         <td>{{$dt->end_date_formatted}}</td>
-                        <td class="uang text-right" >{{$dt->saldo}}</td>
                         <td class="text-center" >
                           @if($dt->status == 'O')
                             <label class="label label-warning" >Open</label>
@@ -75,6 +74,7 @@
                             <label class="label label-success" >Paid</label>
                           @endif
                         </td>
+                        <td class="uang text-right" >{{$dt->saldo}}</td>
                         <td class="text-center" >
                           <a class="btn btn-primary btn-xs" href="payroll/driver/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
@@ -98,20 +98,21 @@
 <script type="text/javascript">
 (function ($) {
 
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
+    var TBL_DATA = $('#table-data').DataTable({
+        // "columns": [
+        //     {className: "text-center","orderable": false},
+        //     {className: "text-right"},
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     {className: "text-center"},
+        //     // {className: "text-center"}
+        // ],
+        // order: [[ 1, 'asc' ]],
+        sort:false
+    });
 
 
     // format auto numeric uang

@@ -81,7 +81,7 @@
                 <a href="dailyhd"> <i class="ft-excafator"></i> <span>Harian Alat Berat</span> </a>
             </li>
 
-            <li class="treeview {{Request::is('attendance/*') ? 'active':''}}" >
+            {{-- <li class="treeview {{Request::is('attendance/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-calendar-check-o"></i>
                     <span>Attendance</span>
@@ -91,6 +91,10 @@
                     <li class="{{Request::is('attendance/setting*') ? 'active':''}}" ><a href="attendance/setting"><i class="fa fa-circle-o"></i> Setting</a></li>
                     <li class="{{Request::is('attendance/attend*') ? 'active':''}}" ><a href="attendance/attend"><i class="fa fa-circle-o"></i> Attend Now</a></li>
                 </ul>
+            </li> --}}
+
+            <li class="{{Request::is('attendance/*') ? 'active':''}}" >
+                <a href="attendance/attend"> <i class="fa fa-calendar-check-o"></i> <span>Attendance</span> </a>
             </li>
 
             <li class="treeview {{Request::is('payroll/*') ? 'active':''}}" >

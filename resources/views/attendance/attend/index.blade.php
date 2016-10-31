@@ -3,6 +3,8 @@
 @section('styles')
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+
 
 <style>
     .col-top-item{
@@ -109,6 +111,7 @@
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
 
@@ -172,6 +175,9 @@
                                                                                   .prop('checked',data.siang == 'Y' && true)
                                                                                 ))
                               );
+
+          
+          // $(".ck-row-siang").bootstrapSwitch();
         });
 
         // tampilkan data table presensi
@@ -196,6 +202,19 @@
           $('#label-status-draft').removeClass('bg-blue');
           $('#label-status-draft').addClass('bg-blue');
         }
+
+        // format checkbox to switch
+          $(".ck-row").bootstrapSwitch({
+            size:'small',
+            onText:'YES',
+            offText:'NO'
+          });
+          // $(".ck-row-pagi").bootstrapSwitch({
+          //   size:'small',
+          //   onText:'YES',
+          //   offText:'NO'
+          // });
+
       });
     }else{
       alert('Lengkapi data yang kosong.');
@@ -219,10 +238,16 @@
     data_master.tanggal = tanggal;
 
     $('.ck-row-pagi').each(function(i,data){
+      var hadir_siang = $('input[name=ck_hadir_siang_'+$(this).data('karyawanid')+']').prop('checked');
+      var hadir_pagi = $(this).prop('checked');
+
+
+      // alert($('input[name=ck_hadir_siang_' + karyawan_id + ']').is(':checked'));
+      // alert($('input[data-karyawanid=' + karyawan_id + ']').prop(':checked'));
       data_presensi.presensi.push({
           karyawan_id : $(this).data('karyawanid'),
-          pagi : $(this).is(':checked'),
-          siang : $(this).parent().next().children('input').is(':checked')
+          pagi : hadir_pagi,
+          siang : hadir_siang
       });
     });
 

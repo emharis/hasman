@@ -32,7 +32,7 @@
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >
                     <tr>
-                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
+                        <td class="bg-orange text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
                             AMOUNT DUE
                         </td>
@@ -55,8 +55,8 @@
                         <th>PO Date</th>
                         <th>PO Ref#</th>
                         <th>Total</th>
-                        <th>Amount Due</th>
                         <th>Status</th>
+                        <th>Amount Due</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
@@ -79,17 +79,17 @@
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
                         </td>
+                        <td class="row-to-edit text-center" >
+                            @if($dt->status == 'O')
+                                <label class="label label-warning" >OPEN</label>
+                            @elseif($dt->status == 'V')
+                                <label class="label label-danger" >VALIDATED</label>
+                            @else
+                                <label class="label label-success" >PAID</label>
+                            @endif    
+                        </td>
                         <td class="row-to-edit uang text-right" >
                             {{$dt->amount_due}}
-                        </td>
-                        <td class="row-to-edit" >
-                            @if($dt->status == 'O')
-                                OPEN
-                            @elseif($dt->status == 'V')
-                                VALIDATED
-                            @else
-                                PAID
-                            @endif    
                         </td>
                         <td class="text-center" >
                             <a class="btn btn-primary btn-xs" href="invoice/supplier/bill/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
