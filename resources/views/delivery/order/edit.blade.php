@@ -52,8 +52,17 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status != 'D')
-                <a  class="btn btn-primary btn-sm" href="delivery/order/validate/{{$data->id}}" id="btn-validate" >Validate</a>
-                <a class="btn btn-success btn-sm" >Print</a>
+                <a  class="btn btn-primary" href="delivery/order/validate/{{$data->id}}" id="btn-validate" >Validate</a>
+                {{-- <a class="btn btn-success btn-sm" >Print</a> --}}
+                <div class="btn-group ">
+                    <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Print <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#" onclick="return false;" id="btn-direct-print" >Direct Print</a></li>
+                      <li><a href="#" onclick="return false;" id="btn-print-pdf" >PDF</a></li>
+                    </ul>
+                </div>
             @else
                 
                 {{-- Form Header --}}
@@ -82,15 +91,15 @@
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Sales Order Number</label>
+                            <label>SO Ref#</label>
                         </td>
                         <td class="col-lg-4" >
                             {{$data->order_number}}
                         </td>
                         <td class="col-lg-2" >
-                            <label>Order Date</label>
+                            <label>SO Date</label>
                         </td>
-                        <td class="col-lg-4" >
+                        <td class="col-lg-4" id="label-sales-order-date" >
                             {{$data->order_date_formatted}}
                         </td>
                     </tr>
@@ -170,7 +179,7 @@
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Close</a>
         </div>
     </div><!-- /.box -->
 
@@ -456,6 +465,7 @@
         format: 'dd-mm-yyyy',
         todayHighlight: true,
         autoclose: true,
+        startDate:$('#label-sales-order-date').text()
     });
     // END OF SET DATEPICKER
 
@@ -507,6 +517,8 @@
             var volume = Number(panjang) * Number(lebar) * Number(tinggi);
             // alert('volume ' + volume);
             $('input[name=volume]').autoNumeric('set',volume);
+            // pembulatan volume
+            volume = $('input[name=volume]').autoNumeric('get');
 
             // hitung total harga
             var price = $('input[name=unit_price]').autoNumeric('get');
@@ -553,6 +565,18 @@
         
     });
     // END CALCULATE RITASE
+
+    // BUTTON PRINT
+    // ====================================================
+    $('#btn-print-pdf').click(function(){
+        alert('print pdf');
+    });
+
+    $('#btn-direct-print').click(function(){
+        alert('direct printing');
+    });
+    // ====================================================
+    // END BUTTON PRINT
 
 })(jQuery);
 </script>

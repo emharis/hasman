@@ -70,7 +70,7 @@
                             <label>Customer</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="customer" autofocus class="form-control " data-customerid="{{$data_master->customer_id}}" value="{{'['.$data_master->kode_customer .'] ' .$data_master->customer}}" required>
+                            <input type="text" name="customer" autofocus class="form-control " data-customerid="{{$data_master->customer_id}}" value="{{'['.$data_master->kode_customer .'] ' .$data_master->customer}}" readonly required>
                         </td>
                         <td class="col-lg-2" ></td>
                         <td class="col-lg-2" >
@@ -740,6 +740,8 @@
             && so_master.order_date != "" 
             && so_material.material.length > 0){
 
+            $(this).attr('disabled','disabled');
+
             var newform = $('<form>').attr('method','POST').attr('action','sales/order/update');
                 newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
                 newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));
@@ -757,11 +759,11 @@
     // VALIDATE ORDER
     $('#btn-validate').click(function(e){
 
-        if(confirm('Anda akan memvalidasi data ini, setelah tervalidasi data tidak dapat dirubah kembali, lanjutkan ?')){
+        // if(confirm('Anda akan memvalidasi data ini, setelah tervalidasi data tidak dapat dirubah kembali, lanjutkan ?')){
 
-        }else{
-            return false;
-        }
+        // }else{
+        //     return false;
+        // }
     })
     // END OF VALIDATE ORDER
 

@@ -25,20 +25,19 @@
 
     <!-- Default box -->
     <div class="box box-solid">
-        <div class="box-body">
+        <div class="box-header with-border">
             <a class="btn btn-primary btn-sm" id="btn-add" href="master/karyawan/create" >Create</a>
             <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-            <div class="clearfix" ></div>
-            <br/>
-
+        </div>
+        <div class="box-body">
             <?php $rownum=1; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">
+                        <th style="width:25px;" class="text-center">
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
-                        <th style="width:25px;">No</th>
+                        {{-- <th style="width:25px;">No</th> --}}
                         <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
                         <th>Nama</th>
                         <th>Panggilan</th>
@@ -51,12 +50,12 @@
                 <tbody>
                     @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
-                        <td>
+                        <td class="text-center" >
                             @if($dt->ref == 0)
                                 <input type="checkbox" class="ck_row" >
                             @endif
                         </td>
-                        <td class="row-to-edit" >{{$rownum++}}</td>
+                        {{-- <td class="row-to-edit" >{{$rownum++}}</td> --}}
                         <td class="row-to-edit" >
                             {{$dt->kode}}
                         </td>
@@ -77,7 +76,7 @@
                         <td class="row-to-edit" >
                             {{$dt->telp}}
                         </td>
-                        <td >
+                        <td class="text-center" >
                             <a class="btn btn-primary btn-xs" href="master/karyawan/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
@@ -100,18 +99,19 @@
 (function ($) {
 
     var TBL_KATEGORI = $('#table-data').DataTable({
-        "columns": [
-            {className: "text-center","orderable": false},
-            {className: "text-right"},
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {className: "text-center"}
-        ],
-        order: [[ 1, 'asc' ]],
+        // "columns": [
+        //     {className: "text-center","orderable": false},
+        //     {className: "text-right"},
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     {className: "text-center"}
+        // ],
+        // order: [[ 1, 'asc' ]],
+        sort:false
     });
 
     // check all checkbox

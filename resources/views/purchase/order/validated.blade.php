@@ -37,7 +37,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="purchase/order" >Sales Orders</a>
+        <a href="purchase/order" >Purchase Orders</a>
         <i class="fa fa-angle-double-right" ></i>
         {{$data_master->order_number}}
     </h1>
@@ -53,7 +53,7 @@
             <button class="btn btn-success btn-sm" >Print</button>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'DN' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Validated</a>
@@ -67,31 +67,21 @@
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
-          <label>
-            <h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3>
-          </label>
+          
+            <div class="row" >
+                <div class="col-sm-10 col-md-10 col-lg-10">
+                    <label>
+                        <h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3>
+                    </label>
 
-            <input type="hidden" name="purchase_order_id" value="{{$data_master->id}}">
-            {{-- <div class="row" > --}}
-                {{-- <div class="col-sm-8 col-md-8 col-lg-8"> --}}
-
-                {{-- </div> --}}
-                {{-- <div class="col-sm-4 col-md-4 col-lg-4" > --}}
-                    {{-- INVOICES SHORTCUT --}}
-                    {{-- <a class="btn btn-app pull-right" href="purchase/order/invoices/show/{{$data_master->id}}" >
-                            <span class="badge bg-green">1</span>
-                            <i class="fa fa-newspaper-o"></i> Invoices
-                        </a> --}}
-                {{-- </div> --}}
-            {{-- </div> --}}
-
-            <table class="table" id="table-master-so" >
+                    <input type="hidden" name="purchase_order_id" value="{{$data_master->id}}">
+                    <table class="table" id="table-master-so" >
                         <tbody>
                             <tr>
                                 <td class="col-lg-2">
                                     <label>Supplier</label>
                                 </td>
-                                <td class="col-lg-4" >
+                                <td class="col-lg-6" >
                                     {{'['.$data_master->kode_supplier .'] ' .$data_master->supplier}}
                                 </td>
                                 <td class="col-lg-2" >
@@ -115,13 +105,24 @@
 
                         </tbody>
                     </table>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2" >
+                    {{-- INVOICES SHORTCUT --}}
+                    <a class="btn btn-app pull-right" href="purchase/order/invoices/show/{{$data_master->id}}" >
+                            <span class="badge bg-green">1</span>
+                            <i class="fa fa-newspaper-o"></i> Invoices
+                        </a>
+                </div>
+            </div>
+
+            
 
             <h4 class="page-header" style="font-size:14px;color:#3C8DBC"><strong>PRODUCT DETAILS</strong></h4>
 
             <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >NO</th>
+                        {{-- <th style="width:25px;" >NO</th> --}}
                         <th  >PRODUCT</th>
                         <th class="col-lg-1" >SATUAN</th>
                         <th class="col-lg-1" >QUANTITY</th>
@@ -134,7 +135,7 @@
                     <?php $rownum=1; ?>
                     @foreach($data_detail as $dt)
                     <tr class="row-product">
-                        <td class="text-right" >{{$rownum++}}</td>
+                        {{-- <td class="text-right" >{{$rownum++}}</td> --}}
                         <td>
                             {{'[' . $dt->kode_product .'] ' . $dt->product}}
                         </td>
@@ -240,11 +241,11 @@
         // location.href = "purchase/order/can-delete/" + purchase_order_id;
 
         $.get("purchase/order/can-delete/" + purchase_order_id,null,function(res){
-            if(res == 'false'){
-              alert('Data purchase order ini tidak dapat dihapus. \nAnda harus menghapus data invoice yang berhubungan dengan purchase order ini terlebih dahulu.');
-            }else{
+            // if(res == 'false'){
+            //   alert('Data purchase order ini tidak dapat dihapus. \nAnda harus menghapus data invoice yang berhubungan dengan purchase order ini terlebih dahulu.');
+            // }else{
               location.href = "purchase/order/cancel-order/" + purchase_order_id;
-            }
+            // }
         });
 
 

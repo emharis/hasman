@@ -27,61 +27,34 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <div class="row" >
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    <a class="btn btn-primary btn-sm" id="btn-add" href="purchase/order/create" >Create</a>
-                    <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- Filter section --}}
-                    <div class="input-group">
-                        <span class="input-group-addon bg-gray" >
-                            Filter
-                        </span>
-                        <div class="input-group-btn" style="width: 30%;" >
-                            <select name="select_filter_by" class="form-control" >
-                                <option value="order_number" >Nomor Order</option>
-                                <option value="order_date" >Tanggal</option>
-                                <option value="customer" >Customer</option>
-                                <option value="pekerjaan" >Pekerjaan</option>
-                                <option disabled>──────────</option>
-                                <option value="O" >OPEN</option>
-                                <option value="V" >VALIDATED</option>
-                                <option value="D" >DONE</option>
+            <a class="btn btn-primary btn-sm" id="btn-add" href="purchase/order/create" >Create</a>
+            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
 
-                            </select>
-                        </div><!-- /btn-group -->
-
-                        {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter ">
-
-                        {{-- Filter by date --}}
-                        <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
-                            <input type="text" name="input_filter_date_start" class="form-control input-tanggal">
-                        </div>
-                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
-
-                        {{-- Filter submit button --}}
-                        <div class="input-group-btn" >
-                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
-                        </div>
-
-                    </div>
-                    {{-- End of filter section --}}
-                </div>
+            <div class="pull-right" >
+                <table style="background-color: #ECF0F5;" >
+                    <tr>
+                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
+                        <td style="padding-left: 10px;padding-right: 5px;">
+                            AMOUNT DUE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"  style="padding-right: 5px;" >
+                            <label class="uang">{{$amount_due}}</label>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="box-body">
-            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
                         <th style="width:25px;" class="text-center">
-                            <input type="checkbox" name="ck_all" >
+                            <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;"  >
                         </th>
-                        <th style="width:25px;">No</th>
-                        <th>Order Number</th>
-                        <th>Order Date</th>
+                        <th>Ref#</th>
+                        <th>Date</th>
                         <th>Supplier Ref#</th>
                         <th>Supplier</th>
                         <th>Total</th>
@@ -91,13 +64,12 @@
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
-                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
+                    <tr  data-id="{{$dt->id}}">
                         <td class="text-center" >
                             @if($dt->status == 'O')
                                 <input type="checkbox" class="ck_row" >
                             @endif
                         </td>
-                        <td class="row-to-edit text-right" >{{$rownum++}}</td>
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
                         </td>
@@ -130,10 +102,6 @@
                 </tbody>
             </table>
 
-            <div class="text-right" >
-                {{$data->render()}}
-            </div>
-
         </div><!-- /.box-body -->
     </div><!-- /.box -->
 
@@ -151,49 +119,49 @@
 <script type="text/javascript">
 (function ($) {
 
-    // ==========================================================================
-    // FILTER SECTION
-    $('select[name=select_filter_by]').change(function(){
-        var filter_by = $(this).val();
+    // // ==========================================================================
+    // // FILTER SECTION
+    // $('select[name=select_filter_by]').change(function(){
+    //     var filter_by = $(this).val();
 
-        // hide filter input
-        $('.input-filter').removeClass('hide');
-        $('.input-filter').hide();
+    //     // hide filter input
+    //     $('.input-filter').removeClass('hide');
+    //     $('.input-filter').hide();
 
-        if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
-            $('input[name=filter_string]').show();
-        }else if(filter_by == 'order_date'){
-            $('.input-filter-by-date').show();
-        }else{
-            // order by status open, validated, done
-            // otomatis submit tanpa tombol click
-            var filter_by = $('select[name=select_filter_by]').val();
-            var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
-            formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
-            formFilter.submit();
-        }
+    //     if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
+    //         $('input[name=filter_string]').show();
+    //     }else if(filter_by == 'order_date'){
+    //         $('.input-filter-by-date').show();
+    //     }else{
+    //         // order by status open, validated, done
+    //         // otomatis submit tanpa tombol click
+    //         var filter_by = $('select[name=select_filter_by]').val();
+    //         var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
+    //         formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
+    //         formFilter.submit();
+    //     }
 
-    });
+    // });
 
-    $('#btn-submit-filter').click(function(){
-        var filter_by = $('select[name=select_filter_by]').val();
-        var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
+    // $('#btn-submit-filter').click(function(){
+    //     var filter_by = $('select[name=select_filter_by]').val();
+    //     var formFilter = $('<form>').attr('method','GET').attr('action','purchase/order/filter');
 
-        if(filter_by == 'order_date'){
-            formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
-            formFilter.append($('<input>').attr('type','hidden').attr('name','date_end').val($('input[name=input_filter_date_end]').val()));
-        }
-        else{
-            // FILTER BY STRING
-            formFilter.append($('<input>').attr('type','hidden').attr('name','filter_string').val($('input[name=filter_string]').val()));
-            // formFilter.append($('<input>').attr('type','hidden').attr('name','total').val($('input[name=input_filter_total]').autoNumeric('get')));
-        }
+    //     if(filter_by == 'order_date'){
+    //         formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
+    //         formFilter.append($('<input>').attr('type','hidden').attr('name','date_end').val($('input[name=input_filter_date_end]').val()));
+    //     }
+    //     else{
+    //         // FILTER BY STRING
+    //         formFilter.append($('<input>').attr('type','hidden').attr('name','filter_string').val($('input[name=filter_string]').val()));
+    //         // formFilter.append($('<input>').attr('type','hidden').attr('name','total').val($('input[name=input_filter_total]').autoNumeric('get')));
+    //     }
 
-        formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
-        formFilter.submit();
-    });
-    // END OF FILTER SECTION
-    // ==========================================================================
+    //     formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
+    //     formFilter.submit();
+    // });
+    // // END OF FILTER SECTION
+    // // ==========================================================================
 
     // SET DATEPICKER
     $('.input-tanggal').datepicker({
@@ -213,20 +181,21 @@
     });
     // END OF SET AUTONUMERIC
 
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
+    var TBL_DATA = $('#table-data').DataTable({
+        // "columns": [
+        //     {className: "text-center","orderable": false},
+        //     {className: "text-right"},
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     {className: "text-center"},
+        //     // {className: "text-center"}
+        // ],
+        // order: [[ 1, 'asc' ]],
+        sort:false
+    });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){

@@ -8,17 +8,37 @@ use App\Http\Controllers\Controller;
 
 class DeliveryOrderController extends Controller
 {
+	// public function index(){
+	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+
+	// 	$data = \DB::table('VIEW_DELIVERY_ORDER')
+	// 		//->where('status','!=','D')
+	// 		->orderBy('order_date','desc')
+	// 		->paginate($paging_item_number);
+			
+	// 	return view('delivery.order.index',[
+	// 			'data' => $data,
+	// 			'paging_item_number' => $paging_item_number
+	// 		]);
+	// }
+
 	public function index(){
-		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
 		$data = \DB::table('VIEW_DELIVERY_ORDER')
 			//->where('status','!=','D')
 			->orderBy('order_date','desc')
-			->paginate($paging_item_number);
+			->get();
+			// ->paginate($paging_item_number);
+		$delivery_to_do = \DB::table('delivery_order')
+							->where('status','!=' ,'V')
+							->where('status','!=' ,'DN')
+							->count();
 			
 		return view('delivery.order.index',[
 				'data' => $data,
-				'paging_item_number' => $paging_item_number
+				'delivery_to_do' => $delivery_to_do
+				// 'paging_item_number' => $paging_item_number
 			]);
 	}
 
@@ -93,18 +113,20 @@ class DeliveryOrderController extends Controller
 					]);
 
 			if($req->kalkulasi == "K"){
+				$vol = round($req->panjang * $req->lebar * $req->tinggi,2);
 				// hitung total kubikasi
 				\DB::table('delivery_order')
 				->where('id',$req->delivery_id)
 				->update([
-						'total' => $unit_price * $req->panjang * $req->lebar * $req->tinggi,
+						'total' => $unit_price * $vol,
 					]);
 			}elseif($req->kalkulasi == "T"){
 				// hitung price berdasar tonase
+				$netto = round($req->gross - $req->tarre,2);
 				\DB::table('delivery_order')
 				->where('id',$req->delivery_id)
 				->update([
-						'total' => $unit_price * ($req->gross - $req->tarre),
+						'total' => $unit_price * $netto,
 					]);
 			}else{
 				// hitung price berdasar ritase
@@ -317,42 +339,50 @@ class DeliveryOrderController extends Controller
 		return \DB::transaction(function()use($id){
 			$do = \DB::table('delivery_order')->find($id);
 			// update delivery order
-			\DB::table('delivery_order')->where('id',$id)->update([
-					'status' => 'O',
-					'no_nota_timbang' => '',
-					'kalkulasi' => '',
-					'panjang' => '',
-					'lebar' => '',
-					'tinggi' => '',
-					'volume' => '',
-					'gross' => '',
-					'tarre' => '',
-					'netto' => '',
-					'unit_price' => '',
-					'total' => '',
-				]);
+			// \DB::table('delivery_order')->where('id',$id)->update([
+			// 		'status' => 'O',
+			// 		'no_nota_timbang' => '',
+			// 		'kalkulasi' => '',
+			// 		'panjang' => '',
+			// 		'lebar' => '',
+			// 		'tinggi' => '',
+			// 		'volume' => '',
+			// 		'gross' => '',
+			// 		'tarre' => '',
+			// 		'netto' => '',
+			// 		'unit_price' => '',
+			// 		'total' => '',
+			// 	]);
+
+			// hapus delivery order
+			\DB::table('delivery_order')->delete($do->id);
 
 			// reset customer invoice detail
+			// \DB::table('customer_invoice_detail')
+			// 	->where('delivery_order_id',$id)
+			// 	->update([
+			// 		'kalkulasi' => '',
+			// 		'panjang' => '',
+			// 		'lebar' => '',
+			// 		'tinggi' => '',
+			// 		'volume' => '',
+			// 		'gross' => '',
+			// 		'tarre' => '',
+			// 		'netto' => '',
+			// 		'unit_price' => '',
+			// 		'total' => '',
+			// 	]);
+
+			// delete custoer_invoice_detail
 			\DB::table('customer_invoice_detail')
 				->where('delivery_order_id',$id)
-				->update([
-					'kalkulasi' => '',
-					'panjang' => '',
-					'lebar' => '',
-					'tinggi' => '',
-					'volume' => '',
-					'gross' => '',
-					'tarre' => '',
-					'netto' => '',
-					'unit_price' => '',
-					'total' => '',
-				]);
+				->delete();
 
-			// reset status customer invoice to 'Draft'
+			// reset status customer invoice to Open		
 			\DB::table('customer_invoices')
 			->where('order_id',$do->sales_order_id)
 			->update([
-				'status' => 'D',
+				'status' => 'O',
 				'total' => 0,
 				'amount_due' => 0,
 			]);
@@ -364,7 +394,25 @@ class DeliveryOrderController extends Controller
 						'status' => 'V'
 					]);
 
-			return redirect()->back();
+			// rubah jumlah order 
+			\DB::table('sales_order_detail')
+			->where('sales_order_id',$do->sales_order_id)
+			->where('material_id',$do->material_id)
+			->update([
+					'qty' => \DB::raw('qty - 1')
+				]);
+
+			// cek qty jika 0 maka hapus sales_order_detail
+			if(\DB::table('sales_order_detail')
+			->where('sales_order_id',$do->sales_order_id)
+			->where('material_id',$do->material_id)->count() == 0){
+					\DB::table('sales_order_detail')
+						->where('sales_order_id',$do->sales_order_id)
+						->where('material_id',$do->material_id)
+						->delete();
+			}
+
+			return redirect('delivery/order');
 		});
 	}
 
@@ -430,6 +478,25 @@ class DeliveryOrderController extends Controller
                 'paging_item_number' => $paging_item_number
             ]);
 
+	}
+
+	// DELETE DATA DELIVERY ORDER
+	public function delete(Request $req){
+		return \DB::transaction(function()use($req){
+			// echo $req->dataid;
+			$data = json_decode($req->dataid);
+			foreach($data as $dt){
+				$sales_order = \DB::table('sales_order')->find($dt->sales_order_id);
+				// delete delivery order
+				\DB::table('delivery_order')->delete($dt->id);
+				if(\DB::table('delivery_order')->whereSalesOrderId($sales_order->id)->count() == 0){
+					// hapus sales order
+					\DB::table('sales_order')->delete($sales_order->id);
+				}
+			}
+
+			return redirect()->back();
+		});
 	}
 
 

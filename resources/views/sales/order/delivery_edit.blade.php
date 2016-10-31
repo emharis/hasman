@@ -54,15 +54,15 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            
+            {{-- 
             @if($data->status != 'D')
-                {{-- <a  class="btn btn-primary btn-sm" href="sales/order/delivery/validate/{{$data->id}}" >Validate</a> --}}
+                <a  class="btn btn-primary btn-sm" href="sales/order/delivery/validate/{{$data->id}}" >Validate</a>
                 <a class="btn btn-success btn-sm" >Print</a>
             @else
-                
+ --}}                
                 {{-- Form Header --}}
                 <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->delivery_order_number}}</h3></label>
-            @endif
+            {{-- @endif --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Validated</a>
@@ -85,7 +85,7 @@
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Order Number</label>
+                            <label>Sales Order Ref#</label>
                         </td>
                         <td class="col-lg-4" >
                             {{$data->order_number}}

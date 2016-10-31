@@ -8,17 +8,37 @@ use App\Http\Controllers\Controller;
 
 class CustomerInvoiceController extends Controller
 {
-	public function index(){
-		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+	// public function index(){
+	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
+	// 	$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+	// 		// ->where('status','=','O')
+	// 		->orderBy('order_date','desc')
+	// 		->paginate($paging_item_number);
+			
+	// 	return view('invoice.customer.index',[
+	// 			'data' => $data,
+	// 			'paging_item_number' => $paging_item_number
+	// 		]);
+	// }
+
+	public function index(){
+		
 		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
 			// ->where('status','=','O')
 			->orderBy('order_date','desc')
-			->paginate($paging_item_number);
+			->get();
+
+		$amount_due = \DB::table('customer_invoices')->sum('amount_due');
+		$total = \DB::table('customer_invoices')->sum('total');
+		$paid = $total - $amount_due;
 			
 		return view('invoice.customer.index',[
 				'data' => $data,
-				'paging_item_number' => $paging_item_number
+				'amount_due' => $amount_due,
+				'total' => $total,
+				'paid' => $paid,
+				// 'paging_item_number' => $paging_item_number
 			]);
 	}
 

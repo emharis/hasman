@@ -65,10 +65,6 @@
                 </ul>
             </li>
 
-            <li class="{{Request::is('dailyhd') ? 'active':''}}" >
-                <a href="dailyhd"> <i class="ft-excafator"></i> <span>Harian Alat Berat</span> </a>
-            </li>
-
             <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-newspaper-o"></i>
@@ -79,6 +75,10 @@
                     <li class="{{Request::is('invoice/customer*') ? 'active':''}}" ><a href="invoice/customer"><i class="fa fa-circle-o"></i> Customer Invoices</a></li>
                     <li class="{{Request::is('invoice/supplier/bill*') ? 'active':''}}" ><a href="invoice/supplier/bill"><i class="fa fa-circle-o"></i> Supplier Bills</a></li>
                 </ul>
+            </li>
+
+            <li class="{{Request::is('dailyhd') ? 'active':''}}" >
+                <a href="dailyhd"> <i class="ft-excafator"></i> <span>Harian Alat Berat</span> </a>
             </li>
 
             <li class="treeview {{Request::is('attendance/*') ? 'active':''}}" >

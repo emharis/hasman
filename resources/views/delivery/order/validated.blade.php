@@ -52,7 +52,7 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status != 'D')
-                <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Reconcile</a>
+                <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Cancel Delivery Order</a>
                 <a class="btn btn-success btn-sm" >Print</a>
             @else
                 
@@ -81,13 +81,13 @@
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Sales Order Number</label>
+                            <label>SO Ref#</label>
                         </td>
                         <td class="col-lg-4" >
                             {{$data->order_number}}
                         </td>
                         <td class="col-lg-2" >
-                            <label>Order Date</label>
+                            <label>SO Date</label>
                         </td>
                         <td class="col-lg-4" >
                             {{$data->order_date_formatted}}
@@ -157,7 +157,7 @@
                 <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th rowspan="2" style="width:25px;" >NO</th>
+                        {{-- <th rowspan="2" style="width:25px;" >NO</th> --}}
                         <th rowspan="2" >MATERIAL</th>
                         <th colspan="3" class="text-center" >UKURAN</th>
                         <th rowspan="2" >VOLUME</th>
@@ -172,7 +172,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
+                        {{-- <td>1</td> --}}
                         <td>{{'[' .$data->kode_material . '] ' . $data->material}}</td>
                         <td class="text-right" >{{$data->panjang}}</td>
                         <td class="text-right" >{{$data->lebar}}</td>

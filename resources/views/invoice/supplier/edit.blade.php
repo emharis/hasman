@@ -55,12 +55,21 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             @if($data->status == 'O')
               <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
-            @else
+            @elseif($data->status == 'P')
+                <div class="btn-group ">
+                    <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Print <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#" onclick="return false;" id="btn-direct-print" >Direct Print</a></li>
+                      <li><a href="#" onclick="return false;" id="btn-print-pdf" >PDF</a></li>
+                    </ul>
+                </div>
             {{-- Tampilkan header --}}
             {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->bill_number}}</h3></label> --}}
             @endif
 
-            <button class="btn btn-danger btn-sm" id="btn-cancel-bill" data-href="invoice/supplier/bill/cancel-bill/{{$data->id}}" >Cancel Bill</button>
+            {{-- <button class="btn btn-danger btn-sm" id="btn-cancel-bill" data-href="invoice/supplier/bill/cancel-bill/{{$data->id}}" >Cancel Bill</button> --}}
 
             {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label> --}}
             {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a> --}}
@@ -89,11 +98,11 @@
                                 {{'['.$data->kode_supplier .'] ' .$data->supplier}}
                             </td>
                             <td class="col-lg-2" ></td>
-                            <td class="col-lg-2" >
-                                <label>Order Number</label>
+                            <td class="col-lg-4" >
+                                <label>Purchase Order Date</label>
                             </td>
                             <td class="col-lg-2" >
-                                {{$data->order_number}}
+                                {{$data->order_date_formatted}}
                             </td>
                         </tr>
                         <tr>
@@ -104,8 +113,12 @@
                                 {{$purchase_order->supplier_ref}}
                             </td>
                             <td></td>
-                            <td></td>
-                            <td></td>
+                            <td  >
+                                <label>Purchase Order Ref#</label>
+                            </td>
+                            <td  >
+                                {{$data->order_number}}
+                            </td>
                         </tr>
 
                     </tbody>
@@ -127,20 +140,20 @@
             <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >NO</th>
+                        {{-- <th style="width:25px;" >NO</th> --}}
                         <th  >PRODUCT</th>
-                        <th class="col-lg-1" >SATUAN</th>
+                        <th class="col-lg-1" >UNIT</th>
                         <th class="col-lg-1" >QUANTITY</th>
                         <th class="col-lg-2" >UNIT PRICE</th>
                         {{-- <th class="col-lg-2" >S.U.P</th> --}}
-                        <th class="col-lg-2" >SUBTOTAL</th>
+                        <th class="col-lg-2" >TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $rownum=1; ?>
                     @foreach($data_detail as $dt)
                     <tr class="row-product">
-                        <td class="text-right" >{{$rownum++}}</td>
+                        {{-- <td class="text-right" >{{$rownum++}}</td> --}}
                         <td>
                             {{'[' . $dt->kode_product .'] ' . $dt->product}}
                         </td>
@@ -156,9 +169,6 @@
                         </td>
                     </tr>
                     @endforeach
-
-
-
                 </tbody>
             </table>
 
@@ -174,15 +184,15 @@
                         <tbody>
                             <tr>
                                 <td class="text-right">
-                                    <label>Subtotal :</label>
+                                    <label>SUBTOTAL :</label>
                                 </td>
                                 <td class="label-total-subtotal text-right uang" >
-                                    {{-- {{$data->subtotal}} --}}
+                                    {{$data->subtotal}}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-right" >
-                                    <label>Disc :</label>
+                                    <label>DISC :</label>
                                 </td>
                                 <td class="text-right uang" >
                                    {{$data->disc}}
@@ -190,7 +200,7 @@
                             </tr>
                             <tr>
                                 <td class="text-right" style="border-top:solid darkgray 1px;" >
-                                    Total :
+                                    TOTAL :
                                 </td>
                                 <td class="label-total text-right uang" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
                                     {{$data->total}}
@@ -209,7 +219,7 @@
                             @endforeach
                             <tr>
                                 <td class="text-right" style="border-top:solid darkgray 1px;" >
-                                    Amount due :
+                                    AMOUNT DUE :
                                 </td>
                                 <td class="label-total text-right uang" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
                                     {{$data->amount_due}}
@@ -267,6 +277,20 @@
     $('#btn-reg-payment').click(function(){
         location.href = $(this).data('href');
     });
+
+
+
+    // BUTTON PRINT
+    // ====================================================
+    $('#btn-print-pdf').click(function(){
+        alert('print pdf');
+    });
+
+    $('#btn-direct-print').click(function(){
+        alert('direct printing');
+    });
+    // ====================================================
+    // END BUTTON PRINT
 
 })(jQuery);
 </script>

@@ -17,7 +17,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Customer Invoices
+        Supplier Bills
     </h1>
 </section>
 
@@ -27,55 +27,71 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Customer Invoices</h3></label>
+            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Supplier Bills</h3></label>
 
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >
                     <tr>
-                        <td class="bg-orange text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
-                        <td style="padding-left: 10px;padding-right: 5px;">
-                            AMOUNT DUE
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"  style="padding-right: 5px;  width: 125px;" >
-                            <label class="uang">{{$amount_due}}</label>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="pull-right" style="margin-right: 5px;" >
-                <table style="background-color: #ECF0F5;" >
-                    <tr>
                         <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
-                            PAID
+                            <label>AMOUNT DUE</label>
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-right"  style="padding-right: 5px;  width: 125px;" >
-                            <label class="uang">{{$paid}}</label>
+                        <td class="text-right"  style="padding-right: 5px;" >
+                            {{number_format($amount_due,0,'.',',')}}
                         </td>
                     </tr>
                 </table>
             </div>
-            <div class="pull-right" style="margin-right: 5px;" >
-                <table style="background-color: #ECF0F5;" >
-                    <tr>
-                        <td class="bg-blue text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
-                        <td style="padding-left: 10px;padding-right: 5px;">
-                            TOTAL
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"  style="padding-right: 5px; width: 125px;" >
-                            <label class="uang" style="padding-left: 10px;" >{{$total}}</label>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            {{-- <div class="row" > --}}
+
+                {{-- <div class="col-sm-6 col-md-6 col-lg-6" > --}}
+                    {{-- <a class="btn btn-primary btn-sm" id="btn-add" href="invoice/supplier/bill/create" >Create</a> --}}
+                    {{-- <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a> --}}
+
+                {{-- </div> --}}
+                {{-- <div class="col-sm-6 col-md-6 col-lg-6" > --}}
+                    {{-- Filter section --}}
+                    {{-- <div class="input-group">
+                        <span class="input-group-addon bg-gray" >
+                            Filter
+                        </span>
+                        <div class="input-group-btn" style="width: 30%;" >
+                            <select name="select_filter_by" class="form-control" >
+                                <option value="order_number" >Nomor Order</option>
+                                <option value="order_date" >Tanggal</option>
+                                <option value="supplier" >Customer</option>
+                                <option value="pekerjaan" >Pekerjaan</option>
+                                <option disabled>──────────</option>
+                                <option value="O" >OPEN</option>
+                                <option value="V" >VALIDATED</option>
+                                <option value="P" >PAID</option>
+
+                            </select>
+                        </div> --}}<!-- /btn-group -->
+
+                        {{-- Filter by string --}}
+                        {{-- <input type="text" name="filter_string" class="form-control input-filter "> --}}
+
+                        {{-- Filter by date --}}
+                        {{-- <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" > --}}
+                            {{-- <input type="text" name="input_filter_date_start" class="form-control input-tanggal"> --}}
+                        {{-- </div>
+                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
+ --}}
+                        {{-- Filter submit button --}}
+                        {{-- <div class="input-group-btn" >
+                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
+                        </div>
+
+                    </div> --}}
+                    {{-- End of filter section --}}
+                {{-- </div> --}}
+            {{-- </div> --}}
         </div>
         <div class="box-body">
+            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
@@ -85,19 +101,17 @@
                         {{-- <th style="width:25px;">No</th> --}}
                         <th>Ref#</th>
                         <th>Customer</th>
-                        <th>Pekerjaan</th>
-                        <th>SO Date</th>
-                        <th>SO Ref#</th>
-                        <th>Kalkulasi</th>
+                        <th>PO Date</th>
+                        <th>PO Ref#</th>
                         <th>Total</th>
                         <th>Amount Due</th>
                         <th>Status</th>
-                        <th style="width: 25px;" ></th>
+                        <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
-                    <tr data-id="{{$dt->id}}">
+                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         {{-- <td class="text-center" >
                             @if($dt->status == 'O')
                                 <input type="checkbox" class="ck_row" >
@@ -105,32 +119,16 @@
                         </td> --}}
                         {{-- <td class="row-to-edit text-right" >{{$rownum++}}</td> --}}
                         <td class="row-to-edit" >
-                            {{$dt->inv_number}}
+                            {{$dt->bill_number}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->customer}}
-                        </td>
-                        <td class="row-to-edit" >
-                            @if($dt->pekerjaan)
-                                {{$dt->pekerjaan}}
-                            @else
-                                -
-                            @endif
+                            {{'[' . $dt->kode_supplier . '] ' . $dt->supplier}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
-                        </td>
-                        <td class="row-to-edit" >
-                            @if($dt->kalkulasi == 'K')
-                                Kubikasi
-                            @elseif($dt->kalkulasi == 'T')
-                                Tonase
-                            @else
-                                Ritase
-                            @endif
                         </td>
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
@@ -139,23 +137,25 @@
                             {{$dt->amount_due}}
                         </td>
                         <td class="row-to-edit" >
-                            @if($dt->status == 'D')
-                                DRAFT
-                            @elseif($dt->status == 'O')
+                            @if($dt->status == 'O')
                                 OPEN
                             @elseif($dt->status == 'V')
                                 VALIDATED
-                            @elseif($dt->status == 'P')
+                            @else
                                 PAID
                             @endif    
                         </td>
                         <td class="text-center" >
-                            <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            <a class="btn btn-primary btn-xs" href="invoice/supplier/bill/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="text-right" >
+                {{$data->render()}}
+            </div>
 
         </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -183,7 +183,7 @@
         $('.input-filter').removeClass('hide');
         $('.input-filter').hide();
 
-        if(filter_by == 'order_number' || filter_by == 'customer' || filter_by == 'pekerjaan' ){
+        if(filter_by == 'order_number' || filter_by == 'supplier' || filter_by == 'pekerjaan' ){
             $('input[name=filter_string]').show();
         }else if(filter_by == 'order_date'){
             $('.input-filter-by-date').show();
@@ -191,7 +191,7 @@
             // order by status open, validated, done
             // otomatis submit tanpa tombol click
             var filter_by = $('select[name=select_filter_by]').val();
-            var formFilter = $('<form>').attr('method','GET').attr('action','invoice/customer/filter');
+            var formFilter = $('<form>').attr('method','GET').attr('action','invoice/supplier/bill/filter');
             formFilter.append($('<input>').attr('type','hidden').attr('name','filter_by').val(filter_by));
             formFilter.submit();
         }
@@ -200,7 +200,7 @@
 
     $('#btn-submit-filter').click(function(){
         var filter_by = $('select[name=select_filter_by]').val();
-        var formFilter = $('<form>').attr('method','GET').attr('action','invoice/customer/filter');
+        var formFilter = $('<form>').attr('method','GET').attr('action','invoice/supplier/bill/filter');
 
         if(filter_by == 'order_date'){
             formFilter.append($('<input>').attr('type','hidden').attr('name','date_start').val($('input[name=input_filter_date_start]').val()));
@@ -240,9 +240,20 @@
     });
     // END OF SET DATEPICKER
 
-    var TBL_DATA = $('#table-data').DataTable({
-        sort:false
-    });
+    // var TBL_KATEGORI = $('#table-data').DataTable({
+    //     "columns": [
+    //         {className: "text-center","orderable": false},
+    //         {className: "text-right"},
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         {className: "text-center"},
+    //         // {className: "text-center"}
+    //     ],
+    //     order: [[ 1, 'asc' ]],
+    // });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){
@@ -275,7 +286,7 @@
     $('.row-to-edit').click(function(){        
         var row = $(this).parent();        
         var data_id = row.data('id');            
-        location.href = 'invoice/customer/edit/' + data_id ;        
+        location.href = 'invoice/supplier/bill/edit/' + data_id ;        
     });
 
     // Delete Data Lokasi
@@ -289,7 +300,7 @@
                 dataid.push(newdata);
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','invoice/customer/delete');
+            var deleteForm = $('<form>').attr('method','POST').attr('action','invoice/supplier/bill/delete');
             deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
             deleteForm.submit();
         }

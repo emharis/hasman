@@ -38,8 +38,8 @@
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:25px;">No</th>
-                        <th>DO Number</th>
+                        {{-- <th style="width:25px;">No</th> --}}
+                        <th>Ref#</th>
                         <th>Material</th>
                         {{-- <th>Driver</th> --}}
                         {{-- <th>Armada</th> --}}
@@ -54,7 +54,7 @@
                    @foreach($delivery_order as $dt)
                         @for($i=0;$i<$dt->qty;$i++)
                             <tr>
-                                <td>{{$rownum++}}</td>
+                                {{-- <td>{{$rownum++}}</td> --}}
                                 <td>{{$dt->delivery_order_number}}</td>
                                 <td>
                                     {{'['.$dt->kode_material.'] '.$dt->material}}
@@ -121,19 +121,20 @@
 <script type="text/javascript">
 (function ($) {
 
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
+    var TBL_DATA = $('#table-data').DataTable({
+        // "columns": [
+        //     {className: "text-center","orderable": false},
+        //     {className: "text-right"},
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     {className: "text-center"},
+        //     // {className: "text-center"}
+        // ],
+        // order: [[ 1, 'asc' ]],
+        sort:false
+    });
 
    
 

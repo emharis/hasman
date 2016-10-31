@@ -8,16 +8,29 @@ use App\Http\Controllers\Controller;
 
 class SalesOrderController extends Controller
 {
+	// public function index(){
+	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+
+	// 	$data = \DB::table('VIEW_SALES_ORDER')
+	// 				->orderBy('order_date','desc')
+	// 				->paginate($paging_item_number);
+		
+	// 	return view('sales.order.index',[
+	// 			'data' => $data,
+	// 			'paging_item_number' => $paging_item_number
+	// 		]);
+	// }
+
 	public function index(){
-		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
 		$data = \DB::table('VIEW_SALES_ORDER')
 					->orderBy('order_date','desc')
-					->paginate($paging_item_number);
+					->get();
 		
 		return view('sales.order.index',[
 				'data' => $data,
-				'paging_item_number' => $paging_item_number
+				// 'paging_item_number' => $paging_item_number
 			]);
 	}
 
@@ -372,15 +385,19 @@ class SalesOrderController extends Controller
 
 	public function reconcile($id){
 		return \DB::transaction(function()use($id){
-			// delete customer invoice
-			\DB::table('customer_invoices')->where('order_id',$id)->delete();
-			// delete delivery order
-			\DB::table('delivery_order')->where('sales_order_id',$id)->delete();
-			// update status sales order
-			\DB::table('sales_order')->where('id',$id)->update([
-					'status' => 'O'
-				]);
-			return redirect()->back();
+			// // delete customer invoice
+			// \DB::table('customer_invoices')->where('order_id',$id)->delete();
+			// // delete delivery order
+			// \DB::table('delivery_order')->where('sales_order_id',$id)->delete();
+			// // update status sales order
+			// \DB::table('sales_order')->where('id',$id)->update([
+			// 		'status' => 'O'
+			// 	]);
+
+			// delete sales_order
+			\DB::table('sales_order')->delete($id);
+
+			return redirect('sales/order');
 		});
 	}
 

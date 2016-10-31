@@ -63,7 +63,7 @@
             {{-- <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a> --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
+            <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'P' ? 'bg-blue' : 'bg-gray'}}" >Paid</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
@@ -86,7 +86,7 @@
                                 </td>
                                 <td class="col-lg-2" ></td>
                                 <td class="col-lg-2" >
-                                    <label>Order Number</label>
+                                    <label>Purchase Order Ref#</label>
                                 </td>
                                 <td class="col-lg-2" >
                                     {{$data->order_number}}
@@ -171,13 +171,31 @@
                                     {{$data->total}}
                                 </td>
                             </tr>
+                            @foreach($payments as $pay)
+                            <tr style="background-color:#EEF0F0;">
+                                    <td class="text-right">
+                                        <i>Paid on {{$pay->payment_date_formatted}}</i> :
+                                    </td>
+                                    <td class="text-right">
+                                        <i><span class="uang" >{{$pay->payment_amount}}</span></i>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <td class="text-right" style="border-top:solid darkgray 1px;" >
+                                    Amount due :
+                                </td>
+                                <td class="label-total text-right uang" style="font-size:18px;font-weight:bold;border-top:solid darkgray 1px;" >
+                                    {{$data->amount_due}}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>            
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="purchase/order/invoices/{{$purchase_order->id}}" >Close</a>
+            <a class="btn btn-danger" href="purchase/order/edit/{{$purchase_order->id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 

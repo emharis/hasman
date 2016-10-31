@@ -751,6 +751,8 @@
             // && so_master.pekerjaan_id != null 
             && so_material.material.length > 0){
 
+            $(this).attr('disabled','disabled');
+
             var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert');
                 newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
                 newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));

@@ -53,22 +53,25 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status == 'O') 
-                <button class="btn btn-primary btn-sm" id="btn-validate" >Validate</button>
+                <button class="btn btn-primary" id="btn-validate" >Validate</button>
             @else
-                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/customer/reconcile/{{$data->id}}" >Reconcile</button>
+                {{-- <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="invoice/customer/reconcile/{{$data->id}}" >Reconcile</button> --}}
                 @if($data->status != 'P')
-                    <a class="btn btn-primary btn-sm" id="btn-register-payment" href="invoice/customer/register-payment/{{$data->id}}" >Register Payment</a>
+                    <a class="btn btn-primary" id="btn-register-payment" href="invoice/customer/register-payment/{{$data->id}}" >Register Payment</a>
                 @endif
             @endif
-            <div class="btn-group">
-              <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Print <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#">Direct Print</a></li>
-                <li><a href="#">PDF</a></li>
-              </ul>
-            </div>
+            
+            @if($data->status != "O")
+                <div class="btn-group">
+                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Print <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Direct Print</a></li>
+                    <li><a href="#">PDF</a></li>
+                  </ul>
+                </div>
+            @endif
             
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
@@ -78,8 +81,10 @@
             <a class="btn  btn-arrow-right pull-right disabled {{$data->status == 'V' ? 'bg-blue' : 'bg-gray'}}" >Validated</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-
             <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'O' ? 'bg-blue' : 'bg-gray'}}"" >Open</a>
+
+            {{-- <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
+            <a class="btn btn-arrow-right pull-right disabled {{$data->status == 'D' ? 'bg-blue' : 'bg-gray'}}"" >Draft</a> --}}
 
         </div>
         <div class="box-body">
@@ -407,9 +412,9 @@
     // VALIDATE INVOICE 
     $('#btn-validate').click(function(){
         var invoice_id = $('input[name=customer_invoice_id]').val();
-        if(confirm("Anda akan mem-validasi data ini? pastikan data sudah benar & valid, data tidak dapat dirubah setelah proses ini.")){
+        // if(confirm("Anda akan mem-validasi data ini? pastikan data sudah benar & valid, data tidak dapat dirubah setelah proses ini.")){
             location.href = "invoice/customer/validate/" + invoice_id;
-        }
+        // }
     });
 
     // -----------------------------------------------------

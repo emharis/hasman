@@ -604,6 +604,7 @@
 
     // BTN SAVE TRANSACTION
     $('#btn-save').click(function(){
+
         // cek kelengkapan data
         var po_master = {"supplier_id":"",
                          // "purchaseperson_id":"",
@@ -675,6 +676,8 @@
             // && po_master.pekerjaan_id != null
             && po_product.product.length > 0){
 
+            $(this).attr('disabled','disabled');
+
             var newform = $('<form>').attr('method','POST').attr('action','purchase/order/insert');
                 newform.append($('<input>').attr('type','hidden').attr('name','po_master').val(JSON.stringify(po_master)));
                 newform.append($('<input>').attr('type','hidden').attr('name','po_product').val(JSON.stringify(po_product)));
@@ -709,15 +712,6 @@
     });
     // END OF SAVE ADD PEKERJAAN
 
-
-
-
-
-    // // $('#btn-test').click(function(){
-    // //     hitungTotal();
-    // //     return false;
-    // // });
-    // // END OF FUNGSI HITUNG TOTAL KESELURUHAN
 
 })(jQuery);
 </script>

@@ -47,14 +47,16 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            @if($data_master->status != 'D')
-                <button class="btn btn-danger btn-sm" id="btn-reconcile" data-href="sales/order/reconcile/{{$data_master->id}}" >Reconcile</button> 
-
-                <a class="btn btn-primary btn-sm" id="btn-validate" href="sales/order/set-to-done/{{$data_master->id}}" >Set to done</a>
-
-            @endif
-
-            <button class="btn btn-success btn-sm" >Print</button>
+            <button class="btn btn-danger" id="btn-reconcile" data-href="sales/order/reconcile/{{$data_master->id}}" >Cancel Order</button> 
+            <div class="btn-group ">
+                <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  Print <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" onclick="return false;" id="btn-direct-print" >Direct Print</a></li>
+                  <li><a href="#" onclick="return false;" id="btn-print-pdf" >PDF</a></li>
+                </ul>
+            </div>
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
@@ -137,7 +139,7 @@
             <table id="table-product" class="table table-bordered table-condensed" >
                 <thead>
                     <tr>
-                        <th style="width:25px;" >NO</th>
+                        {{-- <th style="width:25px;" >NO</th> --}}
                         <th  >MATERIAL</th>
                         <th class="col-lg-1" >QUANTITY</th>
                     </tr>
@@ -146,7 +148,7 @@
                     <?php $rownum=1; ?>
                     @foreach($data_detail as $dt)
                         <tr class="row-product"  >
-                            <td class="text-right" >{{$rownum++}}</td>
+                            {{-- <td class="text-right" >{{$rownum++}}</td> --}}
                             <td>
                                 {{'['.$dt->kode_material.'] ' . $dt->material}}
                             </td>
@@ -182,6 +184,18 @@
             location.href = $(this).data('href');
         }
     });
+
+    // BUTTON PRINT
+    // ====================================================
+    $('#btn-print-pdf').click(function(){
+        alert('print pdf');
+    });
+
+    $('#btn-direct-print').click(function(){
+        alert('direct printing');
+    });
+    // ====================================================
+    // END BUTTON PRINT
 
 })(jQuery);
 </script>

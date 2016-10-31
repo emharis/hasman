@@ -8,17 +8,33 @@ use App\Http\Controllers\Controller;
 
 class SupplierBillController extends Controller
 {
-	public function index(){
-		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+	// public function index(){
+	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
+	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
+	// 		// ->where('status','=','O')
+	// 		->orderBy('order_date','desc')
+	// 		->paginate($paging_item_number);
+	// 	$amount_due = \DB::table('supplier_bill')->sum('amount_due');
+
+	// 	return view('invoice.supplier.index',[
+	// 			'data' => $data,
+	// 			'paging_item_number' => $paging_item_number,
+	// 			'amount_due' => $amount_due
+	// 		]);
+	// }
+
+	public function index(){
 		$data = \DB::table('VIEW_SUPPLIER_BILL')
 			// ->where('status','=','O')
 			->orderBy('order_date','desc')
-			->paginate($paging_item_number);
+			->get();
+		$amount_due = \DB::table('supplier_bill')->sum('amount_due');
 
 		return view('invoice.supplier.index',[
 				'data' => $data,
-				'paging_item_number' => $paging_item_number
+				// 'paging_item_number' => $paging_item_number,
+				'amount_due' => $amount_due
 			]);
 	}
 
@@ -88,6 +104,18 @@ class SupplierBillController extends Controller
 					->update([
 							'status' => 'P'
 						]);
+
+			// update status purchase order ke Done jiak pembayaran telah lunas
+			$bill = \DB::table('supplier_bill')
+					->find($req->supplier_bill_id);
+			if($bill->status == 'P'){
+				\DB::table('purchase_order')
+					->whereId($bill->purchase_order_id)
+					->update([
+							'status' => 'D'
+						]);
+			}
+
 			return redirect('invoice/supplier/bill/edit/'.$req->supplier_bill_id);
 		});
 	}

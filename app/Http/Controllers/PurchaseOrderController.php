@@ -9,15 +9,21 @@ use App\Http\Controllers\Controller;
 class PurchaseOrderController extends Controller
 {
 	public function index(){
-		$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+
+		// $data = \DB::table('VIEW_PURCHASE_ORDER')
+		// 			->orderBy('order_date','desc')
+		// 			->paginate($paging_item_number);
 
 		$data = \DB::table('VIEW_PURCHASE_ORDER')
 					->orderBy('order_date','desc')
-					->paginate($paging_item_number);
+					->get();
+		$amount_due = \DB::table('supplier_bill')->sum('amount_due');
 
 		return view('purchase.order.index',[
 				'data' => $data,
-				'paging_item_number' => $paging_item_number
+				'amount_due' => $amount_due,
+				// 'paging_item_number' => $paging_item_number
 			]);
 	}
 
@@ -79,6 +85,7 @@ class PurchaseOrderController extends Controller
 	public function edit($id){
 		$data_master = \DB::table('VIEW_PURCHASE_ORDER')->find($id);
 		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')->where('purchase_order_id',$id)->get();
+		
 
 		// $pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('supplier_id',$data_master->supplier_id)->get();
 		// $select_pekerjaan = [];
@@ -87,31 +94,27 @@ class PurchaseOrderController extends Controller
 		// }
 
 		if($data_master->status == 'O'){
-			return view('purchase.order.edit',[
-				'data_master' => $data_master,
-				'data_detail' => $data_detail,
-				// 'select_pekerjaan' => $select_pekerjaan
-			]);
-		}elseif($data_master->status == 'V' ){
+			// return view('purchase.order.edit',[
+			// 	'data_master' => $data_master,
+			// 	'data_detail' => $data_detail,
+			// 	// 'select_pekerjaan' => $select_pekerjaan
+			// ]);
+			$view = 'purchase.order.edit';
+		}elseif($data_master->status == 'V' || $data_master->status == 'D' ){
 		// // }elseif($data_master->status == 'V'){
 		// 	// get jumlah DO
 		// 	$delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
-			return view('purchase.order.validated',[
-					'data_master' => $data_master,
-					'data_detail' => $data_detail,
-					]);
-		}elseif($data_master->status == 'D'){
-			// $delivery_order_count = \DB::table('delivery_order')->where('purchase_order_id',$id)->count();
-			// $invoices_count = \DB::table('supplier_invoices')->where('order_id',$id)->count();
 			// return view('purchase.order.validated',[
 			// 		'data_master' => $data_master,
 			// 		'data_detail' => $data_detail,
-			// 		'select_pekerjaan' => $select_pekerjaan,
-			// 		'delivery_order_count' => $delivery_order_count,
-			// 		'invoices_count' => $invoices_count,
-			// 	]);
+			// 		]);
+			$view = 'purchase.order.validated';
 		}
 
+		return view($view,[
+						'data_master' => $data_master,
+						'data_detail' => $data_detail,
+					]);
 
 	}
 
@@ -405,12 +408,14 @@ class PurchaseOrderController extends Controller
 		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
 				->where('purchase_order_id',$purchase_order_id)
 				->get();
+		$payments = \DB::table('VIEW_SUPPLIER_PAYMENT')->where('supplier_bill_id',$data->id)->get();
 
 
 		return view('purchase.order.invoice-show',[
 				'data' => $data,
 				'data_detail' => $data_detail,
 				'purchase_order' => $purchase_order,
+				'payments' => $payments
 			]);
 	}
 
@@ -428,9 +433,9 @@ class PurchaseOrderController extends Controller
 	public function cancelOrder($purchase_order_id){
 		return \DB::transaction(function()use($purchase_order_id){
 			// delete supplier bill
-			\DB::table('supplier_bill')
-					->where('purchase_order_id',$purchase_order_id)
-					->delete();
+			// \DB::table('supplier_bill')
+			// 		->where('purchase_order_id',$purchase_order_id)
+			// 		->delete();
 
 			// delete purchase order
 			\DB::table('purchase_order')->delete($purchase_order_id);

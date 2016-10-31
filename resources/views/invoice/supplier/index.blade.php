@@ -27,64 +27,33 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <div class="row" >
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- <a class="btn btn-primary btn-sm" id="btn-add" href="invoice/supplier/bill/create" >Create</a> --}}
-                    {{-- <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a> --}}
-                    <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Supplier Bills</h3></label>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- Filter section --}}
-                    <div class="input-group">
-                        <span class="input-group-addon bg-gray" >
-                            Filter
-                        </span>
-                        <div class="input-group-btn" style="width: 30%;" >
-                            <select name="select_filter_by" class="form-control" >
-                                <option value="order_number" >Nomor Order</option>
-                                <option value="order_date" >Tanggal</option>
-                                <option value="supplier" >Customer</option>
-                                <option value="pekerjaan" >Pekerjaan</option>
-                                <option disabled>──────────</option>
-                                <option value="O" >OPEN</option>
-                                <option value="V" >VALIDATED</option>
-                                <option value="P" >PAID</option>
+            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Supplier Bills</h3></label>
 
-                            </select>
-                        </div><!-- /btn-group -->
-
-                        {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter ">
-
-                        {{-- Filter by date --}}
-                        <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
-                            <input type="text" name="input_filter_date_start" class="form-control input-tanggal">
-                        </div>
-                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
-
-                        {{-- Filter submit button --}}
-                        <div class="input-group-btn" >
-                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
-                        </div>
-
-                    </div>
-                    {{-- End of filter section --}}
-                </div>
+            <div class="pull-right" >
+                <table style="background-color: #ECF0F5;" >
+                    <tr>
+                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
+                        <td style="padding-left: 10px;padding-right: 5px;">
+                            AMOUNT DUE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"  style="padding-right: 5px;" >
+                            <label class="uang" >{{$amount_due}}</label>
+                        </td>
+                    </tr>
+                </table>
             </div>
+            
         </div>
         <div class="box-body">
-            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        {{-- <th style="width:25px;" class="text-center">
-                            <input type="checkbox" name="ck_all" >
-                        </th> --}}
-                        <th style="width:25px;">No</th>
-                        <th>Number</th>
+                        <th>Ref#</th>
                         <th>Customer</th>
-                        <th>Order Date</th>
-                        <th>Order Number</th>
+                        <th>PO Date</th>
+                        <th>PO Ref#</th>
                         <th>Total</th>
                         <th>Amount Due</th>
                         <th>Status</th>
@@ -93,18 +62,13 @@
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
-                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
-                        {{-- <td class="text-center" >
-                            @if($dt->status == 'O')
-                                <input type="checkbox" class="ck_row" >
-                            @endif
-                        </td> --}}
-                        <td class="row-to-edit text-right" >{{$rownum++}}</td>
+                    <tr  data-id="{{$dt->id}}">
+                        
                         <td class="row-to-edit" >
-                            {{$dt->order_number}}
+                            {{$dt->bill_number}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->supplier}}
+                            {{'[' . $dt->kode_supplier . '] ' . $dt->supplier}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}
@@ -134,10 +98,6 @@
                     @endforeach
                 </tbody>
             </table>
-
-            <div class="text-right" >
-                {{$data->render()}}
-            </div>
 
         </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -222,20 +182,9 @@
     });
     // END OF SET DATEPICKER
 
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
+    var TBL_DATA = $('#table-data').DataTable({
+        sort:false
+    });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){

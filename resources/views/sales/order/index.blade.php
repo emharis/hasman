@@ -27,61 +27,19 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <div class="row" >
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
-                    <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6" >
-                    {{-- Filter section --}}
-                    <div class="input-group">
-                        <span class="input-group-addon bg-gray" >
-                            Filter
-                        </span>
-                        <div class="input-group-btn" style="width: 30%;" >
-                            <select name="select_filter_by" class="form-control" >
-                                <option value="order_number" >Nomor Order</option>
-                                <option value="order_date" >Tanggal</option>
-                                <option value="customer" >Customer</option>
-                                <option value="pekerjaan" >Pekerjaan</option>
-                                <option disabled>──────────</option>
-                                <option value="O" >OPEN</option>
-                                <option value="V" >VALIDATED</option>
-                                <option value="D" >DONE</option>
-
-                            </select>
-                        </div><!-- /btn-group -->
-
-                        {{-- Filter by string --}}
-                        <input type="text" name="filter_string" class="form-control input-filter ">
-
-                        {{-- Filter by date --}}
-                        <div class="input-group-btn input-filter-by-date hide input-filter " style="width: 30%;" >
-                            <input type="text" name="input_filter_date_start" class="form-control input-tanggal">
-                        </div>
-                        <input type="text" name="input_filter_date_end" class="form-control input-filter  input-tanggal input-filter-by-date hide">
-
-                        {{-- Filter submit button --}}
-                        <div class="input-group-btn" >
-                            <button class="btn btn-success" id="btn-submit-filter" ><i class="fa fa-search" ></i></button>
-                        </div>
-
-                    </div>
-                    {{-- End of filter section --}}
-                </div>
-            </div>
+            <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
+            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
         </div>
         <div class="box-body">
-            <?php $rownum = ($data->currentPage() - 1 ) * $paging_item_number + 1 ; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
                         <th style="width:25px;" class="text-center">
                             <input type="checkbox" name="ck_all" >
                         </th>
-                        <th style="width:25px;">No</th>
-                        <th>Nomor Order</th>
-                        <th>Tanggal</th>
+                        {{-- <th style="width:25px;">No</th> --}}
+                        <th>Ref#</th>
+                        <th>Date</th>
                         <th>Customer</th>
                         <th>Pekerjaan</th>
                         <th>Status</th>
@@ -90,14 +48,14 @@
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
-                    <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
+                    <tr data-id="{{$dt->id}}">
                         <td class="text-center" >
                             @if($dt->status == 'O')
                                 <input type="checkbox" class="ck_row" >
                             @endif
                         </td>
-                        <td class="row-to-edit text-right" >{{$rownum++}}</td>
-                        <td class="row-to-edit" >
+                        {{-- <td class="row-to-edit text-right" >{{$rownum++}}</td> --}}
+                        <td class="" >
                             {{$dt->order_number}}
                         </td>
                         <td class="row-to-edit" >
@@ -129,10 +87,6 @@
                     @endforeach
                 </tbody>
             </table>
-
-            <div class="text-right" >
-                {{$data->render()}}
-            </div>
 
         </div><!-- /.box-body -->
     </div><!-- /.box -->

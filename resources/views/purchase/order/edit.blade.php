@@ -247,7 +247,7 @@
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" >Close</a>
         </div>
     </div><!-- /.box -->
 
@@ -722,6 +722,8 @@
             // && po_master.pekerjaan_id != "" 
             // && po_master.pekerjaan_id != null 
             && po_product.product.length > 0){
+
+            $(this).attr('disabled','disabled');
 
             var newform = $('<form>').attr('method','POST').attr('action','purchase/order/update');
                 newform.append($('<input>').attr('type','hidden').attr('name','po_master').val(JSON.stringify(po_master)));
