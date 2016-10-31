@@ -69,9 +69,9 @@
                         <td>{{$dt->end_date_formatted}}</td>
                         <td class="text-center" >
                           @if($dt->status == 'O')
-                            <label class="label label-warning" >Open</label>
+                            <label class="label label-warning" >OPEN</label>
                           @else
-                            <label class="label label-success" >Paid</label>
+                            <label class="label label-success" >PAID</label>
                           @endif
                         </td>
                         <td class="uang text-right" >{{$dt->saldo}}</td>
