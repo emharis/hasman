@@ -27,9 +27,14 @@ class SalesOrderController extends Controller
 		$data = \DB::table('VIEW_SALES_ORDER')
 					->orderBy('order_date','desc')
 					->get();
+		$delivery_to_do = \DB::table('delivery_order')
+							->where('status','!=' ,'V')
+							->where('status','!=' ,'DN')
+							->count();
 		
 		return view('sales.order.index',[
 				'data' => $data,
+				'delivery_to_do' => $delivery_to_do
 				// 'paging_item_number' => $paging_item_number
 			]);
 	}

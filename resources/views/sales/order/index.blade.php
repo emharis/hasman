@@ -29,6 +29,22 @@
         <div class="box-header with-border" >
             <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
             <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+
+            <div class="pull-right" >
+                <table style="background-color: #ECF0F5;" >
+                    <tr>
+                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="fa fa-truck" ></i></td>
+                        <td style="padding-left: 10px;padding-right: 5px;">
+                            DELIVERY TO DO
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"  style="padding-right: 5px;" >
+                            <label>{{$delivery_to_do}}</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
