@@ -148,6 +148,10 @@
                 </ul>
             </li>
 
+            <li style="background-color: #DD4B39;" >
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <i class="fa fa-bars" class=""></i> <span>Minimize Menu</span> </a>
+            </li>
+
         </ul>
     </section>
     <!-- /.sidebar -->
