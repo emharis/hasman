@@ -156,20 +156,21 @@
     });
     // END OF SET DATEPICKER
 
-    // var TBL_KATEGORI = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-center","orderable": false},
-    //         {className: "text-right"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         {className: "text-center"},
-    //         // {className: "text-center"}
-    //     ],
-    //     order: [[ 1, 'asc' ]],
-    // });
+    var TBL_KATEGORI = $('#table-data').DataTable({
+        // "columns": [
+        //     {className: "text-center","orderable": false},
+        //     {className: "text-right"},
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     {className: "text-center"},
+        //     // {className: "text-center"}
+        // ],
+        // order: [[ 1, 'asc' ]],
+        sort:false
+    });
 
     // check all checkbox
     $('input[name=ck_all]').change(function(){
