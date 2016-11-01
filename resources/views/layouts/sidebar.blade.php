@@ -62,7 +62,7 @@
             </li> --}}
 
             <li class="{{Request::is('delivery*') ? 'active':''}}" >
-                <a href="purchase/order"> <i class="fa fa-truck"></i> <span>Delivery Orders</span> </a>
+                <a href="delivery/order"> <i class="fa fa-truck"></i> <span>Delivery Orders</span> </a>
             </li>
 
             {{-- <li class="treeview {{Request::is('delivery/*') ? 'active':''}}" >
