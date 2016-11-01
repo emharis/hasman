@@ -1,10 +1,10 @@
 <header class="main-header">
     <!-- Logo -->
-    <a  class="logo" style="background-color: #1A2226;" >
+    <a  class="logo" style="background-color: #222D32;" >
         <!-- mini logo for sidebar mini 50x50 pixels -->
         {{-- <span class="logo-mini"><b>HM</b></span> --}}
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg" style="color: #3B5D61;font-size: 0.7em;" ><b>MAIN NAVIGATION</b></span>
+        <span class="logo-lg" style="color: #E0EDF4;font-size: 0.7em;" ><b>MAIN NAVIGATION</b></span>
 
     </a>
     <!-- Header Navbar: style can be found in header.less -->
