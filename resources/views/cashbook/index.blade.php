@@ -48,12 +48,12 @@
                     <tr>
                         <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
-                            <label>TOTAL BALANCE</label>
+                            TOTAL BALANCE
                         </td>
                     </tr>
                     <tr>
                         <td class="text-right"  style="padding-right: 5px;" >
-                            {{number_format($balance,0,'.',',')}}
+                            <label>{{number_format($balance,0,'.',',')}}</label>
                         </td>
                     </tr>
                 </table>

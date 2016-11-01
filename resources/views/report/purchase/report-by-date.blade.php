@@ -27,10 +27,10 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border"  >
-            <h3 class="box-title">Purchase Order Report <i class="ft-excafator" ></i></h3>
+            <h3 class="box-title">Purchase Order Report</h3>
               <div class="box-tools pull-right">
                 <div class="btn-group pull-right">
-                  <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Print <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
@@ -42,7 +42,7 @@
               </div>
         </div>
         <div class="box-body">
-            <div class="row" >
+            {{-- <div class="row" >
                 <div class="col-sm-3 col-md-3 col-lg-3" >
                     <img src="img/logo.png" class="col-sm-12" >
                 </div>
@@ -51,22 +51,22 @@
                     <label class="pull-right" ><h3><i class="ft-rupiah" ></i> Purchase Order Report</h3></label>
 
                 </div>
-            </div>
+            </div> --}}
 
             <table class="table" >
                 <tbody>
                     <tr>
                         <td class="col-sm-2 col-md-2 col-lg-2">
-                            <label>Start Date :</label>
+                            <label>Start Date : </label>
                         </td>
                         <td  >
-                            {{-- {{$start_date}} --}}
+                            {{$start_date}}
                         </td>
                         <td class="col-sm-2 col-md-2 col-lg-2" >
                             <label>End Date :</label>
                         </td>
                         <td  >
-                            {{-- {{$end_date}}     --}}
+                            {{$end_date}}    
                         </td>
                         <td></td>
                     </tr>
