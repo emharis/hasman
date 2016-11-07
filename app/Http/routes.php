@@ -240,9 +240,13 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('order/reconcile/{id}','SalesOrderController@reconcile');
         Route::get('order/invoices/{sales_order_id}','SalesOrderController@invoices');
         Route::get('order/invoices/show/{invoice_id}','SalesOrderController@showInvoice');
+        Route::post('order/update-direct-sales','SalesOrderController@updateDirectSales');
+        Route::get('order/validate-direct-sales/{sales_order_id}','SalesOrderController@validateDirectSalesOrder');
 
 
         // DIRECT SALES
+        Route::post('order/insert-direct-sales','SalesOrderController@insertDirectSales');
+
     });
 
     Route::group(['prefix' => 'delivery'], function () {
@@ -283,7 +287,11 @@ Route::group(['middleware' => ['web','auth']], function () {
         // REPORT PURCHASE
         Route::get('purchase','ReportPurchaseController@index');
         Route::post('purchase/filter-by-date','ReportPurchaseController@filterByDate');
+        Route::post('purchase/filter-by-date-n-supplier','ReportPurchaseController@filterByDateNSupplier');
         Route::get('purchase/filter-by-date/pdf/{start}/{end}','ReportPurchaseController@filterByDateToPdf');
+
+        // REPORT SALES
+        Route::get('sales','ReportSalesController@index');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

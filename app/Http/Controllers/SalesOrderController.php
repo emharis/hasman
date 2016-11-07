@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Helpers\Helper;
 
 class SalesOrderController extends Controller
 {
@@ -93,12 +94,6 @@ class SalesOrderController extends Controller
 		});
 	}
 
-	public function insertDirectSales(Request $req){
-		\DB::transaction(function()use($req){
-
-
-		});
-	}
 
 	public function edit($id){
 		$data_master = \DB::table('VIEW_SALES_ORDER')->find($id);
@@ -108,6 +103,22 @@ class SalesOrderController extends Controller
 		$select_pekerjaan = [];
 		foreach($pekerjaan as $dt){
 			$select_pekerjaan[$dt->id] = $dt->nama;
+		}
+
+		// jika direct selling
+		if($data_master->is_direct_sales == 'Y'){
+			if($data_master->status == 'O'){
+				return view('sales.order.ds_edit',[
+					'data_master' => $data_master,
+					'data_detail' => $data_detail
+				]);
+			}elseif($data_master->status == 'V'){
+				return view('sales.order.ds_validated',[
+					'data_master' => $data_master,
+					'data_detail' => $data_detail
+				]);
+			}
+			
 		}
 
 		if($data_master->status == 'O'){
@@ -431,6 +442,139 @@ class SalesOrderController extends Controller
 				'data_detail' => $data_detail,
 				'sales_order' => $sales_order,
 			]);
+	}
+
+	// INSERT DIRECT SALES
+	public function insertDirectSales(Request $req){
+		return \DB::transaction(function()use($req){
+			$so_master = json_decode($req->so_master);
+            $so_material = json_decode($req->so_material)->material;
+
+            $so_counter = \DB::table('appsetting')->where('name','so_counter')->first()->value;
+            $so_prefix = \DB::table('appsetting')->where('name','so_prefix')->first()->value;
+            $so_number = $so_prefix . '/' . date('Y') . '/000' . $so_counter++;
+
+            // update so_counter
+            \DB::table('appsetting')->where('name','so_counter')->update(['value'=>$so_counter]);
+
+			// generate tanggal
+            $order_date = $so_master->order_date;
+            $arr_tgl = explode('-',$order_date);
+            $fix_order_date = new \DateTime();
+            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);     
+
+
+			// isnert master sales order
+			$sales_order_id = \DB::table('sales_order')
+								->insertGetId([
+										'order_number' => $so_number,
+										'order_date' => $fix_order_date,
+										'is_direct_sales' => 'Y',
+										'customer_id' => $so_master->customer_id,
+										// 'nama_customer' => $so_master->customer_name,
+										'nopol' => $so_master->nopol,
+									]);
+			// insert detail sales order
+			foreach($so_material as $dt){
+				\DB::table('sales_order_detail')
+					->insert([
+							'sales_order_id' => $sales_order_id,
+							'material_id' => $dt->id,
+							'qty' => $dt->qty,
+							'harga' => $dt->unit_price,
+							'total' => $dt->unit_price * $dt->qty,
+						]);
+			}
+
+			// langsung generate invoice
+
+			return redirect('sales/order/edit/' . $sales_order_id);
+			
+
+		});
+	}
+
+	public function updateDirectSales(Request $req){
+		return \DB::transaction(function()use($req){
+			$so_master = json_decode($req->so_master);
+            $so_material = json_decode($req->so_material)->material;
+
+			// generate tanggal
+            $order_date = $so_master->order_date;
+            $arr_tgl = explode('-',$order_date);
+            $fix_order_date = new \DateTime();
+            $fix_order_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);     
+
+
+			// update master sales
+			\DB::table('sales_order')
+				->where('id',$so_master->sales_order_id)
+				->update([
+						'order_date' => $fix_order_date,
+						// 'customer_id' => $so_master->customer,
+						'nopol' => $so_master->nopol,
+					]);
+			// delete data material yang lama
+			\DB::table('sales_order_detail')
+			->where('sales_order_id',$so_master->sales_order_id)
+			->delete();
+
+			// insert detail sales order yang baru
+			foreach($so_material as $dt){
+				\DB::table('sales_order_detail')
+					->insert([
+							'sales_order_id' => $so_master->sales_order_id,
+							'material_id' => $dt->id,
+							'qty' => $dt->qty,
+							'harga' => $dt->unit_price,
+							'total' => $dt->unit_price * $dt->qty,
+						]);
+			}
+
+			return redirect('sales/order/edit/' . $so_master->sales_order_id);
+
+		});
+	}
+
+	public function validateDirectSalesOrder($sales_order_id){
+		return \DB::transaction(function()use($sales_order_id){
+			\DB::table('sales_order')->where('id',$sales_order_id)->update([
+				'status' => 'V'
+			]);
+
+			// generate & insert delivery order for this sales order
+			$sales_order_detail = \DB::table('sales_order_detail')->where('sales_order_id',$sales_order_id)->get();
+
+			$total = \DB::table('sales_order_detail')->where('sales_order_id',$sales_order_id)->sum('total');
+			
+			// GENERATE INVOICE
+			// =======================================================================
+			$invoice_id = \DB::table('customer_invoices')->insertGetId([
+					'inv_number' => Helper::GenerateCustomerInvoiceNumber(),
+					'order_id' => $sales_order_id,
+					'total' => 	$total,
+					'amount_due' => $total,
+					'status' => 'O',
+					'kalkulasi' => 'R'
+				]);
+
+			// insert invoice detail
+			foreach($sales_order_detail as $dt){
+				\DB::table('customer_invoice_detail')->insert([
+						'customer_invoice_id' => $invoice_id,
+						'material_id' => $dt->material_id,
+						'kalkulasi' => 'R',
+						'unit_price' => $dt->harga,
+						'qty' => $dt->qty,
+						'total' => $dt->total
+					]);
+			}
+			
+
+		return redirect()->back();
+
+		});
+		// echo Helper::GenerateCustomerInvoiceNumber();
 	}
 
 

@@ -75,7 +75,7 @@
           <table id="table-presensi" class="table table-bordered ">
             <thead>
               <tr>
-                <th class="col-sm-1 col-md-1 col-lg-1" >No</th>
+                <th style="width:25px;" class="text-center">No</th>
                 <th class="col-sm-1 col-md-1 col-lg-1">Kode</th>
                 <th>Karyawan</th>
                 <th class="col-sm-1 col-md-1 col-lg-1 text-center" >

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Helpers\Helper;
 
 class DeliveryOrderController extends Controller
 {
@@ -326,13 +327,13 @@ class DeliveryOrderController extends Controller
 	}
 
 	public function getNewCustomerInvoice(){
-		// generate customer invoice
-		$invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
-		$invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
-		// update invoice counter
-		\DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
+		// // generate customer invoice
+		// $invoice_counter = \DB::table('appsetting')->where('name','invoice_counter')->first()->value;
+		// $invoice_number = 'INV/' . date('Y') . '/000' . $invoice_counter++;
+		// // update invoice counter
+		// \DB::table('appsetting')->where('name','invoice_counter')->update(['value'=>$invoice_counter]);
 
-		return $invoice_number;
+		return Helper::GenerateCustomerInvoiceNumber();
 	}
 
 	public function reconcile($id){

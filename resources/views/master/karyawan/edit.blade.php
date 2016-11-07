@@ -2,6 +2,8 @@
 
 @section('styles')
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+
 <style>
     .col-top-item{
         cursor:pointer;
@@ -39,7 +41,7 @@
                         <input type="text" name="nama" class="form-control"  autofocus autocomplete="off" required value="{{$data->nama}}" >
                         <input type="hidden" name="id" class="form-control" value="{{$data->id}}">
                     </td>
-                    <td rowspan="11" class="col-lg-2 col-md-2 col-sm-2" >
+                    <td rowspan="5" class="col-lg-2 col-md-2 col-sm-2" >
                         <img id="foto-karyawan" class="col-lg-12 col-sm-12 col-md-12" src="foto_karyawan/{{$data->foto}}" >
                     </td>
                 </tr>
@@ -85,7 +87,9 @@
                     <td>
                         <input type="text" name="ktp" class="form-control"  autocomplete="off" value="{{$data->ktp}}" >
                     </td>
-
+                    <td>
+                        <input type="file" name="foto" accept="image/*">
+                    </td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -100,6 +104,7 @@
                             </div>
                         </div>
                     </td>
+                    <td></td>
 
                 </tr>
                 <tr>
@@ -109,6 +114,7 @@
                     <td>
                         <input type="text" name="alamat" class="form-control " value="{{$data->alamat}}" >
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -117,6 +123,7 @@
                     <td>
                         <input type="text" name="provinsi" class="form-control " data-id="{{$data->provinsi_id}}" value="{{$data->provinsi}}" >
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -125,7 +132,7 @@
                     <td>
                         <input type="text" name="kabupaten" class="form-control " data-id="{{$data->kabupaten_id}}" value="{{$data->kabupaten}}" >
                     </td>
-
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -134,6 +141,7 @@
                     <td>
                         <input type="text" name="kecamatan" class="form-control " data-id="{{$data->kecamatan_id}}" value="{{$data->kecamatan}}" >
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -142,6 +150,7 @@
                     <td>
                         <input type="text" name="desa" class="form-control " data-id="{{$data->desa_id}}" value="{{$data->desa}}" >
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
@@ -151,8 +160,17 @@
                         <input type="text" name="telp" class="form-control " data-id="" value="{{$data->telp}}" >
                     </td>
                     <td>
-                        <input type="file" name="foto" accept="image/*">
+                        
                     </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Aktif</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_aktif" {{$data->is_active == 'Y' ? 'checked':''}}>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -174,8 +192,17 @@
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 (function ($) {
+
+    // format checkbox to switch
+      $("input[name=is_aktif]").bootstrapSwitch({
+        size:'small',
+        onText:'YES',
+        offText:'NO'
+      });
 
     // SET DATEPICKER
     $('.input-date').datepicker({
@@ -214,6 +241,7 @@
         var tgl_lahir = $('input[name=tgl_lahir]').val();
         var tempat_lahir = $('input[name=tempat_lahir]').val();
         var gaji_pokok = $('input[name=gaji_pokok]').autoNumeric('get');
+        var is_aktif = $('input[name=is_aktif]').prop('checked');
 
         if(nama != "" && kode != ""){
 
@@ -238,6 +266,7 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','tgl_lahir').val(tgl_lahir));
             formdata.append($('<input>').attr('type','hidden').attr('name','tempat_lahir').val(tempat_lahir));
             formdata.append($('<input>').attr('type','hidden').attr('name','gaji_pokok').val(gaji_pokok));
+            formdata.append($('<input>').attr('type','hidden').attr('name','is_aktif').val(is_aktif));
             formdata.append($('input[name=foto]'));
             formdata.submit();
         }else{

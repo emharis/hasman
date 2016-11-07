@@ -235,7 +235,7 @@
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" href="{!! URL::previous() !!}" >Cancel</a>
+            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order" >Close</a>
         </div>
     </div><!-- /.box -->
 

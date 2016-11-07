@@ -148,7 +148,7 @@ class AttendanceController extends Controller
 								karyawan
 								INNER JOIN jabatan
 								 ON karyawan.jabatan_id = jabatan.id
-							where jabatan_id = 4
+							where jabatan_id = 4 and is_active ="Y"
 								 ');
 			$data->status = 'D';
 		}

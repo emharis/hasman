@@ -48,6 +48,7 @@ class CustomerInvoiceController extends Controller
 		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
 				->where('customer_invoice_id',$data->id)
 				->get();
+		$sales_order = \DB::table('sales_order')->find($data->order_id);
 		$payments = \DB::table('customer_payment')
 					->where('customer_invoice_id',$invoice_id)
 					->select('customer_payment.*',\DB::raw('date_format(payment_date,"%d-%m-%Y") as date_formatted'))
@@ -57,6 +58,7 @@ class CustomerInvoiceController extends Controller
 				'data' => $data,
 				'data_detail' => $data_detail,
 				'payments' => $payments,
+				'sales_order' => $sales_order,
 			]);
 	}
 
@@ -167,6 +169,16 @@ class CustomerInvoiceController extends Controller
 					'status' => 'P'
 				]);
 
+			// CEK SALES ORDER JIKA SEMUA SUDAH PAID MAKA SET SALES ORDER KE DONE
+			$invoice = \DB::Table('customer_invoices')->find($req->customer_invoice_id);
+			$sales_order = \DB::table('sales_order')->find($invoice->order_id);
+			// var is_done = false;
+			$not_done_invoice = \DB::table('customer_invoices')->where('order_id',$sales_order->id)->where('status','!=','P')->count();
+			if($not_done_invoice == 0){
+				// berarti sudah done/sudah paid semua , set sales order to DONE
+				\DB::table('sales_order')->whereId($sales_order->id)->update(['status'=>'D']);
+			}
+
 			
 			return redirect('invoice/customer/edit/' . $req->customer_invoice_id);
 
@@ -193,6 +205,9 @@ class CustomerInvoiceController extends Controller
 						'status' => 'V',
 						'amount_due' => \DB::raw('amount_due + ' . $payment->payment_amount)
 					]);
+
+			// Update Status Sales Order to Validated
+			\DB::table('sales_order')->whereId($customer_invoice->order_id)->update(['status'=>'V']);
 
 			return redirect()->back();
 

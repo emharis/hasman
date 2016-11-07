@@ -41,6 +41,7 @@
                         <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
                         <th>Nama</th>
                         <th>Panggilan</th>
+                        <th>Aktif</th>
                         <th>Jabatan</th>
                         <th>Alamat</th>
                         <th>Telp</th>
@@ -64,6 +65,13 @@
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->panggilan}}
+                        </td>
+                        <td class="row-to-edit text-center" >
+                        @if($dt->is_active == 'Y')
+                            <label class="label label-success" >active</label>
+                        @else
+                            <label class="label label-danger" >non active</label>
+                        @endif
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->jabatan}}

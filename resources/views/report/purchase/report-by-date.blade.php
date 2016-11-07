@@ -17,7 +17,7 @@
 <section class="content-header">
     <h1>
          <a href="report/purchase" >Purchase Order Reports</a> <i class="fa fa-angle-double-right" ></i> 
-         Show Data Reports
+         Show Data Reports 
     </h1>
 </section>
 
@@ -82,17 +82,44 @@
                     <tr>
                         <th style="width:25px;">No</th>
                         <th >Ref#</th>
-                        <th>Order Date</th>
+                        <th>PO Date</th>
                         <th>Supplier Ref#</th>
+                        @if($is_detailed_report == 'true')
+                            <th>Kode Product</th>
+                            <th>Product</th>
+                        @endif
                         <th>Supplier</th>
-                        <th>Status</th>
-                        <th>Total</th>                        
+                        
+                        @if($is_detailed_report == 'true')
+                            <th>Qty</th>
+                            <th>Unit</th>
+                            <th>Harga Satuan</th>
+                            <th>Total</th>
+                        @else
+                            <th>Status</th>
+                            <th>Total</th>                        
+                            <th>Amount Due</th>                        
+                        @endif
                     </tr>
                 </thead>
                 <tbody> 
-                    <?php $total=0;?>
+                    @if($is_detailed_report == 'true')
+                        <?php $total_detail=0;?>
+                    @else
+                        <?php $total=0;?>                    
+                        <?php $amount_due=0;?>
+                    @endif
+
                     @foreach($data as $dt)
-                    <?php $total+= $dt->total; ?>                    
+
+                    @if($is_detailed_report == 'true')
+                        <?php $total_detail+=$dt->unit_price * $dt->qty;?>
+
+                    @else
+                        <?php $total+= $dt->total; ?>                    
+                        <?php $amount_due+= $dt->amount_due; ?>  
+                    @endif
+
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         <td>{{$rownum++}}</td>
                         <td>
@@ -108,33 +135,106 @@
                             -
                             @endif
                         </td>
+                        @if($is_detailed_report == 'true')
+                            <td>
+                                {{$dt->kode_product}}
+                            </td>
+                            <td>
+                                {{$dt->product}}
+                            </td>
+                        @endif
                         <td>
                             {{$dt->supplier}}
-                        </td>
-                        <td>
-                            @if($dt->status == 'O')
-                                Open
-                            @elseif($dt->status == 'V')
-                                Validated
-                            @else
-                                Done
-                            @endif
-                        </td>
-                        <td class="text-right uang">
-                            {{$dt->total}}
-                        </td>
+                        </td>                        
+                        @if($is_detailed_report == 'true')
+                            <td class="text-right" >
+                                {{$dt->qty}}
+                            </td>
+                            <td>
+                                {{$dt->product_unit}}
+                            </td>
+                            <td class="text-right uang">
+                                {{$dt->unit_price}}
+                            </td>
+                            <td class="text-right uang">
+                                {{$dt->unit_price * $dt->qty}}
+                            </td>
+                        @else
+                            <td>
+                                @if($dt->status == 'O')
+                                    Open
+                                @elseif($dt->status == 'V')
+                                    Validated
+                                @else
+                                    Done
+                                @endif
+                            </td>
+                            <td class="text-right uang">
+                                {{$dt->total}}
+                            </td>
+                            <td class="text-right uang">
+                                {{$dt->amount_due}}
+                            </td>
+                        @endif
+                        
                         
                     </tr>
                     @endforeach
 
                 </tbody>
                 <tfoot>
-                    <tr style="background-color: whitesmoke;" >
-                        <td colspan="6" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
-                        <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$total}}</label></td>
-                    </tr>
+                    @if($is_detailed_report == 'true')
+                        <tr style="background-color: whitesmoke;" >
+                            <td colspan="10" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
+                            <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$total_detail}}</label></td>
+                        </tr>
+                    @else
+                        <tr style="background-color: whitesmoke;" >
+                            <td colspan="6" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
+                            <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$total}}</label></td>
+                            <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$amount_due}}</label></td>
+                        </tr>
+                    @endif
+                    
                 </tfoot>
             </table>
+
+            @if($is_detailed_report == 'true')
+                <br/>
+                <div class="row" >
+                    <div class="col-sm-8 col-md-8 col-lg-8" ></div>
+                    <div class="col-sm-4 col-md-4 col-lg-4" >
+                        <table class="table " >
+                            <tbody>
+                                <tr style="border-top:solid #CACACA 2px;" >
+                                    <td class="text-right" >Total</td>
+                                    <td>:</td>
+                                    <td class="text-right" >
+                                        <label class="uang" >{{$total_detail}}</label>
+                                    </td>                                
+                                </tr>
+                                <tr style="background-color:#EEF0F0;">
+                                    <td class="text-right">
+                                        <i>Paid </i>
+                                    </td>
+                                    <td>:</td>
+                                    <td class="text-right">
+                                        <i><span class="uang" >{{$total_detail - $amount_due}}</span></i>
+                                    </td>
+                                </tr>
+                                <tr style="border-top:solid #CACACA 2px;" >
+                                    <td class="text-right" >Amount Due</td>
+                                    <td>:</td>
+                                    <td class="text-right" >
+                                        <label class="uang" >{{$amount_due}}</label>
+                                    </td>                                
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <a class="btn btn-danger" href="report/purchase" >Close</a>

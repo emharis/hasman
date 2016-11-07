@@ -27,8 +27,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+            <a class="btn btn-primary" id="btn-add" href="sales/order/create" >Create</a>
+            <a class="btn btn-danger hide" id="btn-delete" href="#" >Delete</a>
 
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >
@@ -51,12 +51,14 @@
                 <thead>
                     <tr>
                         <th style="width:25px;" class="text-center">
-                            <input type="checkbox" name="ck_all" >
+                            <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;"  >
                         </th>
                         {{-- <th style="width:25px;">No</th> --}}
                         <th>Ref#</th>
                         <th>Date</th>
+                        <th>Direct Sales</th>
                         <th>Customer</th>
+                        <th>Nopol</th>
                         <th>Pekerjaan</th>
                         <th>Status</th>
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
@@ -77,8 +79,26 @@
                         <td class="row-to-edit" >
                             {{$dt->order_date_formatted}}
                         </td>
+                        <td class="text-center" >
+                            @if($dt->is_direct_sales == 'Y')
+                                <label class="label label-success" >Direct Sales</label>
+                            @else 
+                             -
+                            @endif
+                        </td>
                         <td class="row-to-edit" >
-                            {{$dt->customer}}
+                            @if($dt->is_direct_sales == 'Y')
+                                {{$dt->customer}}
+                            @else
+                                {{$dt->customer}}
+                            @endif
+                        </td>
+                        <td class="row-to-edit" >
+                            @if($dt->is_direct_sales == 'Y')
+                                {{$dt->nopol}}
+                            @else
+                                -
+                            @endif
                         </td>
                         <td class="row-to-edit" >
                             @if($dt->pekerjaan)

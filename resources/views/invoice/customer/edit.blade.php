@@ -104,7 +104,7 @@
                                     {{'['.$data->kode_customer .'] ' .$data->customer}}
                                 </td>
                                 <td class="col-lg-2" >
-                                    <label>Order Number</label>
+                                    <label>SO Ref#</label>
                                 </td>
                                 <td class="col-lg-2" >
                                     {{$data->order_number}}
@@ -112,19 +112,27 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label>Pekerjaan</label>
+                                    @if($sales_order->is_direct_sales == 'Y')
+                                        <label>Nopol</label>
+                                    @else
+                                        <label>Pekerjaan</label>
+                                    @endif
                                 </td>
                                 <td>
-                                    @if($data->pekerjaan)
-                                    {{$data->pekerjaan}}<br/>
-                                    {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                                    {{$data->kabupaten . ', ' . $data->provinsi }}
+                                    @if($sales_order->is_direct_sales == 'Y')
+                                        {{$sales_order->nopol}}
                                     @else
-                                    -
+                                        @if($data->pekerjaan)
+                                        {{$data->pekerjaan}}<br/>
+                                        {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                        {{$data->kabupaten . ', ' . $data->provinsi }}
+                                        @else
+                                        -
+                                        @endif
                                     @endif
                                 </td>
                                 <td  >
-                                    <label>Order Date</label>
+                                    <label>SO Date</label>
                                 </td>
                                 <td  >
                                     {{$data->order_date_formatted}}
@@ -294,8 +302,10 @@
                     <thead>
                         <tr>
                             <th  style="width:40px;" >NO</th>
+                            @if($sales_order->is_direct_sales == 'N')
                             <th  >DELIVERY DATE</th>
                             <th  >NOPOL</th>
+                            @endif
                             <th  >MATERIAL</th>
                             <th  >QUANTITY</th>
                             <th  >HARGA</th>
@@ -310,6 +320,7 @@
                             <td class="text-right">
                                 {{$rownum++}}
                             </td>
+                            @if($sales_order->is_direct_sales == 'N')
                             <td>
                                 {{$dt->delivery_date_formatted}}
                             </td>
@@ -320,8 +331,13 @@
                                 -
                                 @endif
                             </td>
+                            @endif
                             <td>
-                                {{$dt->material}}
+                                @if($sales_order->is_direct_sales == 'Y')
+                                    {{ '['.$dt->direct_kode_material.'] ' . $dt->direct_material }}
+                                @else
+                                    {{ '['.$dt->kode_material.'] ' . $dt->material }}
+                                @endif
                             </td>
                             <td class="text-right" >                                
                                     {{$dt->qty}}                                
@@ -332,15 +348,15 @@
                         <?php $qty+= $dt->qty; ?>
                        @endforeach                   
                         <tr style="border-top: solid 2px gray;" >
-                            <td colspan="4" class="text-right" >
-                                
+                            <td colspan="{{$sales_order->is_direct_sales == 'Y' ? '4':'6'}}" class="text-right" >
+                                <label>TOTAL</label>
                             </td>
-                            <td class="text-right" style="background-color:whitesmoke;" >
+                           {{--  <td class="text-right" style="background-color:whitesmoke;" >
                                 <label>{{$qty}}</label>
                             </td>
                             <td class="text-right" style="background-color:whitesmoke;" >
                                 <label>{{$qty}}</label>
-                            </td>
+                            </td> --}}
                             <td  class="text-right " style="background-color:whitesmoke;" >
                                 <label class="uang" >{{$data->total}}</label>
                             </td>

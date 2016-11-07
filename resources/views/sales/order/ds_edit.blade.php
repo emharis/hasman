@@ -2,9 +2,6 @@
 
 @section('styles')
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="plugins/select2/select2.min.css">
-<link href="plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
-
 <style>
     .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
     .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
@@ -36,16 +33,18 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <a href="sales/order" >Sales Orders</a> <i class="fa fa-angle-double-right" ></i> New
+        <a href="sales/order" >Sales Orders</a> <i class="fa fa-angle-double-right" ></i> {{$data_master->order_number}}
     </h1>
 </section>
 
 <!-- Main content -->
 <section class="content">
+
+    <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >New</h4></label> --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >New</h3></label>
+            
+            <a class="btn btn-primary"  id="btn-validate" href="sales/order/validate-direct-sales/{{$data_master->id}}" >Validate Order</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
@@ -55,70 +54,42 @@
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
-            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Open</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Open</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
 
-            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Draft</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-gray" >Draft</a>
         </div>
         <div class="box-body">
+            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data_master->order_number}}</h3></label>
+            <input type="hidden" name="sales_order_id" value="{{$data_master->id}}">
+            <input type="hidden" name="is_direct_sales" value="Y">
             <table class="table" >
                 <tbody>
                     <tr>
                         <td class="col-lg-2">
-                            <label>Direct Sales</label>
+                            <label>Customer</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="checkbox" name="is_direct_sales">
+                            <input type="text" name="customer" autofocus class="form-control " required value="{{'['.$data_master->kode_customer . '] ' . $data_master->customer}}" readonly data-customerid="{{$data_master->customer_id}}" >
                         </td>
                         <td class="col-lg-2" >
                             <label>Order Date</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="tanggal" class="input-tanggal form-control" value="{{date('d-m-Y')}}" required>
+                            <input type="text" name="tanggal" class="input-tanggal form-control" value="{{$data_master->order_date_formatted}}" required>
                         </td>
                     </tr>
-                    <tr  >
-                        <td >
-                            <label>Customer</label>
-                        </td>
-                        <td >
-                            <input type="text" name="customer" autofocus class="form-control " data-customerid="" required>
-                        </td>
-                        <td class="normal_sales_input">
-                            <label>Pekerjaan</label>
-                        </td>
-                        <td class="normal_sales_input">
-                            <div class="input-group">                                
-                                <select name="pekerjaan" class="form-control select2" required="required" disabled="disabled">
-                                </select>
-                                 <div class="input-group-btn">
-                                  <button type="button" class="btn btn-primary " disabled="disabled" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td class="direct_sales_input hide" >
-                            <label>Nopol</label>
-                        </td>
-                        <td class="direct_sales_input hide">
-                            <input type="text" name="nopol" class="form-control">
-                        </td>
-                    </tr>
-                    {{-- <tr class="direct_sales_input hide"  >
-                        <td >
-                            <label>Customer</label>
-                        </td>
-                        <td >
-                            <input type="text" name="customer_direct" autofocus class="form-control " required>
-                        </td>
+                    <tr class="direct_sales_input"  >
                         <td>
                             <label>Nopol</label>
                         </td>
                         <td>
-                            <input type="text" name="nopol" class="form-control">
+                            <input type="text" name="nopol" class="form-control" value="{{$data_master->nopol}}" >
                         </td>
-                    </tr> --}}
+                        <td></td>
+                        <td></td>
+                    </tr>
                     {{-- <tr>
                         <td class="col-lg-2">
                             <label>Salesperson</label>
@@ -146,9 +117,9 @@
                         <th  >MATERIAL</th>
                         {{-- <th class="col-lg-1" >SATUAN</th> --}}
                         <th class="col-lg-1" >QUANTITY</th>
-                        <th class="col-lg-2 direct_sales_input hide" >UNIT PRICE</th>
+                        <th class="col-lg-2 " >UNIT PRICE</th>
                         {{-- <th class="col-lg-2" >S.U.P</th> --}}
-                        <th class="col-lg-2 direct_sales_input hide" >TOTAL</th>
+                        <th class="col-lg-2 " >TOTAL</th>
                         <th style="width:50px;" ></th>
                     </tr>
                 </thead>
@@ -158,44 +129,56 @@
                         <td>
                             <input autocomplete="off" type="text"  data-materialid="" data-kode="" class=" form-control input-product input-sm input-clear">
                         </td>
-                        {{-- <td>
-                            <input type="text" readonly autocomplete="off" class="form-control text-right input-quantity-on-hand input-sm input-clear">
-                        </td> --}}
                         <td>
                             <input type="number" autocomplete="off" min="1" class="form-control text-right input-quantity input-sm input-clear">
                         </td>
-                        <td class="direct_sales_input hide" >
+                        <td class="" >
                             <input type="text" class="uang form-control input-clear text-right input-harga-satuan-on-row" name="harga_satuan" >
                         </td>
-                        <td class="direct_sales_input hide text-right uang" ></td>
-                        {{-- <td>
-                            <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" readonly="">
-                        </td>
-                        <td>
-                            <input autocomplete="off" type="text" class="text-right form-control input-salesperson-unit-price input-sm input-clear">
-                        </td>
-                        <td>
-                            <input autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear">
-                        </td> --}}
+                        <td class=" text-right uang" ></td>
                         <td class="text-center" >
                             <a href="#" class="btn-delete-row-product" ><i class="fa fa-trash" ></i></a>
                         </td>
                     </tr>
+                    {{-- LOAD DATA --}}
+                    <?php $rownum=1; ?>
+                    <?php $total=0; ?>
+                    @foreach($data_detail as $dt)
+                        <?php $total+=$dt->total; ?>
+                        <tr class="row-product"  >
+                            <td class="text-right" >{{$rownum++}}</td>
+                            <td>
+                                <input autocomplete="off" type="text"  data-materialid="{{$dt->material_id}}" data-kode="{{$dt->kode_material}}" class=" form-control input-product input-sm input-clear" value="{{'['.$dt->kode_material.'] ' . $dt->material}}">
+                            </td>
+                            <td>
+                                <input type="number" autocomplete="off" min="1" class="form-control text-right input-quantity input-sm input-clear" value="{{$dt->qty}}" >
+                            </td>
+                            <td class="" >
+                                <input type="text" class="uang form-control input-clear text-right input-harga-satuan-on-row" name="harga_satuan"  value="{{$dt->harga}}" >
+                            </td>
+                            <td class=" text-right uang" >{{$dt->qty * $dt->harga}}</td>
+                            <td class="text-center" >
+                                <a href="#" class="btn-delete-row-product" ><i class="fa fa-trash" ></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    {{-- END LOAD DATA --}}
                     <tr id="row-btn-add-item">
                         <td></td>
                         <td colspan="7" >
                             <a id="btn-add-item" href="#">Add an item</a>
                         </td>
                     </tr>
-                    <tr class="direct_sales_input hide" >
+                    <tr class="" >
                         <td colspan="4" class="text-right">
                             <label>TOTAL</label>
                         </td>
                         <td class=" text-right" >
-                            <label class="label-total uang" ></label>
+                            <label class="label-total uang" >{{$total}}</label>
                         </td>
                         <td></td>
                     </tr>
+                    
                     
                     
                 </tbody>
@@ -239,7 +222,7 @@
                     </table>
                 </div>
                 <div class="col-lg-12" >
-                    <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
+                    <button type="submit" class="btn btn-primary" id="btn-direct-sales-save" >Save</button>
                             <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
                 </div>
             </div> --}}
@@ -251,15 +234,12 @@
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <button type="submit" class="btn btn-primary normal_sales_input" id="btn-save" >Save</button>
-            <button type="submit" class="btn btn-success direct_sales_input hide" id="btn-direct-sales-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
+            <button type="submit" class="btn btn-primary" id="btn-direct-sales-save" >Save</button>
+            <a class="btn btn-danger" id="btn-cancel-save" href="sales/order" >Close</a>
         </div>
     </div><!-- /.box -->
 
-</section><!-- /.content -->
-
-<div class="example-modal">
+    <div class="example-modal">
     <div class="modal" id="modal-pekerjaan">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -269,68 +249,47 @@
             <h4 class="modal-title">Create Pekerjaan</h4>
           </div>
           <form name="form_create_pekerjaan" method="POST" action="sales/order/create-pekerjaan" >
-            <input type="hidden" name="customer_id"  >
+            <input type="hidden" name="customer_id" value="{{$data_master->customer_id}}"  >
             <div class="modal-body">
                 <table class="table table-bordered table-condensed" >
                     <tbody>
                         <tr>
-                            <td>
-                                <label>Nama Pekerjaan</label>
-                            </td>
+                            <td>Nama Pekerjaan</td>
                             <td>
                                 <input type="text" name="nama" class="form-control" autocomplete="off" required>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Tahun</label>
-                            </td>
-                            <td>
-                                {{-- <input type="text" name="tahun" class="form-control input-tahun" autocomplete="off" required> --}}
-                                <input type="text" name="tahun" maxlength="4" class="form-control" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Alamat</label>
-                            </td>
+                            <td>Alamat</td>
                             <td>
                                 <input type="text" name="alamat" class="form-control" autocomplete="off">
                             </td>
                         </tr>
                         <tr>
+                            <td>Provinsi</td>
                             <td>
-                                <label>Provinsi</label>
-                            </td>
-                            <td>
-                                <input type="text" name="provinsi" class="form-control" autocomplete="off" required >
-                                <input type="hidden" name="provinsi_id" class="form-control">
+                                <input type="text" name="provinsi" class="form-control" required autocomplete="off">
+                                <input type="hidden" name="provinsi_id" class="form-control" >
                             </td>
                         </tr>
                         <tr>
+                            <td>Kabupaten</td>
                             <td>
-                                <label>Kabupaten</label>
-                            </td>
-                            <td>
-                                <input type="text" name="kabupaten" class="form-control" autocomplete="off" required>
+                                <input type="text" name="kabupaten" class="form-control" required autocomplete="off">
                                 <input type="hidden" name="kabupaten_id" class="form-control">
                             </td>
                         </tr>
                         <tr>
+                            <td>Kecamatan</td>
                             <td>
-                                <label>Kecamatan</label>
-                            </td>
-                            <td>
-                                <input type="text" name="kecamatan" class="form-control" autocomplete="off" required>
+                                <input type="text" name="kecamatan" class="form-control" required autocomplete="off">
                                 <input type="hidden" name="kecamatan_id" class="form-control">
                             </td>
                         </tr>
                         <tr>
+                            <td>Desa</td>
                             <td>
-                                <label>Desa</label>
-                            </td>
-                            <td>
-                                <input type="text" name="desa" class="form-control" autocomplete="off" required>
+                                <input type="text" name="desa" class="form-control" required autocomplete="off">
                                 <input type="hidden" name="desa_id" class="form-control">
                             </td>
                         </tr>
@@ -350,6 +309,8 @@
 <!-- /.modal -->
 </div>
 
+</section><!-- /.content -->
+
 @stop
 
 @section('scripts')
@@ -359,25 +320,9 @@
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
-<!-- Select2 -->
-<script src="plugins/select2/select2.full.min.js"></script>
-<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-
-
 
 <script type="text/javascript">
 (function ($) {
-    // bootstrap swithc
-    $("input[name=is_direct_sales]").bootstrapSwitch({
-            size:'small',
-            onText:'YES',
-            offText:'NO'
-          });
-
-    //Initialize Select2 Elements
-    $(".select2").select2();
-
-
     // SET DATEPICKER
     $('.input-tanggal').datepicker({
         format: 'dd-mm-yyyy',
@@ -402,7 +347,7 @@
 
             // enablekan select pekerjaan
             $('select[name=pekerjaan]').removeAttr('disabled');
-            $('#btn-add-pekerjaan').removeAttr('disabled');
+            $('#btn-add-pekerjaan').removeClass('disabled');
 
             //set data pekerjaan id
             $('form[name=form_create_pekerjaan] input[name=customer_id]').val(suggestions.data);
@@ -522,7 +467,13 @@
     // -----------------------------------------------------
     // SET AUTO NUMERIC
     // =====================================================
-
+    $('.uang').autoNumeric('init',{
+        vMin:'0',
+        vMax:'9999999999'
+    });
+    $('.uang').each(function(){
+        $(this).autoNumeric('set',$(this).autoNumeric('get'));
+    });
     // END OF AUTONUMERIC
 
     // FUNGSI REORDER ROWNUMBER
@@ -658,6 +609,8 @@
         // input_qty_on_hand = first_col.next().next().children('input');
         input_qty = first_col.next().next().children('input');
         input_unit_price = first_col.next().next().next().children('input');
+
+        // input_unit_price = first_col.next().next().next().next().children('input');
         // input_sup = first_col.next().next().next().next().next().children('input');
         // input_subtotal = first_col.next().next().next().next().next().next().children('input');
     }
@@ -714,107 +667,118 @@
 
     
     // BTN CANCEL SAVE
-    $('#btn-cancel-save').click(function(){
-        if(confirm('Anda akan membabtalkan transaksi ini?')){
-            location.href = "sales/order";
-        }else
-        {
+    // $('#btn-cancel-save').click(function(){
+    //     if(confirm('Anda akan membabtalkan transaksi ini?')){
+    //         location.href = "sales/order";
+    //     }else
+    //     {
 
-        return false
-        }
-    });
+    //     return false
+    //     }
+    // });
     // END OF BTN CANCEL SAVE
 
 
     // BTN SAVE TRANSACTION
-    $('#btn-save').click(function(){
-        // cek kelengkapan data
-            var so_master = {"customer_id":"",
-                             // "salesperson_id":"",
-                             "order_date":"",
-                             "pekerjaan_id":"",
-                             // "note":"",
-                             // "subtotal":"",
-                             // "disc":"",
-                             // "total":""
-                         };
-            // set so_master data
-            so_master.customer_id = $('input[name=customer]').data('customerid');
-            // so_master.salesperson_id = $('input[name=salesperson]').data('salespersonid');
-            // so_master.no_inv = $('input[name=no_inv]').val();
-            so_master.order_date = $('input[name=tanggal]').val();
-            so_master.pekerjaan_id = $('select[name=pekerjaan]').val();
-            // so_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
-            // so_master.note = $('textarea[name=note]').val();
-            // so_master.subtotal = $('.label-total-subtotal').autoNumeric('get');
-            // so_master.total = $('.label-total').autoNumeric('get');
-            // so_master.disc = $('input[name=disc]').autoNumeric('get');
+    // $('#btn-direct-sales-save').click(function(){
+    //     // cek kelengkapan data
+    //     var so_master = {"customer_id":"",
+    //                      "sales_order_id":"",
+    //                      // "salesperson_id":"",
+    //                      "order_date":"",
+    //                      "pekerjaan_id":"",
+    //                      // "note":"",
+    //                      // "subtotal":"",
+    //                      // "disc":"",
+    //                      // "total":""
+    //                  };
+    //     // set so_master data
+    //     so_master.sales_order_id = $('input[name=sales_order_id]').val();
+    //     so_master.customer = $('input[name=customer]').val();
+    //     so_master.nopol = $('input[name=nopol]').val();
+    //     // so_master.salesperson_id = $('input[name=salesperson]').data('salespersonid');
+    //     // so_master.no_inv = $('input[name=no_inv]').val();
+    //     so_master.order_date = $('input[name=tanggal]').val();
+    //     // so_master.pekerjaan_id = $('select[name=pekerjaan]').val();
+    //     // so_master.jatuh_tempo = $('input[name=jatuh_tempo]').val();
+    //     // so_master.note = $('textarea[name=note]').val();
+    //     // so_master.subtotal = $('.label-total-subtotal').autoNumeric('get');
+    //     // so_master.total = $('.label-total').autoNumeric('get');
+    //     // so_master.disc = $('input[name=disc]').autoNumeric('get');
 
-            // get data material;
-            var so_material = JSON.parse('{"material" : [] }');
+    //     // get data material;
+    //     var so_material = JSON.parse('{"material" : [] }');
 
-            // set data barant
-            $('input.input-product').each(function(){
-                if($(this).parent().parent().hasClass('row-product')){
-                    generateInput($(this));
+    //     // set data barant
+    //     $('input.input-product').each(function(){
+    //         if($(this).parent().parent().hasClass('row-product')){
+    //             generateInput($(this));
 
-                    if(input_product.data('materialid') != "" 
-                        // && input_qty_on_hand.val() != "" 
-                        // && Number(input_qty_on_hand.val()) > 0 
-                        && input_qty.val() != "" 
-                        && Number(input_qty.val()) > 0 
-                        // &&input_unit_price.val() != "" 
-                        // && Number(input_unit_price.autoNumeric('get')) > 0 
-                        // && input_sup.val() != "" 
-                        // && Number(input_sup.autoNumeric('get')) > 0 
-                        // && input_subtotal.val() != "" 
-                        // && Number(input_subtotal.autoNumeric('get')) > 0 
-                        ){
+    //             if(input_product.data('materialid') != "" 
+    //                 // && input_qty_on_hand.val() != "" 
+    //                 // && Number(input_qty_on_hand.val()) > 0 
+    //                 && input_qty.val() != "" 
+    //                 && Number(input_qty.val()) > 0 
+    //                 // &&input_unit_price.val() != "" 
+    //                 // && Number(input_unit_price.autoNumeric('get')) > 0 
+    //                 // && input_sup.val() != "" 
+    //                 // && Number(input_sup.autoNumeric('get')) > 0 
+    //                 // && input_subtotal.val() != "" 
+    //                 // && Number(input_subtotal.autoNumeric('get')) > 0 
+    //                 ){
 
-                        so_material.material.push({
-                            id:input_product.data('materialid'),
-                            // qoh:input_qty_on_hand.val(),
-                            qty:input_qty.val(),
-                            // unit_price : input_unit_price.autoNumeric('get'),
-                            // sup_price:input_sup.autoNumeric('get'),
-                            // subtotal:input_subtotal.autoNumeric('get')
-                        });
+    //                 so_material.material.push({
+    //                     id:input_product.data('materialid'),
+    //                     // qoh:input_qty_on_hand.val(),
+    //                     qty:input_qty.val(),
+    //                     // unit_price : input_unit_price.autoNumeric('get'),
+    //                     // sup_price:input_sup.autoNumeric('get'),
+    //                     // subtotal:input_subtotal.autoNumeric('get')
+    //                 });
 
-                    }
-                    
-                }
-            });
+    //             }
+                
+    //         }
+    //     });
 
-            // save ke database
-            // alert(so_material.material.length);
-            // alert('Pekerjaan id : ' + so_master.pekerjaan_id);
-            if(so_master.customer_id != "" 
-                && $('input[name=customer]').val() != "" 
-                && $('input[name=customer]').val() != null 
-                && so_master.order_date != "" 
-                && so_master.order_date != null 
-                // && so_master.pekerjaan_id != "" 
-                // && so_master.pekerjaan_id != null 
-                && so_material.material.length > 0){
+    //     // save ke database
+    //     // alert(so_master.customer_id);
+    //     // alert(so_material.material.length);
+    //     if(so_master.customer != "" 
+    //         && $('input[name=customer]').val() != "" 
+    //         // && so_master.salesperson_id != "" 
+    //         // && $('input[name=salesperson]').val() != "" 
+    //         && so_master.order_date != "" 
+    //         && so_material.material.length > 0){
 
-                $(this).attr('disabled','disabled');
+    //         $(this).attr('disabled','disabled');
 
-                var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert');
-                    newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
-                    newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));
-                    newform.submit();
+    //         var newform = $('<form>').attr('method','POST').attr('action','sales/order/update-direct-sales');
+    //             newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
+    //             newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));
+    //             newform.submit();
 
-            }else{
-                alert('Lengkapi data yang kosong');
-            }        
+    //     }else{
+    //         alert('Lengkapi data yang kosong');
+    //     }
 
 
-        return false;
-    });
+    //     return false;
+    // });
     // END OF BTN SAVE TRANSACTION
 
+    // VALIDATE ORDER
+    $('#btn-validate').click(function(e){
 
-    // CEK INPUT CUSTOMER APAKAH KOSONG ATAU TIDAK
+        // if(confirm('Anda akan memvalidasi data ini, setelah tervalidasi data tidak dapat dirubah kembali, lanjutkan ?')){
+
+        // }else{
+        //     return false;
+        // }
+    })
+    // END OF VALIDATE ORDER
+
+     // CEK INPUT CUSTOMER APAKAH KOSONG ATAU TIDAK
     $('input[name=customer]').keyup(function(){
         if($(this).val() == ""){
             // disable input pekerjaan
@@ -877,6 +841,7 @@
                              "nopol":""
                          };
             // set so_master data
+            so_master.sales_order_id = $('input[name=sales_order_id]').val();
             so_master.customer_id = $('input[name=customer]').data('customerid');
             so_master.order_date = $('input[name=tanggal]').val();
             so_master.nopol = $('input[name=nopol]').val();
@@ -916,6 +881,9 @@
                 }
             });
 
+            // alert(JSON.stringify(so_material));
+
+
             // save ke database
             // alert(so_material.material.length);
             // alert('Pekerjaan id : ' + so_master.pekerjaan_id);
@@ -927,7 +895,7 @@
 
                 $(this).attr('disabled','disabled');
 
-                var newform = $('<form>').attr('method','POST').attr('action','sales/order/insert-direct-sales');
+                var newform = $('<form>').attr('method','POST').attr('action','sales/order/update-direct-sales');
                     newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
                     newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));
                     newform.submit();
@@ -946,7 +914,7 @@
         // var total = Number(qty) * Number(harga_satuan);
         // row.children('td:last').prev().autoNumeric('set',total);
 
-        if($('input[name=is_direct_sales]').prop('checked')){
+        // if($('input[name=is_direct_sales]').prop('checked')){
             var subtotal = 0;
 
             $('.row-product').each(function(){
@@ -961,7 +929,7 @@
 
             // tampilkan subtotal
             $('.label-total').autoNumeric('set',subtotal);
-        }
+        // }
 
         
     });

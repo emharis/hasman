@@ -218,6 +218,7 @@ return [
         'Input' => Illuminate\Support\Facades\Input::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
+        'Helper' => App\Helpers\Helper::class,
 
     ],
 

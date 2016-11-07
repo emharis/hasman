@@ -119,6 +119,7 @@ class KaryawanController extends Controller
 					'tgl_lahir' => $tgl_lahir,
 					'tempat_lahir' => $req->tempat_lahir,
 					'gaji_pokok' => $req->gaji_pokok,
+					'is_active' => $req->is_aktif == 'true' ? 'Y':'N'
 				]);
 
 			$foto_lama = \DB::table('karyawan')->find($req->id)->foto;
@@ -146,6 +147,8 @@ class KaryawanController extends Controller
 
 			return redirect('master/karyawan');
 		});
+
+		// echo $req->is_aktif == 'true' ? 'Y':'N';
 
 	}
 

@@ -131,9 +131,9 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{Request::is('report/purchase*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Purchase Order</a></li>
-                    <li class="{{Request::is('report/sales*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Sales Order</a></li>
-                    <li class="{{Request::is('report/delivery*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Delivery Order</a></li>
+                    <li class="{{Request::is('report/purchase*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Purchases</a></li>
+                    <li class="{{Request::is('report/sales*') ? 'active':''}}" ><a href="report/sales"><i class="fa fa-circle-o"></i> Sales</a></li>
+                    {{-- <li class="{{Request::is('report/delivery*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Delivery Order</a></li> --}}
                 </ul>
             </li>
 
@@ -149,7 +149,7 @@
             </li>
 
             <li style="background-color: #DD4B39;" >
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <i class="fa fa-bars" class=""></i> <span>Minimize Menu</span> </a>
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <i class="fa fa-bars" class=""></i> <span></span> </a>
             </li>
 
         </ul>

@@ -43,28 +43,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" >
-                                
-                                <div class="checkbox" >
-                                    <label>
-                                        <input type="checkbox" name="ck_detail_report" >
-                                        <b>Tampilkan detail report per product</b>
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
                             <td>
                                 
                                 <div class="checkbox" >
                                     <label>
-                                        <input type="checkbox" name="ck_supplier" data-filter='filter_by_supplier'>
-                                        <b>Supplier</b>
+                                        <input type="checkbox" name="ck_customer" data-filter='filter_by_customer'>
+                                        <b>customer</b>
                                     </label>
                                 </div>
                             </td>
                             <td colspan="2" >
-                                {!! Form::select('supplier',$select_supplier,null,['class'=>'form-control','readonly filter_by_supplier']) !!}
+                                {!! Form::select('customer',$select_customer,null,['class'=>'form-control','readonly filter_by_customer']) !!}
                             </td>
                         </tr>
                         {{-- <tr>
@@ -78,7 +67,7 @@
                                 
                             </td>
                             <td colspan="2" >
-                                {!! Form::select('status',['O'=>'Open','V'=>'Validated','D'=>'Done'],null,['class'=>'form-control','readonly filter_by_supplier']) !!}
+                                {!! Form::select('status',['O'=>'Open','V'=>'Validated','D'=>'Done'],null,['class'=>'form-control','readonly filter_by_customer']) !!}
                             </td>
                         </tr> --}}
                         <tr>
@@ -122,59 +111,54 @@
 
     // SUBMIT FORM
     $('#btn-submit').click(function(){
-        var filter_by_supplier = $('input[name=ck_supplier]').prop('checked');
+        var filter_by_customer = $('input[name=ck_customer]').prop('checked');
         var filter_by_status = $('input[name=ck_status]').prop('checked');
 
-        // alert(filter_by_supplier)
+        // alert(filter_by_customer)
 
         // filter by date range
         var start_date = $('input[name=start_date]').val();
         var end_date = $('input[name=end_date]').val();
-        var is_detailed_report = $('input[name=ck_detail_report]').prop('checked');
 
-        if(filter_by_supplier && filter_by_status){
-            // filter by status & supplier
+        if(filter_by_customer && filter_by_status){
+            // filter by status & customer
         }else if(filter_by_status){
             // filter by status
 
-        }else if(filter_by_supplier){
-            // filter by supplier
-            var supplier = $('select[name=supplier]').val();
-            var newform = $('<form>').attr('method','POST').attr('action','report/purchase/filter-by-date-n-supplier');
+        }else if(filter_by_customer){
+            // filter by customer
+            var customer = $('select[name=customer]').val();
+            var newform = $('<form>').attr('method','POST').attr('action','report/purchase/filter-by-date-n-customer');
             newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
             newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-            newform.append($('<input>').attr('type','hidden').attr('name','supplier').val(supplier));
-            newform.append($('<input>').attr('type','hidden').attr('name','is_detailed_report').val(is_detailed_report));
-            
+            newform.append($('<input>').attr('type','hidden').attr('name','customer').val(customer));
             newform.submit();
         }else{            
 
             var newform = $('<form>').attr('method','POST').attr('action','report/purchase/filter-by-date');
             newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
             newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-            newform.append($('<input>').attr('type','hidden').attr('name','is_detailed_report').val(is_detailed_report));
-
             newform.submit();
         }
     });
 
-    // FILTER BY SUPPLIER
-    $('input[name=ck_supplier]').change(function(){
-        if($('input[name=ck_supplier]').prop('checked')){
-            // enable input supplier
-            $('select[name=supplier]').removeAttr('readonly');
+    // FILTER BY customer
+    $('input[name=ck_customer]').change(function(){
+        if($('input[name=ck_customer]').prop('checked')){
+            // enable input customer
+            $('select[name=customer]').removeAttr('readonly');
         }else{
-            $('select[name=supplier]').attr('readonly','readonly');
+            $('select[name=customer]').attr('readonly','readonly');
         }
     });
 
     // FILTER BY STATUS
-    $('input[name=ck_supplier]').change(function(){
-        if($('input[name=ck_supplier]').prop('checked')){
-            // enable input supplier
-            $('select[name=supplier]').removeAttr('readonly');
+    $('input[name=ck_customer]').change(function(){
+        if($('input[name=ck_customer]').prop('checked')){
+            // enable input customer
+            $('select[name=customer]').removeAttr('readonly');
         }else{
-            $('select[name=supplier]').attr('readonly','readonly');
+            $('select[name=customer]').attr('readonly','readonly');
         }
     });
 
