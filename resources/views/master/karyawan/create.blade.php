@@ -93,8 +93,20 @@
                         <div class="input-group">
                             <input type="text" name="tempat_lahir" class="form-control">
 
-                             <div class="input-group-btn" style="width:30%;">
+                             {{-- <div class="input-group-btn" style="width:30%;">
                               <input type="text" name="tgl_lahir" class="input-date form-control">
+                            </div> --}}
+                            <div class="input-group-addon" >
+                                <label>Tanggal</label>
+                            </div>
+                            <div class="input-group-btn" style="width:50px;">
+                              <input type="text" name="tanggal" class="form-control text-right" maxlength="2" value="">
+                            </div>
+                            <div class="input-group-btn" style="width:50px;">
+                              <input type="text" name="bulan" class="form-control text-right" maxlength="2" value="">
+                            </div>
+                            <div class="input-group-btn" style="width:100px;">
+                              <input type="text" name="tahun" class="form-control text-right" maxlength="4" value="">
                             </div>
                         </div>
                     </td>
@@ -211,6 +223,9 @@
         var tgl_lahir = $('input[name=tgl_lahir]').val();
         var tempat_lahir = $('input[name=tempat_lahir]').val();
         var gaji_pokok = $('input[name=gaji_pokok]').autoNumeric('get');
+        var tanggal = $('input[name=tanggal]').val();
+        var bulan = $('input[name=bulan]').val();
+        var tahun = $('input[name=tahun]').val();
 
         if(nama != "" && kode != ""){
 
@@ -232,6 +247,9 @@
             formdata.append($('<input>').attr('type','hidden').attr('name','jabatan').val(jabatan));
             formdata.append($('<input>').attr('type','hidden').attr('name','telp').val(telp));
             formdata.append($('<input>').attr('type','hidden').attr('name','tgl_lahir').val(tgl_lahir));
+            formdata.append($('<input>').attr('type','hidden').attr('name','tanggal').val(tanggal));
+            formdata.append($('<input>').attr('type','hidden').attr('name','bulan').val(bulan));
+            formdata.append($('<input>').attr('type','hidden').attr('name','tahun').val(tahun));
             formdata.append($('<input>').attr('type','hidden').attr('name','tempat_lahir').val(tempat_lahir));
             formdata.append($('<input>').attr('type','hidden').attr('name','gaji_pokok').val(gaji_pokok));
             formdata.append($('input[name=foto]'));

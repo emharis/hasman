@@ -40,8 +40,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="cashbook/create" >Create</a>
-            <button class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</button>
+            <a class="btn btn-primary" id="btn-add" href="cashbook/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+            <button class="btn btn-danger hide" id="btn-delete" href="#" ><i class="fa fa-trash-o" ></i> Delete</button>
             
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >

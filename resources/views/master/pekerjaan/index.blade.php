@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Data Karyawan
+        Data Pekerjaan
     </h1>
 </section>
 
@@ -25,10 +25,10 @@
 
     <!-- Default box -->
     <div class="box box-solid">
-        <div class="box-header with-border">
-            <a class="btn btn-primary" id="btn-add" href="master/karyawan/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+        <div class="box-header with-border" >
+            <a class="btn btn-primary" id="btn-add" href="master/pekerjaan/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
             <a class="btn btn-danger hide" id="btn-delete" href="#" ><i class="fa fa-trash-o" ></i> Delete</a>
-
+            
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >
                     <tr>
@@ -54,13 +54,11 @@
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
                         </th>
                         {{-- <th style="width:25px;">No</th> --}}
-                        <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
+                        {{-- <th class="col-sm-2 col-md-2 col-lg-2" >Kode</th> --}}
                         <th>Nama</th>
-                        <th>Panggilan</th>
-                        <th>Aktif</th>
-                        <th>Jabatan</th>
-                        <th>Alamat</th>
-                        <th>Telp</th>
+                        <th>Customer</th>
+                        <th>Tahun</th>
+                        {{-- <th>Can Delete</th> --}}
                         <th class="col-sm-1 col-md-1 col-lg-1" ></th>
                     </tr>
                 </thead>
@@ -68,40 +66,28 @@
                     @foreach($data as $dt)
                     <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                         <td class="text-center" >
-                            @if($dt->ref == 0)
+                            @if($dt->can_delete == 'true')
                                 <input type="checkbox" class="ck_row" >
                             @endif
                         </td>
                         {{-- <td class="row-to-edit" >{{$rownum++}}</td> --}}
-                        <td class="row-to-edit" >
+                        {{-- <td class="row-to-edit" >
                             {{$dt->kode}}
-                        </td>
+                        </td> --}}
                         <td class="row-to-edit" >
                             {{$dt->nama}}
                         </td>
-                        <td class="row-to-edit" >
-                            {{$dt->panggilan}}
+                        <td>
+                            {{$dt->customer}}
                         </td>
-                        <td class="row-to-edit text-center" >
-                        @if($dt->is_active == 'Y')
-                            <label class="label label-success" >active</label>
-                        @else
-                            <label class="label label-danger" >non active</label>
-                        @endif
+                        <td>
+                            {{$dt->tahun}}
                         </td>
-                        <td class="row-to-edit" >
-                            {{$dt->jabatan}}
-                        </td>
-                        <td class="row-to-edit" >
-                          @if($dt->alamat)
-                            {{$dt->alamat . ', ' . $dt->desa . ', ' . $dt->kecamatan  }}
-                          @endif
-                        </td>
-                        <td class="row-to-edit" >
-                            {{$dt->telp}}
-                        </td>
+                        {{-- <td>
+                            {{$dt->can_delete}}
+                        </td> --}}
                         <td class="text-center" >
-                            <a class="btn btn-primary btn-xs" href="master/karyawan/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            <a class="btn btn-primary btn-xs" href="master/pekerjaan/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -123,18 +109,6 @@
 (function ($) {
 
     var TBL_KATEGORI = $('#table-data').DataTable({
-        // "columns": [
-        //     {className: "text-center","orderable": false},
-        //     {className: "text-right"},
-        //     null,
-        //     null,
-        //     null,
-        //     null,
-        //     null,
-        //     null,
-        //     {className: "text-center"}
-        // ],
-        // order: [[ 1, 'asc' ]],
         sort:false
     });
 
@@ -156,7 +130,7 @@
 
     function showOptionButton(){
         var checkedCk = $('input.ck_row:checked');
-
+        
         if(checkedCk.length > 0){
             // tampilkan option button
             $('#btn-delete').removeClass('hide');
@@ -166,10 +140,10 @@
     }
 
     // Row Clicked
-    $(document).on('click','.row-to-edit',function(){
-        var row = $(this).parent();
-        var data_id = row.data('id');
-        location.href = 'master/karyawan/edit/' + data_id ;
+    $(document).on('click','.row-to-edit',function(){        
+        var row = $(this).parent();        
+        var data_id = row.data('id');            
+        location.href = 'master/pekerjaan/edit/' + data_id ;        
     });
 
     // Delete Data Lokasi
@@ -183,7 +157,7 @@
                 dataid.push(newdata);
             });
 
-            var deleteForm = $('<form>').attr('method','POST').attr('action','master/karyawan/delete');
+            var deleteForm = $('<form>').attr('method','POST').attr('action','master/pekerjaan/delete');
             deleteForm.append($('<input>').attr('type','hidden').attr('name','dataid').attr('value',JSON.stringify(dataid)));
             deleteForm.submit();
         }
@@ -192,7 +166,7 @@
         return false;
     });
 
-
+    
 
 })(jQuery);
 </script>

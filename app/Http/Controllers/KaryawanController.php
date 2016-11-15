@@ -31,14 +31,16 @@ class KaryawanController extends Controller
 		return \DB::transaction(function()use($req){
 
 			// generate tanggal
-			if($req->tgl_lahir != "" ){
-	      $tgl_lahir = $req->tgl_lahir;
-	      $arr_tgl = explode('-',$tgl_lahir);
-	      $fix_tgl_lahir = new \DateTime();
-	      $fix_tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
-			}else{
-				$fix_tgl_lahir = 'NULL';
-			}
+			// if($req->tgl_lahir != "" ){
+	  //     $tgl_lahir = $req->tgl_lahir;
+	  //     $arr_tgl = explode('-',$tgl_lahir);
+	  //     $fix_tgl_lahir = new \DateTime();
+	  //     $fix_tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+			// }else{
+			// 	$fix_tgl_lahir = 'NULL';
+			// }
+
+			$fix_tgl_lahir =  $req->tahun . '-' . $req->bulan . '-' . $req->tanggal;
 
 			$karyawan_id = \DB::table('karyawan')
 			->insertGetId([
@@ -97,13 +99,18 @@ class KaryawanController extends Controller
 	public function update(Request $req){
 		return \DB::transaction(function()use($req){
 			// generate tanggal
-            $tgl_lahir = $req->tgl_lahir;
-			if($req->tgl_lahir != ""){
+   //          $tgl_lahir = $req->tgl_lahir;
+			// if($req->tgl_lahir != ""){
 
-	            $arr_tgl = explode('-',$tgl_lahir);
-	            $tgl_lahir = new \DateTime();
-	            $tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
-        	}
+	  //           $arr_tgl = explode('-',$tgl_lahir);
+	  //           $tgl_lahir = new \DateTime();
+	  //           $tgl_lahir->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+   //      	}
+
+			// $tgl_lahir = new \DateTime();
+   //          $tgl_lahir->setDate($req->tahun,$req->bulan,$req->tanggal);
+
+            $tgl_lahir =  $req->tahun . '-' . $req->bulan . '-' . $req->tanggal;
 
 			\DB::table('karyawan')
 			->where('id',$req->id)

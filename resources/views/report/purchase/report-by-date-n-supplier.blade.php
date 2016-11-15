@@ -110,12 +110,23 @@
                     </tr>
                 </thead>
                 <tbody> 
-                    <?php $total=0;?>
-                    <?php $amount_due=0;?>         
+                    
+                    @if($is_detailed_report == 'true')
+                        <?php $total_detail =0;?>
+                    @else
+                        <?php $total=0;?>
+                        <?php $amount_due=0;?>    
+                    @endif
+
 
                     @foreach($data as $dt)
-                        <?php $total+= $dt->total; ?>                   
-                        <?php $amount_due+= $dt->amount_due; ?> 
+                        @if($is_detailed_report == 'true')
+                        <?php $total_detail += ($dt->unit_price * $dt->qty); ?>
+                        @else
+                            <?php $total+= $dt->total; ?>                   
+                            <?php $amount_due+= $dt->amount_due; ?> 
+                        @endif
+                        
 
                         <tr data-rowid="{{$rownum}}" data-id="{{$dt->id}}">
                             <td>{{$rownum++}}</td>
@@ -173,14 +184,61 @@
 
                 </tbody>
                 <tfoot>
+                @if($is_detailed_report == 'true')
                     <tr style="background-color: whitesmoke;" >
-                        <td colspan="{{$is_detailed_report == 'true'?'7':'5'}}" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
+                        <td colspan="9" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
+                        <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$total_detail}}</label></td>
+
+                    </tr>
+                @else
+                    <tr style="background-color: whitesmoke;" >
+                        <td colspan="5" class="text-right" style="border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
                         <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$total}}</label></td>
                         <td class="text-right" style="border-color: #DDDDDD!important;" ><label class="uang" >{{$amount_due}}</label></td>
 
                     </tr>
+                @endif
+
+                    
                 </tfoot>
             </table>
+
+            @if($is_detailed_report == 'true')
+                <br/>
+                <div class="row" >
+                    <div class="col-sm-8 col-md-8 col-lg-8" ></div>
+                    <div class="col-sm-4 col-md-4 col-lg-4" >
+                        <table class="table " >
+                            <tbody>
+                                <tr style="border-top:solid #CACACA 2px;" >
+                                    <td class="text-right" >Total</td>
+                                    <td>:</td>
+                                    <td class="text-right" >
+                                        <label class="uang" >{{$total_detail}}</label>
+                                    </td>                                
+                                </tr>
+                                <tr style="background-color:#EEF0F0;">
+                                    <td class="text-right">
+                                        <i>Paid </i>
+                                    </td>
+                                    <td>:</td>
+                                    <td class="text-right">
+                                        <i><span class="uang" >{{$total_detail - $total_amount_due}}</span></i>
+                                    </td>
+                                </tr>
+                                <tr style="border-top:solid #CACACA 2px;" >
+                                    <td class="text-right" >Amount Due</td>
+                                    <td>:</td>
+                                    <td class="text-right" >
+                                        <label class="uang" >{{$total_amount_due}}</label>
+                                    </td>                                
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
         </div><!-- /.box-body -->
         <div class="box-footer" >
             <a class="btn btn-danger" href="report/purchase" >Close</a>

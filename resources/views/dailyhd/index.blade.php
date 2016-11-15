@@ -26,8 +26,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary" id="btn-add" href="dailyhd/create" >Create</a>
-            <button class="btn btn-danger btn-sm hide" id="btn-delete" >Delete</button>
+            <a class="btn btn-primary" id="btn-add" href="dailyhd/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+            <button class="btn btn-danger hide" id="btn-delete" ><i class="fa fa-trash-o" ></i> Delete</button>
             <div class="clearfix" ></div>
             <br/>
 

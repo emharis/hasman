@@ -25,12 +25,27 @@
 
     <!-- Default box -->
     <div class="box box-solid">
+        <div class="box-header with-border" >
+            <a class="btn btn-primary " id="btn-add" href="master/alat/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+            <a class="btn btn-danger hide" id="btn-delete" href="#" ><i class="fa fa-trash-o" ></i> Delete</a>
+            
+            <div class="pull-right" >
+                <table style="background-color: #ECF0F5;" >
+                    <tr>
+                        <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="fa fa-tags" ></i></td>
+                        <td style="padding-left: 10px;padding-right: 5px;">
+                            JUMLAH DATA
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"  style="padding-right: 5px;" >
+                            <label class="uang">{{count($data)}}</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="master/alat/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
-            <div class="clearfix" ></div>
-            <br/>
-
             <?php $rownum=1; ?>
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>

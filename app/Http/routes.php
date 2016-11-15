@@ -159,6 +159,14 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('unit/update','ProductUnitController@update');
         Route::post('unit/delete','ProductUnitController@delete');
 
+        // PEKERJAAN
+        Route::get('pekerjaan','PekerjaanController@index');
+        Route::get('pekerjaan/create','PekerjaanController@create');
+        Route::post('pekerjaan/insert','PekerjaanController@insert');
+        Route::get('pekerjaan/edit/{id}','PekerjaanController@edit');
+        Route::post('pekerjaan/update','PekerjaanController@update');
+        Route::post('pekerjaan/delete','PekerjaanController@delete');
+
     });
 
     Route::group(['prefix' => 'purchase'], function () {
@@ -292,6 +300,10 @@ Route::group(['middleware' => ['web','auth']], function () {
 
         // REPORT SALES
         Route::get('sales','ReportSalesController@index');
+        Route::post('sales/report-by-date','ReportSalesController@reportByDate');
+        Route::post('sales/report-by-date-detail','ReportSalesController@reportByDateDetail');
+        Route::post('sales/report-by-customer','ReportSalesController@reportByCustomer');
+        Route::post('sales/report-by-customer-detail','ReportSalesController@reportByCustomerDetail');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');

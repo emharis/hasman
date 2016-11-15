@@ -27,8 +27,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <a class="btn btn-primary" id="btn-add" href="sales/order/create" >Create</a>
-            <a class="btn btn-danger hide" id="btn-delete" href="#" >Delete</a>
+            <a class="btn btn-primary" id="btn-add" href="sales/order/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+            <a class="btn btn-danger hide" id="btn-delete" href="#" ><i class="fa fa-trash-o" ></i> Delete</a>
 
             <div class="pull-right" >
                 <table style="background-color: #ECF0F5;" >

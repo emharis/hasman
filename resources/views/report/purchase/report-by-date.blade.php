@@ -219,14 +219,14 @@
                                     </td>
                                     <td>:</td>
                                     <td class="text-right">
-                                        <i><span class="uang" >{{$total_detail - $amount_due}}</span></i>
+                                        <i><span class="uang" >{{$total_detail - $total_amount_due}}</span></i>
                                     </td>
                                 </tr>
                                 <tr style="border-top:solid #CACACA 2px;" >
                                     <td class="text-right" >Amount Due</td>
                                     <td>:</td>
                                     <td class="text-right" >
-                                        <label class="uang" >{{$amount_due}}</label>
+                                        <label class="uang" >{{$total_amount_due}}</label>
                                     </td>                                
                                 </tr>
                             </tbody>

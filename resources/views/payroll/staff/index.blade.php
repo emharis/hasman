@@ -26,8 +26,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="payroll/staff/create" >Create</a>
-            <button class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</button>
+            <a class="btn btn-primary" id="btn-add" href="payroll/staff/create" ><i class="fa fa-plus-circle" ></i> Tambah Baru</a>
+            <button class="btn btn-danger hide" id="btn-delete" href="#" ><i class="fa fa-trash-o" ></i> Delete</button>
             <div class="clearfix" ></div>
             <br/>
 

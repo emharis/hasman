@@ -5,12 +5,38 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         {{-- <img src="img/logo-bg-white.png" class="img-responsive"> --}}
         <ul class="sidebar-menu">
-            {{-- <li class="header">MAIN NAVIGATION</li> --}}
-            <li class="{{Request::is('home') ? 'active':''}}" >
+
+            @foreach($sidemenu as $dt )
+                @if(count($dt->childMenus ) > 0)
+                    <li class="treeview {{Request::is($dt->class_request) ? 'active':''}}" >
+                        <a href="{{$dt->href}}">
+                            <i class="{{$dt->icon}}"></i>
+                            <span>{{$dt->title}}</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @foreach($dt->childMenus as $chd)
+                                <li class="{{Request::is($chd->class_request) ? 'active':''}}" ><a href="{{$chd->href}}"><i class="fa fa-circle-o"></i> {{$chd->title }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @else
+
+                    @if(!$dt->parentMenu)
+                        <li class="{{Request::is($dt->class_request) ? 'active':''}}" >
+                            <a href="{{$dt->href}}"> 
+                                <i class="{{$dt->icon}}"></i> 
+                                <span>{{$dt->title}} </span> 
+                            </a>
+                        </li>
+                    @endif
+                @endif
+            @endforeach
+
+            {{-- <li class="{{Request::is('home') ? 'active':''}}" >
                 <a href="home"> <i class="fa fa-home"></i> <span>Home</span> </a>
             </li>
             
-            <!--Menu Inventory-->
             <li class="treeview {{Request::is('master/*') ? 'active':''}}" >
                 <a href="#">
                     <i class="fa fa-th"></i>
@@ -35,46 +61,13 @@
                 <a href="purchase/order"> <i class="fa fa-calculator"></i> <span>Purchase Orders</span> </a>
             </li>
 
-            {{-- <li class="treeview {{Request::is('purchase/*') ? 'active':''}}" >
-                <a href="#">
-                    <i class="fa fa-calculator"></i>
-                    <span>Purchases</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{Request::is('purchase/order*') ? 'active':''}}" ><a href="purchase/order"><i class="fa fa-circle-o"></i> Purchase Orders</a></li>
-                </ul>
-            </li> --}}
-
             <li class="{{Request::is('sales*') ? 'active':''}}" >
                 <a href="sales/order"> <i class="fa fa-shopping-cart"></i> <span>Sales Orders</span> </a>
             </li>
 
-            {{-- <li class="treeview {{Request::is('sales/*') ? 'active':''}}" >
-                <a href="#">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span>Sales</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{Request::is('sales/order*') ? 'active':''}}" ><a href="sales/order"><i class="fa fa-circle-o"></i> Sales Orders</a></li>
-                </ul>
-            </li> --}}
-
             <li class="{{Request::is('delivery*') ? 'active':''}}" >
                 <a href="delivery/order"> <i class="fa fa-truck"></i> <span>Delivery Orders</span> </a>
             </li>
-
-            {{-- <li class="treeview {{Request::is('delivery/*') ? 'active':''}}" >
-                <a href="#">
-                    <i class="fa fa-truck"></i>
-                    <span>Delivery</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{Request::is('delivery/order*') ? 'active':''}}" ><a href="delivery/order"><i class="fa fa-circle-o"></i> Delivery Order</a></li>
-                </ul>
-            </li> --}}
 
             <li class="treeview {{Request::is('invoice/*') ? 'active':''}}" >
                 <a href="#">
@@ -91,18 +84,6 @@
             <li class="{{Request::is('dailyhd') ? 'active':''}}" >
                 <a href="dailyhd"> <i class="ft-excafator"></i> <span>Harian Alat Berat</span> </a>
             </li>
-
-            {{-- <li class="treeview {{Request::is('attendance/*') ? 'active':''}}" >
-                <a href="#">
-                    <i class="fa fa-calendar-check-o"></i>
-                    <span>Attendance</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{Request::is('attendance/setting*') ? 'active':''}}" ><a href="attendance/setting"><i class="fa fa-circle-o"></i> Setting</a></li>
-                    <li class="{{Request::is('attendance/attend*') ? 'active':''}}" ><a href="attendance/attend"><i class="fa fa-circle-o"></i> Attend Now</a></li>
-                </ul>
-            </li> --}}
 
             <li class="{{Request::is('attendance/*') ? 'active':''}}" >
                 <a href="attendance/attend"> <i class="fa fa-calendar-check-o"></i> <span>Attendance</span> </a>
@@ -133,7 +114,6 @@
                 <ul class="treeview-menu">
                     <li class="{{Request::is('report/purchase*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Purchases</a></li>
                     <li class="{{Request::is('report/sales*') ? 'active':''}}" ><a href="report/sales"><i class="fa fa-circle-o"></i> Sales</a></li>
-                    {{-- <li class="{{Request::is('report/delivery*') ? 'active':''}}" ><a href="report/purchase"><i class="fa fa-circle-o"></i> Delivery Order</a></li> --}}
                 </ul>
             </li>
 
@@ -146,10 +126,12 @@
                 <ul class="treeview-menu">
                     <li class="{{Request::is('setting/user*') ? 'active':''}}" ><a href="setting/user"><i class="fa fa-circle-o"></i> User</a></li>
                 </ul>
-            </li>
+            </li> --}}
 
             <li style="background-color: #DD4B39;" >
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <i class="fa fa-bars" class=""></i> <span></span> </a>
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <i class="fa fa-bars" class=""></i> 
+                    <span style="color:transparent;" >.</span> 
+                </a>
             </li>
 
         </ul>

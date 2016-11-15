@@ -89,13 +89,15 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td class="normal_sales_input">
-                            <div class="input-group">                                
+                            {{-- <div class="input-group">                                
                                 <select name="pekerjaan" class="form-control select2" required="required" disabled="disabled">
                                 </select>
                                  <div class="input-group-btn">
                                   <button type="button" class="btn btn-primary " disabled="disabled" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
                                 </div>
-                            </div>
+                            </div> --}}
+                            <select name="pekerjaan" class="form-control select2" required="required" disabled="disabled">
+                                </select>
                         </td>
 
                         <td class="direct_sales_input hide" >
