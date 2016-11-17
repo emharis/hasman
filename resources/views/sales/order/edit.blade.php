@@ -44,7 +44,7 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
-            <a class="btn btn-primary btn-sm"  id="btn-validate" href="sales/order/validate/{{$data_master->id}}" >Validate Order</a>
+            <a class="btn btn-primary"  id="btn-validate" href="sales/order/validate/{{$data_master->id}}" >Validate Order</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
@@ -85,15 +85,15 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            <div class="input-group">
+                            {{-- <div class="input-group">
                                 <!-- /btn-group -->
                                 {!! Form::select('pekerjaan',$select_pekerjaan,$data_master->pekerjaan_id,['class'=>'form-control select2','required']) !!}    
 
                                  <div class="input-group-btn">
                                   <button type="button" class="btn btn-primary" id="btn-add-pekerjaan" ><i class="fa fa-plus"></i></button>
                                 </div>
-                            </div>
-
+                            </div> --}}
+                            {!! Form::select('pekerjaan',$select_pekerjaan,$data_master->pekerjaan_id,['class'=>'form-control select2','required']) !!} 
 
                         </td>
                         <td></td>

@@ -114,7 +114,7 @@
                             <label>Delivery Date</label>
                         </td>
                         <td>
-                            <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : date('d-m-Y')}}">
+                            <input type="text" name="delivery_date" class="form-control input-date" value="{{$data->delivery_date_formatted ? $data->delivery_date_formatted : $data->order_date_formatted}}">
                         </td>
                         
                     </tr>

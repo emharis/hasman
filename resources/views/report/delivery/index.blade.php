@@ -22,7 +22,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Sales Reports
+            Delivery Reports
         </h1>
     </section>
 
@@ -48,41 +48,21 @@
                                 {{-- <input type="text" class="form-control input-date" name="end_date"> --}}
                             </td>
                         </tr>
-                        {{-- <tr>
-                            <td>                                
-                                <div class="checkbox"  >
-                                    <label>
-                                        <input type="checkbox" name="ck_detail_per_material" data-filter='filter_by_detail_material'>
-                                        <b>Detail per material</b>
-                                    </label>
-                                </div>
+                        <tr>
+                            <td class="col-sm-2 col-md-2 col-lg-2" >
+                                <label>Kalkulasi</label>
                             </td>
-                            <td colspan="2" >
-                                
-                            </td>
-                        </tr> --}}
-
-                        <tr >
-                            <td >
-                                {{-- <div class="radio" >
-                                    <label>
-                                        <input type="radio" name="rd_filter_by" value="by_sales_type" >
-                                        <b>Per Sales Type</b>
-                                    </label>
-                                </div> --}}
-                                <label>Sales Type</label>
-                            </td>
-                            <td > 
-                                <select name="sales_type" class="form-control" {{-- disabled="disabled" --}}  >
-                                    <option value="0" >Semua Jenis</option>
-                                    <option value="1" >Direct Sales</option>
-                                    <option value="2" >Non Direct Sales (Mitra)</option>
+                            <td  >
+                                <select name="kalkulasi" class="form-control" >
+                                    <option value="A">Semua Kalkulasi</option>
+                                    <option value="R">Ritase</option>
+                                    <option value="K">Kubikasi</option>
+                                    <option value="T">Tonase</option>
                                 </select>
                             </td>
-                            <td>
-                                
-                            </td>
+                            <td></td>
                         </tr>
+                        
 
                         {{-- FILTER BY CUSTOMER --}}
                         <tr >
@@ -111,36 +91,42 @@
                        
                         {{-- ============================================================= --}}
 
-                        
-
-{{--                         <tr>
-                            <td>                                
+                        <tr >
+                            <td >
                                 <div class="radio" >
                                     <label>
                                         <input type="radio" name="rd_filter_by" value="by_lokasi_galian" >
                                         <b>Per Lokasi Galian</b>
                                     </label>
                                 </div>
+
                             </td>
-                            <td colspan="2" >
-                                {!! Form::select('lokasi_galian',$select_lokasi_galian,null,['class'=>'form-control','disabled filter_by_galian']) !!}
+                            <td >
+                                {!! Form::select('lokasi_galian',$select_lokasi_galian,null,['class'=>'form-control','disabled ']) !!}
                             </td>
-                        </tr> --}}
-                        
-                        {{-- <tr>
                             <td>
-                                <div class="checkbox" >
-                                    <label>
-                                        <input type="checkbox" name="ck_status" data-filter='filter_by_status'> 
-                                        <b>Status</b>
-                                    </label>   
-                                </div>
                                 
                             </td>
-                            <td colspan="2" >
-                                {!! Form::select('status',['O'=>'Open','V'=>'Validated','D'=>'Done'],null,['class'=>'form-control','disabled filter_by_customer']) !!}
+                        </tr>
+
+                        <tr >
+                            <td >
+                                <div class="radio" >
+                                    <label>
+                                        <input type="radio" name="rd_filter_by" value="by_driver" >
+                                        <b>Per Driver/Armada</b>
+                                    </label>
+                                </div>
+
                             </td>
-                        </tr> --}}
+                            <td >
+                                {!! Form::select('driver',$select_driver,null,['class'=>'form-control','disabled ']) !!}
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+
                         <tr>
                             <td></td>
                             <td colspan="2" >
@@ -233,22 +219,37 @@
             $('select[name=pekerjaan]').empty();
 
             // disable select lokasi galian
-            // $('select[name=lokasi_galian]').attr('disabled','disabled');
+            $('select[name=lokasi_galian]').attr('disabled','disabled');
 
-            // disable select sales typ
-            // $('select[name=sales_type]').attr('disabled','disabled');
-        }else{
+            // disable select driver
+            $('select[name=driver]').attr('disabled','disabled');
+        }else if(rd_filter_by == 'by_lokasi_galian'){
             // disable filter by customer
             $('.filter_by_customer').attr('disabled','disabled');
-            $('.filter_by_customer').val([]);
+            // $('.filter_by_customer').val([]);
 
             // enable kan select lokasi galian
-            // $('select[name=lokasi_galian]').removeAttr('disabled');
+            $('select[name=lokasi_galian]').removeAttr('disabled');
 
-            // enablekan selecct sales type
-            // $('select[name=sales_type]').removeAttr('disabled');
+            // disable select lokasi galian
+            $('select[name=driver]').attr('disabled','disabled');
 
+        }else if(rd_filter_by == 'by_driver'){
+            // disable filter by customer
+            $('.filter_by_customer').attr('disabled','disabled');
+            
+
+            // enable kan select lokasi galian
+            $('select[name=lokasi_galian]').attr('disabled','disabled');
+
+            // disable select lokasi galian
+            $('select[name=driver]').removeAttr('disabled');
         }
+
+        $('select[name=customer]').val([]);
+        $('select[name=pekerjaan]').val([]);
+        $('select[name=lokasi_galian]').val([]);
+        $('select[name=driver]').val([]);
     });
 
     // FILTER BY LOKASI GALIAN
@@ -276,59 +277,35 @@
     var end_date;
     var rd_filter_by;
     $('#btn-submit').click(function(){
-        var sales_type = $('select[name=sales_type]').val();
+
+        var kalkulasi = $('select[name=kalkulasi]').val();
+
         if(start_date != "" 
                 && start_date != undefined 
                 && end_date != "" 
                 && end_date != undefined 
-                && sales_type != ""
-                && sales_type != null
-                && sales_type != undefined){
+                && kalkulasi != undefined
+                && kalkulasi != ""
+                ){
 
             // submit form
             var newform = $('<form>').attr('method','POST');
-            newform.attr('action','report/sales/report-by-date');
+            newform.attr('action','report/delivery/report-by-date');
 
             if(rd_filter_by == 'by_customer'){
                 var customer_id = $('select[name=customer]').val();
                 var pekerjaan_id = $('select[name=pekerjaan]').val();
 
-                // if(pekerjaan_id == 0){
-                //     // semua pekerjaan
-                //     newform.attr('action','report/sales/report-by-customer');
-                // }else{
-                //     newform.attr('action','report/sales/report-by-customer-pekerjaan');
-                //     newform.append($('<input>').attr('type','hidden').attr('name','pekerjaan_id').val(pekerjaan_id));
-
-                // }
-                
-                newform.attr('action','report/sales/report-by-customer');
+                newform.attr('action','report/delivery/report-by-customer');
                 newform.append($('<input>').attr('type','hidden').attr('name','pekerjaan_id').val(pekerjaan_id));
                 newform.append($('<input>').attr('type','hidden').attr('name','customer_id').val(customer_id));
 
             }
-            // else if(rd_filter_by == 'by_sales_type'){
-            //     // var lokasi_galian_id = $('select[name=lokasi_galian]').val();
-            //     // newform.attr('action','report/sales/report-by-lokasi-galian');
-            //     // newform.append($('<input>').attr('type','hidden').attr('name','lokasi-galian_id').val(lokasi_galian_id));
-
-            //     var sales_type = $('select[name=sales_type]').val();
-
-            //     if(sales_type == 0){
-            //         // semua jenis
-            //         // newform.attr('action','report/sales/report-by-sales-type-all');
-                    
-            //     }else{ 
-            //         newform.attr('action','report/sales/report-by-sales-type');
-            //         newform.append($('<input>').attr('type','hidden').attr('name','sales_type').val(sales_type));
-                    
-            //     }
-
-            // }
+            
 
             newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
             newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-            newform.append($('<input>').attr('type','hidden').attr('name','sales_type').val(sales_type));
+            newform.append($('<input>').attr('type','hidden').attr('name','kalkulasi').val(kalkulasi));
             newform.submit();
 
             // ------------------------------
@@ -339,71 +316,6 @@
         return false;
 
         
-
-        
-
-        // ===========================================================
-
-
-        // var start_date = $('input[name=date_range]').data('daterangepicker').getStartDate();
-        // alert(start_date);
-
-        // var filter_by_customer = $('input[name=ck_customer]').prop('checked');
-        // var filter_by_status = $('input[name=ck_status]').prop('checked');
-
-        // // alert(filter_by_customer)
-
-        // // filter by date range
-        // var start_date = $('input[name=start_date]').val();
-        // var end_date = $('input[name=end_date]').val();
-
-        // var ck_detail = $('input[name=ck_detail_per_material]').prop('checked');
-        // var ck_customer = $('input[name=ck_customer]').prop('checked');
-
-        // var newform = $('<form>').attr('method','POST');
-
-        // if(ck_detail && ck_customer){
-        //     var customer_id = $('select[name=customer]').val();
-        //     newform.attr('action','report/sales/report-by-customer-detail')
-        //     newform.append($('<input>').attr('type','hidden').attr('name','customer_id').val(customer_id));
-        // }else if(ck_detail){
-        //     // hanya tanggal
-        //     newform.attr('action','report/sales/report-by-date-detail')
-                        
-        // }else if(ck_customer){
-        //     var customer_id = $('select[name=customer]').val();
-        //     newform.attr('action','report/sales/report-by-customer')
-        //     newform.append($('<input>').attr('type','hidden').attr('name','customer_id').val(customer_id));            
-        // }else{
-        //     // hanya tanggal
-        //     newform.attr('action','report/sales/report-by-date')
-            
-        // }
-
-        // newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
-        // newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-        // newform.submit();
-
-        // // if(filter_by_customer && filter_by_status){
-        // //     // filter by status & customer
-        // // }else if(filter_by_status){
-        // //     // filter by status
-
-        // // }else if(filter_by_customer){
-        // //     // filter by customer
-        // //     var customer = $('select[name=customer]').val();
-        // //     var newform = $('<form>').attr('method','POST').attr('action','report/purchase/filter-by-date-n-customer');
-        // //     newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
-        // //     newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-        // //     newform.append($('<input>').attr('type','hidden').attr('name','customer').val(customer));
-        // //     newform.submit();
-        // // }else{            
-
-        // //     var newform = $('<form>').attr('method','POST').attr('action','report/purchase/filter-by-date');
-        // //     newform.append($('<input>').attr('type','hidden').attr('name','start_date').val(start_date));
-        // //     newform.append($('<input>').attr('type','hidden').attr('name','end_date').val(end_date));
-        // //     newform.submit();
-        // // }
     });
 
     

@@ -144,5 +144,14 @@ class ApiController extends Controller
 		return json_encode($selectPekerjaan);
 	}
 
+	public function getPekerjaanByCustomer($customer_id){
+		$pekerjaan = \DB::table('pekerjaan')
+                                ->where('customer_id',$customer_id)
+                                ->select('id','nama')
+                                ->get();
+
+                return json_encode($pekerjaan);
+	}
+
 
 }

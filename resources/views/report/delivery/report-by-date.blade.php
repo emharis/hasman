@@ -16,7 +16,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-         <a href="report/sales" >Sales Reports</a> <i class="fa fa-angle-double-right" ></i> 
+         <a href="report/delivery" >Delivery Reports</a> <i class="fa fa-angle-double-right" ></i> 
          Show Data Reports 
     </h1>
 </section>
@@ -27,7 +27,7 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border"  >
-            <h3 class="box-title">Sales Report</h3>
+            <h3 class="box-title">Delivery Report</h3>
               <div class="box-tools pull-right">
                 <div class="btn-group pull-right">
                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,29 +47,34 @@
                 <tbody>
                     <tr>
                         <td class="col-sm-1 col-md-1 col-lg-1">
-                            <label>Tanggal : </label>
+                            <label>Tanggal</label>
                         </td>
+                        <td>:</td>
                         <td  >
                             {{'[' .$start_date .']' .' - ' . '['.$end_date.']'}}
                         </td>
                         <td class="col-sm-1 col-md-1 col-lg-1" >
-                            {{-- <label>End Date :</label> --}}
-                            @if($sales_type > 0)
-                                <label>Sales Type :</label>
+                            @if($kalkulasi != 'A'  )
+                                <label>Kalkulasi</label>
                             @endif
                         </td>
+                        <td>
+                            @if($kalkulasi != 'A'  )
+                                :
+                            @endif
+                        </td>                        
                         <td  >
-                            {{-- {{$end_date}}     --}}
-                            @if($sales_type == 1)
-                                Direct Sales
-                            @elseif($sales_type == 2)
-                                Non Direct Sales / Mitra
+                            @if($kalkulasi == 'T')
+                                Tonase
+                            @elseif($kalkulasi == 'K')
+                                Kubikasi
+                            @elseif($kalkulasi == 'R')
+                                Ritase
                             @endif
                         </td>
-                        <td></td>
                     </tr>
                     <tr>
-                        <td colspan="5" ></td>
+                        <td colspan="6" ></td>
                     </tr>
                 </tbody>
             </table>
@@ -79,38 +84,60 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>SO Ref#</th>
+                        <th>Ref#</th>
                         <th>SO Date</th>
-                        <th>Status</th>
+                        <th>Delivery Date</th>
+                        {{-- <th>Status</th> --}}
                         <th>Customer</th>
+                        <th>Pekerjaan</th>
+                        <th>Driver</th>
                         <th>Nopol</th>
-                        <th class="col-sm-2 col-md-2 col-lg-2" >Pekerjaan</th>
-                        <th class="col-sm-2 col-md-2 col-lg-2" >Alamat</th>
-                        <th>Total</th>
-                        <th>Amount Due</th>
+                        <th>Material</th>
+                        <th>Kal</th>
+                        <th>Vol</th>
+                        <th>Netto</th>
+                        <th>Qty</th>
+                        {{-- <th>Total</th> --}}
+                        {{-- <th>Amount Due</th> --}}
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $total_ritase=0; ?>
+                    <?php $total_tonase=0; ?>
+                    <?php $total_kubikasi=0; ?>
                     @foreach($data as $dt )
+
+                        @if($dt->kalkulasi == 'R')
+                            <?php $total_ritase+=$dt->qty; ?>
+                        @elseif($dt->kalkulasi == 'T')
+                            <?php $total_tonase+=$dt->netto; ?>                            
+                        @else 
+                            <?php $total_kubikasi+=$dt->volume; ?>
+                        @endif
+
                         <tr>
                             <td>{{$rownum++}}</td>
                             <td>
-                                {{$dt->order_number}}
+                                {{$dt->delivery_order_number}}
                             </td>
                             <td>
                                 {{$dt->order_date_formatted}}
                             </td>
                             <td>
-                                @if($dt->status =='O')
-                                    OPEN
-                                @elseif($dt->status =='V')
-                                    VALIDATED
-                                @elseif($dt->status =='D')
-                                    DONE
-                                @endif
+                                {{$dt->delivery_date_formatted}}
                             </td>
                             <td>
                                 {{$dt->customer}}
+                            </td>
+                            <td>
+                                @if($dt->pekerjaan != '')
+                                    {{$dt->pekerjaan}}
+                                @else 
+                                    -
+                                @endif
+                            </td>
+                             <td>
+                                {{$dt->karyawan}}
                             </td>
                             <td>
                                 @if($dt->nopol != "")
@@ -120,41 +147,48 @@
                                 @endif
                             </td>
                             <td>
-                                @if($dt->pekerjaan != '')
-                                    {{$dt->pekerjaan}}
-                                @else 
-                                    -
-                                @endif
+                                {{$dt->material}}
                             </td>
                             <td>
-                                @if($dt->alamat_pekerjaan != "")
-                                    {!! $dt->alamat_pekerjaan .', ' . $dt->desa . ', <br/>'  . $dt->kecamatan . ', ' . $dt->kabupaten !!}
-                                @else 
+                                {{$dt->kalkulasi}}
+                            </td>
+                            <td class="text-right">
+                                @if($dt->kalkulasi == 'K')
+                                {{$dt->volume}}
+                                @else
                                 -
                                 @endif
                             </td>
-                            <td class="text-right uang">
-                                {{$dt->total}}
+                            <td class="text-right">
+                                @if($dt->kalkulasi == 'T')
+                                    {{$dt->netto}}
+                                @else
+                                -
+                                @endif
                             </td>
-                            <td class="text-right uang">
-                                {{$dt->amount_due}}
+                            <td class="text-right" >
+                                @if($dt->kalkulasi == 'R')
+                                    {{$dt->qty}}
+                                @else
+                                -
+                                @endif
                             </td>
+                           
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td colspan="8" class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
-                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total}}</label></td>
-                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total_amount_due}}</label></td>
-                        
-                    </tr>
+                    <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" colspan="10" ><label>TOTAL</label></td>
+                    <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" >{{$total_kubikasi}}</td>
+                    <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;">{{$total_tonase}}</td>
+                    <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;">{{$total_ritase}}</td>
+                    
                 </tfoot>
             </table>
             
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger" href="report/sales" >Close</a>
+            <a class="btn btn-danger" href="report/delivery" >Close</a>
         </div>
     </div><!-- /.box -->
 

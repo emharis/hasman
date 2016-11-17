@@ -34,11 +34,11 @@
                     <tr>
                         <td class="bg-green text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
-                            AMOUNT DUE
+                            TOTAL CUSTOMER'S AMOUNT DUE
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-right"  style="padding-right: 5px;  width: 125px;" >
+                        <td class="text-right"  style="padding-right: 5px;  width: 225px;" >
                             <label class="uang">{{$amount_due}}</label>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@
                         <th>Pekerjaan</th>
                         <th>SO Date</th>
                         <th>SO Ref#</th>
-                        <th>Kalkulasi</th>
+                        {{-- <th>Kalkulasi</th> --}}
                         <th>Total</th>
                         <th>Status</th>
                         <th>Amount Due</th>
@@ -123,7 +123,7 @@
                         <td class="row-to-edit" >
                             {{$dt->order_number}}
                         </td>
-                        <td class="row-to-edit" >
+                        {{-- <td class="row-to-edit" >
                             @if($dt->kalkulasi == 'K')
                                 Kubikasi
                             @elseif($dt->kalkulasi == 'T')
@@ -131,7 +131,7 @@
                             @else
                                 Ritase
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="row-to-edit uang text-right" >
                             {{$dt->total}}
                         </td>
@@ -150,7 +150,8 @@
                             {{$dt->amount_due}}
                         </td>
                         <td class="text-center" >
-                            <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                            {{-- <a class="btn btn-primary btn-xs" href="invoice/customer/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a> --}}
+                            <a class="btn btn-primary btn-xs" href="invoice/customer/show-one-invoice/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -272,11 +273,11 @@
     }
 
     // Row Clicked
-    $('.row-to-edit').click(function(){        
-        var row = $(this).parent();        
-        var data_id = row.data('id');            
-        location.href = 'invoice/customer/edit/' + data_id ;        
-    });
+    // $('.row-to-edit').click(function(){        
+    //     var row = $(this).parent();        
+    //     var data_id = row.data('id');            
+    //     location.href = 'invoice/customer/edit/' + data_id ;        
+    // });
 
     // Delete Data Lokasi
     $('#btn-delete').click(function(e){

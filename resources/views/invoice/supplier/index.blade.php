@@ -34,7 +34,7 @@
                     <tr>
                         <td class="bg-orange text-center" rowspan="2" style="width: 50px;" ><i class="ft-rupiah" ></i></td>
                         <td style="padding-left: 10px;padding-right: 5px;">
-                            AMOUNT DUE
+                            TOTAL AMOUNT DUE
                         </td>
                     </tr>
                     <tr>

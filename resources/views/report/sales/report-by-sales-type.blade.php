@@ -47,68 +47,23 @@
                 <tbody>
                     <tr>
                         <td class="col-sm-1 col-md-1 col-lg-1">
-                            <label>Tanggal</label>
+                            <label>Tanggal : </label>
                         </td>
-                        <td>:</td>
                         <td  >
-                            {{ '['. $start_date .'] - [' . $end_date .']'}}
+                            {{'[' .$start_date .']' .' - ' . '['.$end_date.']'}}
                         </td>
-
-                        <td>
-                            <label>Customer</label>
+                        <td class="col-sm-1 col-md-1 col-lg-1" >
+                            <label>Sales Type : </label>
                         </td>
-                        <td>:</td>
-                        <td>{{$customer->nama}}</td>
-                        
+                        <td  >
+                            @if($sales_type == 1)
+                                Direct Sales
+                            @elseif($sales_type == 2)
+                                Non Direct Sales / Mitra
+                            @endif
+                        </td>
+                        <td></td>
                     </tr>
-                    @if($pekerjaan_id > 0)
-                        <tr>
-                            <td class="col-sm-1 col-md-1 col-lg-1" >
-                                <label>Pekerjaan</label>
-                            </td>
-                            <td>
-                                :
-                            <td  >
-                                {{$pekerjaan->nama}}
-                            </td>
-                            
-                            <td>
-                               <label>Alamat</label>
-                            </td>
-                            <td>
-                                :
-                            </td>
-                            <td>
-                                {!!$pekerjaan->alamat .', ' . $pekerjaan->desa.', <br/>' . $pekerjaan->kecamatan .', ' . $pekerjaan->kabupaten . ', ' . $pekerjaan->provinsi!!}
-                            </td>
-                        </tr>
-                    @endif
-                    @if($sales_type > 0)
-                        <tr>
-                            <td class="col-sm-1 col-md-1 col-lg-1" >
-                                    <label>Sales Type</label>
-                            </td>
-                            <td>
-                                    :
-                            <td  >
-                                    @if($sales_type == 1)
-                                        Direct Sales
-                                    @elseif($sales_type == 2)
-                                        Non Direct Sales / Mitra
-                                    @endif
-                            </td>
-                            
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                    @endif
                     <tr>
                         <td colspan="5" ></td>
                     </tr>
@@ -123,14 +78,12 @@
                         <th>SO Ref#</th>
                         <th>SO Date</th>
                         <th>Status</th>
-                        {{-- <th>Customer</th> --}}
+                        <th>Customer</th>
                         <th>Nopol</th>
-                        @if($pekerjaan_id == 0)
-                            <th >Pekerjaan</th>
-                            <th >Alamat</th>
-                        @endif
-                        <th class="col-sm-2 col-md-2 col-lg-2" >Total</th>
-                        <th class="col-sm-2 col-md-2 col-lg-2" >Amount Due</th>
+                        <th class="col-sm-2 col-md-2 col-lg-2" >Pekerjaan</th>
+                        <th class="col-sm-2 col-md-2 col-lg-2" >Alamat</th>
+                        <th>Total</th>
+                        <th>Amount Due</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,9 +105,9 @@
                                     DONE
                                 @endif
                             </td>
-                            {{-- <td>
+                            <td>
                                 {{$dt->customer}}
-                            </td> --}}
+                            </td>
                             <td>
                                 @if($dt->nopol != "")
                                     {{$dt->nopol}}
@@ -162,22 +115,20 @@
                                     -
                                 @endif
                             </td>
-                            @if($pekerjaan_id == 0)
-                                <td>
-                                    @if($dt->pekerjaan != '')
-                                        {{$dt->pekerjaan}}
-                                    @else 
-                                        -
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($dt->alamat_pekerjaan != "")
-                                        {!! $dt->alamat_pekerjaan .', ' . $dt->desa . ', <br/>'  . $dt->kecamatan . ', ' . $dt->kabupaten !!}
-                                    @else 
+                            <td>
+                                @if($dt->pekerjaan != '')
+                                    {{$dt->pekerjaan}}
+                                @else 
                                     -
-                                    @endif
-                                </td>
-                            @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if($dt->alamat_pekerjaan != "")
+                                    {!! $dt->alamat_pekerjaan .', ' . $dt->desa . ', <br/>'  . $dt->kecamatan . ', ' . $dt->kabupaten !!}
+                                @else 
+                                -
+                                @endif
+                            </td>
                             <td class="text-right uang">
                                 {{$dt->total}}
                             </td>
@@ -189,9 +140,9 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="{{$pekerjaan_id == 0 ? 7 : 5}}" class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
-                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total != "" ? $total : 0}}</label></td>
-                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total_amount_due != "" ? $total_amount_due : 0}}</label></td>
+                        <td colspan="8" class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label>TOTAL</label></td>
+                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total}}</label></td>
+                        <td class="text-right" style="background-color: #ecf0f5;border-color: #DDDDDD!important;" ><label class="uang" >{{$total_amount_due}}</label></td>
                         
                     </tr>
                 </tfoot>

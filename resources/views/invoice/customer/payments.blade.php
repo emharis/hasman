@@ -75,8 +75,9 @@
                                 {{$dt->payment_amount}}
                             </td>
                             
-                            <td class="text-center" >
+                            <td class="text-center col-sm-1" >
                                 {{-- <a class="btn btn-primary btn-xs" href="invoice/customer/payment/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a> --}}
+                                <a class="btn btn-success btn-xs btn-print-payment" href="#" ><i class="fa fa-print" ></i></a>
                                 <a class="btn btn-danger btn-xs btn-delete-payment" href="invoice/customer/payments/delete/{{$dt->id}}" ><i class="fa fa-trash-o" ></i></a>
                             </td>
                         </tr>

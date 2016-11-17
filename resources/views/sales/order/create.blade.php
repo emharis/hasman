@@ -255,7 +255,7 @@
         <div class="box-footer" >
             <button type="submit" class="btn btn-primary normal_sales_input" id="btn-save" >Save</button>
             <button type="submit" class="btn btn-success direct_sales_input hide" id="btn-direct-sales-save" >Save</button>
-            <a class="btn btn-danger" id="btn-cancel-save" >Cancel</a>
+            <a class="btn btn-danger" href="sales/order" id="btn-cancel-save" >Cancel</a>
         </div>
     </div><!-- /.box -->
 
@@ -716,15 +716,15 @@
 
     
     // BTN CANCEL SAVE
-    $('#btn-cancel-save').click(function(){
-        if(confirm('Anda akan membabtalkan transaksi ini?')){
-            location.href = "sales/order";
-        }else
-        {
+    // $('#btn-cancel-save').click(function(){
+    //     if(confirm('Anda akan membabtalkan transaksi ini?')){
+    //         location.href = "sales/order";
+    //     }else
+    //     {
 
-        return false
-        }
-    });
+    //     return false
+    //     }
+    // });
     // END OF BTN CANCEL SAVE
 
 

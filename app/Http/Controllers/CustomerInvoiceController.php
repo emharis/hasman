@@ -62,6 +62,43 @@ class CustomerInvoiceController extends Controller
 			]);
 	}
 
+	public function showOneInvoice($invoice_id){
+		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+				->find($invoice_id);
+		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+				->where('customer_invoice_id',$data->id)
+				->get();
+
+		$data_kubikasi = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+						->where('customer_invoice_id',$data->id)
+						->where('kalkulasi','K')
+						->get();
+		$data_tonase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+						->where('customer_invoice_id',$data->id)
+						->where('kalkulasi','T')
+						->get();
+		$data_ritase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+						->where('customer_invoice_id',$data->id)
+						->where('kalkulasi','R')
+						->get();
+
+		$sales_order = \DB::table('sales_order')->find($data->order_id);
+		$payments = \DB::table('customer_payment')
+					->where('customer_invoice_id',$invoice_id)
+					->select('customer_payment.*',\DB::raw('date_format(payment_date,"%d-%m-%Y") as date_formatted'))
+					->get();
+
+		return view('invoice.customer.one-invoice',[
+				'data' => $data,
+				'data_detail' => $data_detail,
+				'payments' => $payments,
+				'sales_order' => $sales_order,
+				'data_kubikasi' => $data_kubikasi,
+				'data_tonase' => $data_tonase,
+				'data_ritase' => $data_ritase,
+			]);
+	}
+
 	public function payments($invoice_id){
 		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
 				->find($invoice_id);
@@ -180,7 +217,8 @@ class CustomerInvoiceController extends Controller
 			}
 
 			
-			return redirect('invoice/customer/edit/' . $req->customer_invoice_id);
+			// return redirect('invoice/customer/edit/' . $req->customer_invoice_id);
+			return redirect('invoice/customer/show-one-invoice/' . $req->customer_invoice_id);
 
 		});
 	}

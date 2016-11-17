@@ -110,7 +110,8 @@ class DeliveryOrderController extends Controller
 						'tarre' => $req->tarre,
 						'netto' => $req->gross - $req->tarre,
 						'unit_price' => $unit_price,
-						'status' => 'V'
+						// 'status' => 'V' 
+						'status' => 'DN' // status akan langsung done karena proses delivery nya sudah selesai 
 					]);
 
 			if($req->kalkulasi == "K"){
@@ -190,137 +191,188 @@ class DeliveryOrderController extends Controller
 			// cek jika delivery order untuk satu sales order telah di kirim &  validated
 			// maka customer invoice akan di generate
 			$open_do = \DB::table('delivery_order')
-				->whereRaw('sales_order_id = ' . $data_do->sales_order_id . ' and status != "V"')
+				// ->whereRaw('sales_order_id = ' . $data_do->sales_order_id . ' and status != "V"')
+				->where('sales_order_id',$data_do->sales_order_id)
+				->where(function($query){
+					$query->where('status','D')
+							->orWhere('status','O');
+				})
 				->count();
 			if($open_do == 0){
-				// genereate multi invoice
-				$by_kubikasi = \DB::table('delivery_order')
-								->where('sales_order_id',$data_do->sales_order_id)
-								->where('kalkulasi','K')->get();
-				$by_tonase = \DB::table('delivery_order')
-								->where('sales_order_id',$data_do->sales_order_id)
-								->where('kalkulasi','T')->get();
-				$by_ritase = \DB::table('delivery_order')
-								->where('sales_order_id',$data_do->sales_order_id)
-								->where('kalkulasi','R')->get();
+				// // genereate multi invoice
+				// $by_kubikasi = \DB::table('delivery_order')
+				// 				->where('sales_order_id',$data_do->sales_order_id)
+				// 				->where('kalkulasi','K')->get();
+				// $by_tonase = \DB::table('delivery_order')
+				// 				->where('sales_order_id',$data_do->sales_order_id)
+				// 				->where('kalkulasi','T')->get();
+				// $by_ritase = \DB::table('delivery_order')
+				// 				->where('sales_order_id',$data_do->sales_order_id)
+				// 				->where('kalkulasi','R')->get();
 
-				if(count($by_kubikasi) > 0){
-					// create invoice kubikasi
-					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+				// if(count($by_kubikasi) > 0){
+				// 	// create invoice kubikasi
+				// 	$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+				// 			'inv_number' => $this->getNewCustomerInvoice(),
+				// 			'order_id' => $data_do->sales_order_id,
+				// 			'status' => 'O',
+				// 			'kalkulasi' => 'K'
+				// 		]);
+				// 	// insert detail invoice
+				// 	$total = 0;
+				// 	foreach($by_kubikasi as $dt){
+				// 		\DB::table('customer_invoice_detail')
+				// 			->insert([
+				// 					'customer_invoice_id' => $customer_invoice_id,
+				// 					'delivery_order_id' => $dt->id,
+				// 					'kalkulasi' => 'K',
+				// 					'panjang' => $dt->panjang,
+				// 					'lebar' => $dt->lebar,
+				// 					'tinggi' => $dt->tinggi,
+				// 					'volume' => $dt->volume,
+				// 					'unit_price' => $dt->unit_price,
+				// 					'total' => $dt->total,
+				// 					'qty' => 1,
+				// 				]);
+				// 		$total += $dt->total;
+				// 	}
+
+				// 	// update total & amount_due di sales order
+				// 	\DB::table('customer_invoices')
+				// 		->where('id',$customer_invoice_id)
+				// 		->update([
+				// 				'total' => $total,
+				// 				'amount_due' => $total,
+				// 			]);
+					
+				// }
+
+				// if(count($by_tonase) > 0){
+				// 	// create invoice TONASE
+				// 	$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+				// 			'inv_number' => $this->getNewCustomerInvoice(),
+				// 			'order_id' => $data_do->sales_order_id,
+				// 			'status' => 'O',
+				// 			'kalkulasi' => 'T'
+				// 		]);
+				// 	// insert detail invoice
+				// 	$total = 0;
+				// 	foreach($by_tonase as $dt){
+				// 		\DB::table('customer_invoice_detail')
+				// 			->insert([
+				// 					'customer_invoice_id' => $customer_invoice_id,
+				// 					'delivery_order_id' => $dt->id,
+				// 					'kalkulasi' => 'T',
+				// 					'gross' => $dt->gross,
+				// 					'tarre' => $dt->tarre,
+				// 					'netto' => $dt->netto,
+				// 					'unit_price' => $dt->unit_price,
+				// 					'total' => $dt->total,
+				// 					'qty' => 1,
+				// 				]);
+				// 		$total += $dt->total;
+				// 	}
+
+				// 	// update total & amount_due di sales order
+				// 	\DB::table('customer_invoices')
+				// 		->where('id',$customer_invoice_id)
+				// 		->update([
+				// 				'total' => $total,
+				// 				'amount_due' => $total,
+				// 			]);
+					
+				// }
+
+				// if(count($by_ritase) > 0){
+				// 	// create invoice RITASE
+				// 	$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
+				// 			'inv_number' => $this->getNewCustomerInvoice(),
+				// 			'order_id' => $data_do->sales_order_id,
+				// 			'status' => 'O',
+				// 			'kalkulasi' => 'R'
+				// 		]);
+				// 	// insert detail invoice
+				// 	$total = 0;
+				// 	foreach($by_ritase as $dt){
+				// 		\DB::table('customer_invoice_detail')
+				// 			->insert([
+				// 					'customer_invoice_id' => $customer_invoice_id,
+				// 					'delivery_order_id' => $dt->id,
+				// 					'kalkulasi' => 'R',
+				// 					'unit_price' => $dt->unit_price,
+				// 					'total' => $dt->total,
+				// 					'qty' => 1,
+				// 				]);
+				// 		$total += $dt->total;
+				// 	}
+
+				// 	// update total & amount_due di sales order
+				// 	\DB::table('customer_invoices')
+				// 		->where('id',$customer_invoice_id)
+				// 		->update([
+				// 				'total' => $total,
+				// 				'amount_due' => $total,
+				// 			]);
+					
+				// }
+
+				// -------------------------------------------------
+
+
+				// generate invoice dalam 1 invoice
+				$data_delivery = \DB::table('delivery_order')
+									->where('sales_order_id',$data_do->sales_order_id)
+									->get();
+				
+				// create master invoice
+				$invoice_id = \DB::table('customer_invoices')->insertGetId([
 							'inv_number' => $this->getNewCustomerInvoice(),
 							'order_id' => $data_do->sales_order_id,
 							'status' => 'O',
-							'kalkulasi' => 'K'
+							// 'kalkulasi' => 'R'
 						]);
-					// insert detail invoice
-					$total = 0;
-					foreach($by_kubikasi as $dt){
-						\DB::table('customer_invoice_detail')
-							->insert([
-									'customer_invoice_id' => $customer_invoice_id,
-									'delivery_order_id' => $dt->id,
-									'kalkulasi' => 'K',
-									'panjang' => $dt->panjang,
-									'lebar' => $dt->lebar,
-									'tinggi' => $dt->tinggi,
-									'volume' => $dt->volume,
-									'unit_price' => $dt->unit_price,
-									'total' => $dt->total,
-									'qty' => 1,
-								]);
-						$total += $dt->total;
-					}
 
-					// update total & amount_due di sales order
-					\DB::table('customer_invoices')
-						->where('id',$customer_invoice_id)
-						->update([
-								'total' => $total,
-								'amount_due' => $total,
+				$invoice_total = \DB::table('delivery_order')->where('sales_order_id',$data_do->sales_order_id)->sum('total');
+
+				foreach($data_delivery as $dt){
+					\DB::table('customer_invoice_detail')
+					->insert([
+								'customer_invoice_id' => $invoice_id,
+								'delivery_order_id' => $dt->id,
+								'material_id' => $dt->material_id,
+								'kalkulasi' => $dt->kalkulasi,
+								'panjang' => $dt->panjang,
+								'lebar' => $dt->lebar,
+								'tinggi' => $dt->tinggi,
+								'volume' => $dt->volume,
+								'gross' => $dt->gross,
+								'tarre' => $dt->tarre,
+								'netto' => $dt->netto,
+								'unit_price' => $dt->unit_price,
+								'total' => $dt->total,
+								'qty' => 1,
 							]);
-					
+
 				}
 
-				if(count($by_tonase) > 0){
-					// create invoice TONASE
-					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
-							'inv_number' => $this->getNewCustomerInvoice(),
-							'order_id' => $data_do->sales_order_id,
-							'status' => 'O',
-							'kalkulasi' => 'T'
-						]);
-					// insert detail invoice
-					$total = 0;
-					foreach($by_tonase as $dt){
-						\DB::table('customer_invoice_detail')
-							->insert([
-									'customer_invoice_id' => $customer_invoice_id,
-									'delivery_order_id' => $dt->id,
-									'kalkulasi' => 'T',
-									'gross' => $dt->gross,
-									'tarre' => $dt->tarre,
-									'netto' => $dt->netto,
-									'unit_price' => $dt->unit_price,
-									'total' => $dt->total,
-									'qty' => 1,
-								]);
-						$total += $dt->total;
-					}
-
-					// update total & amount_due di sales order
-					\DB::table('customer_invoices')
-						->where('id',$customer_invoice_id)
+				// update invoice master
+				\DB::table('customer_invoices')
+						->whereId($invoice_id)
 						->update([
-								'total' => $total,
-								'amount_due' => $total,
+								'total' => $invoice_total,
+								'amount_due' => $invoice_total
 							]);
-					
-				}
 
-				if(count($by_ritase) > 0){
-					// create invoice RITASE
-					$customer_invoice_id = \DB::table('customer_invoices')->insertGetId([
-							'inv_number' => $this->getNewCustomerInvoice(),
-							'order_id' => $data_do->sales_order_id,
-							'status' => 'O',
-							'kalkulasi' => 'R'
-						]);
-					// insert detail invoice
-					$total = 0;
-					foreach($by_ritase as $dt){
-						\DB::table('customer_invoice_detail')
-							->insert([
-									'customer_invoice_id' => $customer_invoice_id,
-									'delivery_order_id' => $dt->id,
-									'kalkulasi' => 'R',
-									'unit_price' => $dt->unit_price,
-									'total' => $dt->total,
-									'qty' => 1,
-								]);
-						$total += $dt->total;
-					}
 
-					// update total & amount_due di sales order
-					\DB::table('customer_invoices')
-						->where('id',$customer_invoice_id)
-						->update([
-								'total' => $total,
-								'amount_due' => $total,
-							]);
-					
-				}
 
 				// UPDATE SALES ORDER TO DONE
 				\DB::table('sales_order')
 					->where('id',$data_do->sales_order_id)
 					->update([
-							'status' => 'D'
+							'status' => 'D' // D = Done
 						]);
 
-
 			}
-
-
 
 			return redirect()->back();
 		});

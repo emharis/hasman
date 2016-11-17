@@ -272,6 +272,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         // CUSTOMER INVOICE
         Route::get('customer','CustomerInvoiceController@index');
         Route::get('customer/edit/{id}','CustomerInvoiceController@edit');
+        Route::get('customer/show-one-invoice/{invoice_id}','CustomerInvoiceController@showOneInvoice');
         Route::get('customer/validate/{id}','CustomerInvoiceController@toValidate');
         Route::get('customer/reconcile/{invoice_id}','CustomerInvoiceController@reconcile');
         Route::get('customer/register-payment/{invoice_id}','CustomerInvoiceController@registerPayment');
@@ -300,10 +301,20 @@ Route::group(['middleware' => ['web','auth']], function () {
 
         // REPORT SALES
         Route::get('sales','ReportSalesController@index');
+        Route::get('sales/get-pekerjaan-by-customer/{customer_id}','ReportSalesController@getPekerjaanByCustomer');
         Route::post('sales/report-by-date','ReportSalesController@reportByDate');
         Route::post('sales/report-by-date-detail','ReportSalesController@reportByDateDetail');
         Route::post('sales/report-by-customer','ReportSalesController@reportByCustomer');
+        Route::post('sales/report-by-customer-pekerjaan','ReportSalesController@reportByCustomerPekerjaan');
         Route::post('sales/report-by-customer-detail','ReportSalesController@reportByCustomerDetail');
+        Route::post('sales/report-by-lokasi-galian','ReportSalesController@reportByLokasiGalian');
+        Route::post('sales/report-by-sales-type','ReportSalesController@reportBySalesType');
+        Route::post('sales/report-by-sales-type-all','ReportSalesController@reportBySalesTypeAll');
+
+        //  REPORT DELIVERY
+        Route::get('delivery','ReportDeliveryController@index');
+        Route::post('delivery/report-by-date','ReportDeliveryController@reportByDate');
+        Route::post('delivery/report-by-customer','ReportDeliveryController@reportByCustomer');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');
@@ -321,4 +332,5 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::get('api/get-auto-complete-staff','ApiController@getAutoCompleteStaff');
     Route::get('api/get-select-customer','ApiController@getSelectCustomer');
     Route::get('api/get-select-pekerjaan/{customer_id}','ApiController@getSelectPekerjaan');
+    Route::get('api/get-pekerjaan-by-customer/{customer_id}','ApiController@getPekerjaanByCustomer');
 });

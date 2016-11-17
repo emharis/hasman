@@ -52,8 +52,8 @@
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             
             @if($data->status != 'D')
-                <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Cancel Delivery Order</a>
-                <a class="btn btn-success btn-sm" >Print</a>
+                <a  class="btn btn-danger" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Cancel DO</a>
+                <a class="btn btn-success" >Print</a>
             @else
                 
                 {{-- Form Header --}}
