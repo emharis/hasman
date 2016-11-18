@@ -75,7 +75,7 @@ class ReportDeliveryController extends Controller
                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
                 $where_kalkulasi = $req->kalkulasi == 'A' ? 'kalkulasi like "%%"' : 'kalkulasi = "' . $req->kalkulasi . '"';
-                $where_pekerjaan = $req->pekerjaan_id == '0' ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = "' . $req->pekerjaan_id . '"';
+                $where_pekerjaan = $req->pekerjaan_id == '0' ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = ' . $req->pekerjaan_id ;
 
 
                 $data = \DB::table('VIEW_DELIVERY_ORDER')
@@ -93,6 +93,73 @@ class ReportDeliveryController extends Controller
                                 'data' => $data,
                                 'customer' => $customer,
                                 'pekerjaan' => $pekerjaan,
+                        ])->with($req->all());
+        }
+
+        public function reportByLokasiGalian(Request $req){
+                $start = $req->start_date;
+                $arr_tgl = explode('-',$start);
+                $start = new \DateTime();
+                $start->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                $start_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+
+                $end = $req->end_date;
+                $arr_tgl = explode('-',$end);
+                $end = new \DateTime();
+                $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+
+                $where_kalkulasi = $req->kalkulasi == 'A' ? 'kalkulasi like "%%"' : 'kalkulasi = "' . $req->kalkulasi . '"';
+                $where_lokasi_galian = $req->lokasi_galian_id == '0' ? 'lokasi_galian_id like "%%"' : 'lokasi_galian_id = ' . $req->lokasi_galian_id;
+
+
+                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                        ->whereRaw($where_kalkulasi)
+                        ->whereRaw($where_lokasi_galian)
+                        ->whereBetween('order_date',[$start_str,$end_str])
+                        ->orderBy('order_date','asc')
+                        ->get();
+
+                $lokasi_galian = \DB::table('lokasi_galian')->find($req->lokasi_galian_id);
+
+                return view('report.delivery.report-by-lokasi-galian',[
+                                'data' => $data,
+                                'lokasi_galian' => $lokasi_galian,
+                        ])->with($req->all());
+        }
+
+        public function reportByDriver(Request $req){
+
+                $start = $req->start_date;
+                $arr_tgl = explode('-',$start);
+                $start = new \DateTime();
+                $start->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                $start_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+
+                $end = $req->end_date;
+                $arr_tgl = explode('-',$end);
+                $end = new \DateTime();
+                $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+
+                $where_kalkulasi = $req->kalkulasi == 'A' ? 'kalkulasi like "%%"' : 'kalkulasi = "' . $req->kalkulasi . '"';
+                $where_driver = $req->driver_id == '0' ? 'karyawan_id like "%%"' : 'karyawan_id = ' . $req->driver_id;
+
+
+                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                        ->whereRaw($where_kalkulasi)
+                        ->whereRaw($where_driver)
+                        ->whereBetween('order_date',[$start_str,$end_str])
+                        ->orderBy('order_date','asc')
+                        ->get();
+
+                $driver = \DB::table('karyawan')->find($req->driver_id);
+                $armada = \DB::table('VIEW_ARMADA')->whereKaryawanId($req->driver_id)->first();
+
+                return view('report.delivery.report-by-driver',[
+                                'data' => $data,
+                                'driver' => $driver,
+                                'armada' => $armada,
                         ])->with($req->all());
         }
 

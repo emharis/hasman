@@ -300,6 +300,18 @@
                 newform.append($('<input>').attr('type','hidden').attr('name','pekerjaan_id').val(pekerjaan_id));
                 newform.append($('<input>').attr('type','hidden').attr('name','customer_id').val(customer_id));
 
+            }else if(rd_filter_by == 'by_lokasi_galian'){
+                newform.attr('action','report/delivery/report-by-lokasi-galian');
+
+                var lokasi_galian_id = $('select[name=lokasi_galian]').val();
+                newform.append($('<input>').attr('type','hidden').attr('name','lokasi_galian_id').val(lokasi_galian_id));
+                
+            }else if(rd_filter_by == 'by_driver'){
+                newform.attr('action','report/delivery/report-by-driver');
+
+                var driver_id = $('select[name=driver]').val();
+                newform.append($('<input>').attr('type','hidden').attr('name','driver_id').val(driver_id));
+                
             }
             
 

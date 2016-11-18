@@ -315,6 +315,8 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('delivery','ReportDeliveryController@index');
         Route::post('delivery/report-by-date','ReportDeliveryController@reportByDate');
         Route::post('delivery/report-by-customer','ReportDeliveryController@reportByCustomer');
+        Route::post('delivery/report-by-lokasi-galian','ReportDeliveryController@reportByLokasiGalian');
+        Route::post('delivery/report-by-driver','ReportDeliveryController@reportByDriver');
     });
 
     Route::get('api/get-auto-complete-provinsi','ApiController@getAutoCompleteProvinsi');
