@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class KaryawanController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_KARYAWAN')->orderBy('created_at','desc')->get();
+		$data = \DB::table('view_karyawan')->orderBy('created_at','desc')->get();
 		return view('master.karyawan.index',[
 				'data' => $data
 			]);
@@ -81,7 +81,7 @@ class KaryawanController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_KARYAWAN')->find($id);
+		$data = \DB::table('view_karyawan')->find($id);
 
 		$jabatans = \DB::table('jabatan')->get();
 		$selectJabatan = [];

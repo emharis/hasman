@@ -36,22 +36,22 @@ class ReportPurchaseController extends Controller
         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
         if($req->is_detailed_report == 'true'){
-            $data = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
+            $data = \DB::table('view_purchase_order_all_detail')
                 ->orderBy('order_date','asc')
                 ->whereBetween('order_date',[$start_str,$end_str])
-                ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER_ALL_DETAIL.id) as amount_due' ))
+                ->select('view_purchase_order_all_detail.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order_all_detail.id) as amount_due' ))
                 ->get();
 
-            // $data_id  = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
+            // $data_id  = \DB::table('view_purchase_order_all_detail')
             //             ->orderBy('order_date','asc')
             //             ->whereBetween('order_date',[$start_str,$end_str])
-            //             ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.id')
+            //             ->select('view_purchase_order_all_detail.id')
             //             ->get();   
-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
+            $total_amount_due = \DB::table('view_supplier_bill')
                             ->whereBetween('order_date',[$start_str,$end_str])
                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
                                 $query->select('id')
-                                    ->from('VIEW_PURCHASE_ORDER_ALL_DETAIL')
+                                    ->from('view_purchase_order_all_detail')
                                     ->orderBy('order_date','asc')
                                     ->whereBetween('order_date',[$start_str,$end_str])
                                     ->get();  
@@ -59,23 +59,23 @@ class ReportPurchaseController extends Controller
                             // ->get();
                             ->sum('amount_due');
         }else{
-            $data = \DB::table('VIEW_PURCHASE_ORDER')
+            $data = \DB::table('view_purchase_order')
                 ->orderBy('order_date','asc')
                 ->whereBetween('order_date',[$start_str,$end_str])
-                ->select('VIEW_PURCHASE_ORDER.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER.id) as amount_due' ))
+                ->select('view_purchase_order.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order.id) as amount_due' ))
                 ->get();
 
-            // $data_id = \DB::table('VIEW_PURCHASE_ORDER')
+            // $data_id = \DB::table('view_purchase_order')
             //         ->orderBy('order_date','asc')
             //         ->whereBetween('order_date',[$start_str,$end_str])
-            //         ->select('VIEW_PURCHASE_ORDER.id')
+            //         ->select('view_purchase_order.id')
             //         ->get();
 
-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
+            $total_amount_due = \DB::table('view_supplier_bill')
                             ->whereBetween('order_date',[$start_str,$end_str])
                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
                                 $query->select('id')
-                                    ->from('VIEW_PURCHASE_ORDER')
+                                    ->from('view_purchase_order')
                                     ->orderBy('order_date','asc')
                                     ->whereBetween('order_date',[$start_str,$end_str])
                                     ->get();  
@@ -88,7 +88,7 @@ class ReportPurchaseController extends Controller
                             // ->sum('amount_due');
 
 
-        // $total_amount_due = \DB::table('VIEW_SUPPLIER_BILLS')
+        // $total_amount_due = \DB::table('view_supplier_billS')
         //                     ->whereBetween('order_date',[$start_str,$end_str])
         //                     ->sum('amount_due');
 
@@ -115,45 +115,45 @@ class ReportPurchaseController extends Controller
         $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-        // $data = \DB::table('VIEW_PURCHASE_ORDER')
+        // $data = \DB::table('view_purchase_order')
         //         ->orderBy('order_date','asc')
         //         ->whereBetween('order_date',[$start_str,$end_str])
         //         ->whereSupplierId($req->supplier)
         //         ->get();
 
         if($req->is_detailed_report == 'true'){
-            $data = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
+            $data = \DB::table('view_purchase_order_all_detail')
                 ->orderBy('order_date','asc')
                 ->whereBetween('order_date',[$start_str,$end_str])
                 ->whereSupplierId($req->supplier)
-                ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER_ALL_DETAIL.id) as amount_due' ))
+                ->select('view_purchase_order_all_detail.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order_all_detail.id) as amount_due' ))
                 ->get();
 
-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
+            $total_amount_due = \DB::table('view_supplier_bill')
                             ->whereSupplierId($req->supplier)
                             ->whereBetween('order_date',[$start_str,$end_str])
                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
                                 $query->select('id')
-                                    ->from('VIEW_PURCHASE_ORDER_ALL_DETAIL')
+                                    ->from('view_purchase_order_all_detail')
                                     ->orderBy('order_date','asc')
                                     ->whereBetween('order_date',[$start_str,$end_str])
                                     ->get();  
                             })
                             ->sum('amount_due');
         }else{
-            $data = \DB::table('VIEW_PURCHASE_ORDER')
+            $data = \DB::table('view_purchase_order')
                 ->orderBy('order_date','asc')
                 ->whereBetween('order_date',[$start_str,$end_str])
                 ->whereSupplierId($req->supplier)
-                ->select('VIEW_PURCHASE_ORDER.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER.id) as amount_due' ))
+                ->select('view_purchase_order.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order.id) as amount_due' ))
                 ->get();    
 
-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
+            $total_amount_due = \DB::table('view_supplier_bill')
                             ->whereBetween('order_date',[$start_str,$end_str])
                             ->whereSupplierId($req->supplier)
                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
                                 $query->select('id')
-                                    ->from('VIEW_PURCHASE_ORDER')
+                                    ->from('view_purchase_order')
                                     ->orderBy('order_date','asc')
                                     ->whereBetween('order_date',[$start_str,$end_str])
                                     ->get();  
@@ -190,7 +190,7 @@ class ReportPurchaseController extends Controller
         $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-        $data = \DB::table('VIEW_PURCHASE_ORDER')
+        $data = \DB::table('view_purchase_order')
         		->orderBy('order_date','asc')
         		->whereBetween('order_date',[$start_str,$end_str])
         		->get();

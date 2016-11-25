@@ -12,7 +12,7 @@ class DeliveryOrderController extends Controller
 	// public function index(){
 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-	// 	$data = \DB::table('VIEW_DELIVERY_ORDER')
+	// 	$data = \DB::table('view_delivery_order')
 	// 		//->where('status','!=','D')
 	// 		->orderBy('order_date','desc')
 	// 		->paginate($paging_item_number);
@@ -26,7 +26,7 @@ class DeliveryOrderController extends Controller
 	public function index(){
 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-		$data = \DB::table('VIEW_DELIVERY_ORDER')
+		$data = \DB::table('view_delivery_order')
 			//->where('status','!=','D')
 			->orderBy('order_date','desc')
 			->get();
@@ -44,7 +44,7 @@ class DeliveryOrderController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($id);
+		$data = \DB::table('view_delivery_order')->find($id);
 		
 		
 		if($data->status == 'D' || $data->status == 'O'){
@@ -484,7 +484,7 @@ class DeliveryOrderController extends Controller
             $arr_tgl = explode('-',$date_end);
             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
 
-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+         	$data = \DB::table('view_delivery_order')
 					->orderBy('order_date','desc')
 					//->where('status','!=','D')
 					->whereBetween($req->filter_by,[$date_start,$date_end])
@@ -500,7 +500,7 @@ class DeliveryOrderController extends Controller
 	                    ]);
 
          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+         	$data = \DB::table('view_delivery_order')
 					->orderBy('order_date','desc')
 					//->where('status','!=','D')
 					->where('status','=',$req->filter_by)
@@ -513,7 +513,7 @@ class DeliveryOrderController extends Controller
 	                    ]);
 
          }else{
-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
+         	$data = \DB::table('view_delivery_order')
 					->orderBy('order_date','desc')
 					//->where('status','!=','D')
 					->where($req->filter_by,'like','%' . $req->filter_string . '%')

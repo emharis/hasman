@@ -11,11 +11,11 @@ class PurchaseOrderController extends Controller
 	public function index(){
 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-		// $data = \DB::table('VIEW_PURCHASE_ORDER')
+		// $data = \DB::table('view_purchase_order')
 		// 			->orderBy('order_date','desc')
 		// 			->paginate($paging_item_number);
 
-		$data = \DB::table('VIEW_PURCHASE_ORDER')
+		$data = \DB::table('view_purchase_order')
 					->orderBy('order_date','desc')
 					->get();
 		$amount_due = \DB::table('supplier_bill')->sum('amount_due');
@@ -83,11 +83,11 @@ class PurchaseOrderController extends Controller
 	}
 
 	public function edit($id){
-		$data_master = \DB::table('VIEW_PURCHASE_ORDER')->find($id);
-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')->where('purchase_order_id',$id)->get();
+		$data_master = \DB::table('view_purchase_order')->find($id);
+		$data_detail = \DB::table('view_purchase_order_detail')->where('purchase_order_id',$id)->get();
 		
 
-		// $pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('supplier_id',$data_master->supplier_id)->get();
+		// $pekerjaan = \DB::table('view_pekerjaan')->where('supplier_id',$data_master->supplier_id)->get();
 		// $select_pekerjaan = [];
 		// foreach($pekerjaan as $dt){
 		// 	$select_pekerjaan[$dt->id] = $dt->nama;
@@ -227,10 +227,10 @@ class PurchaseOrderController extends Controller
 	}
 
 	public function delivery($po_id){
-		$purchase_order = \DB::table('VIEW_PURCHASE_ORDER')->find($po_id);
-		$purchase_order_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
+		$purchase_order = \DB::table('view_purchase_order')->find($po_id);
+		$purchase_order_detail = \DB::table('view_purchase_order_detail')
 								->where('purchase_order_id',$po_id)->get();
-		$delivery_order = \DB::table('VIEW_DELIVERY_ORDER')->where('purchase_order_id',$po_id)->get();
+		$delivery_order = \DB::table('view_delivery_order')->where('purchase_order_id',$po_id)->get();
 		return view('purchase.order.delivery',[
 				'purchase_order' => $purchase_order,
 				'purchase_order_detail' => $purchase_order_detail,
@@ -239,7 +239,7 @@ class PurchaseOrderController extends Controller
 	}
 
 	public function deliveryEdit($delivery_id){
-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
+		$data = \DB::table('view_delivery_order')->find($delivery_id);
 
 		if($data->status == 'V'){
 			return view('purchase.order.delivery_validated',[
@@ -286,7 +286,7 @@ class PurchaseOrderController extends Controller
 				'desa_id' => $req->desa_id,
 				'tahun' => $req->tahun,
 			]);
-		$data = \DB::table('VIEW_PEKERJAAN')
+		$data = \DB::table('view_pekerjaan')
 
 				->find($data_id);
 
@@ -328,7 +328,7 @@ class PurchaseOrderController extends Controller
             $arr_tgl = explode('-',$date_end);
             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
 
-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
+         	$data = \DB::table('view_purchase_order')
 					->orderBy('order_date','desc')
 					->whereBetween('order_date',[$date_start,$date_end])
 					->paginate($paging_item_number)
@@ -343,7 +343,7 @@ class PurchaseOrderController extends Controller
 	                    ]);
 
          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
+         	$data = \DB::table('view_purchase_order')
 					->orderBy('order_date','desc')
 					->where('status','=',$req->filter_by)
 					->paginate($paging_item_number)
@@ -355,7 +355,7 @@ class PurchaseOrderController extends Controller
 	                    ]);
 
          }else{
-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
+         	$data = \DB::table('view_purchase_order')
 					->orderBy('order_date','desc')
 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
 					->paginate($paging_item_number)
@@ -391,7 +391,7 @@ class PurchaseOrderController extends Controller
 
 	public function invoices($purchase_order_id){
 		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
-		$data = \DB::table('VIEW_SUPPLIER_BILL')
+		$data = \DB::table('view_supplier_bill')
 				->where('purchase_order_id',$purchase_order_id)
 				->get();
 		return view('purchase.order.invoices',[
@@ -402,13 +402,13 @@ class PurchaseOrderController extends Controller
 
 	public function showInvoice($purchase_order_id){
 		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
-		$data = \DB::table('VIEW_SUPPLIER_BILL')
+		$data = \DB::table('view_supplier_bill')
 				->where('purchase_order_id',$purchase_order_id)
 				->first();
-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
+		$data_detail = \DB::table('view_purchase_order_detail')
 				->where('purchase_order_id',$purchase_order_id)
 				->get();
-		$payments = \DB::table('VIEW_SUPPLIER_PAYMENT')->where('supplier_bill_id',$data->id)->get();
+		$payments = \DB::table('view_supplier_payment')->where('supplier_bill_id',$data->id)->get();
 
 
 		return view('purchase.order.invoice-show',[

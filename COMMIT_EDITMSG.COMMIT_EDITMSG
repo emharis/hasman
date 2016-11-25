@@ -1,0 +1,1215 @@
+Update tulisan VIEW_* ke view_
+
+# --------------
+# Please enter the commit message for your changes. Everything below
+# this paragraph is ignored, and an empty message aborts the commit.
+# Just close the window to accept your message.
+diff --git a/app/Http/Controllers/ApiController.php b/app/Http/Controllers/ApiController.php
+index 2e390c8..2ae4101 100644
+--- a/app/Http/Controllers/ApiController.php
++++ b/app/Http/Controllers/ApiController.php
+@@ -67,7 +67,7 @@ class ApiController extends Controller
+ 	public function getAutoCompleteArmada(Request $req){
+ 
+ 		$data = \DB::select('select id as data,concat("[",kode,"] ",nama," - ",nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama
+-				from VIEW_ARMADA
++				from view_armada
+ 				where karyawan_id is not NULL and (
+ 				nama like "%'.$req->get('nama').'%"
+ 				or kode like "%'.$req->get('nama').'%"
+@@ -83,7 +83,7 @@ class ApiController extends Controller
+ 	public function getAutoCompleteDriver(Request $req){
+ 
+ 		$data = \DB::select('select id as data,concat("[",kode,"] ", nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama , nopol
+-				from VIEW_ARMADA
++				from view_armada
+ 				where karyawan_id is not NULL and (
+ 				nama like "%'.$req->get('nama').'%"
+ 				or kode like "%'.$req->get('nama').'%"
+@@ -97,7 +97,7 @@ class ApiController extends Controller
+ 	}
+ 
+ 	public function getAutoCompleteStaff(Request $req){
+-		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from VIEW_KARYAWAN where jabatan_id = 4 and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
++		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from view_karyawan where jabatan_id = 4 and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
+ 		$data_res = ['query'=>'Unit','suggestions' => $data];
+ 
+ 		return json_encode($data_res);
+@@ -125,7 +125,7 @@ class ApiController extends Controller
+ 	}
+ 
+ 	public function getSelectCustomer(){
+-		$data = \DB::table('VIEW_CUSTOMER')->get();
++		$data = \DB::table('view_customer')->get();
+ 		$selectCustomer = [];
+ 		foreach($data as $dt){
+ 			$selectCustomer[$dt->id] = '[' . $dt->kode . '] ' . $dt->nama;
+@@ -135,7 +135,7 @@ class ApiController extends Controller
+ 	}
+ 
+ 	public function getSelectPekerjaan($customer_id){
+-		$data = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$customer_id)->get();
++		$data = \DB::table('view_pekerjaan')->where('customer_id',$customer_id)->get();
+ 		$selectPekerjaan = [];
+ 		foreach($data as $dt){
+ 			$selectPekerjaan[$dt->id] =  $dt->nama;
+diff --git a/app/Http/Controllers/ArmadaController.php b/app/Http/Controllers/ArmadaController.php
+index 98038e5..4b59876 100644
+--- a/app/Http/Controllers/ArmadaController.php
++++ b/app/Http/Controllers/ArmadaController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class ArmadaController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_ARMADA')->get();
++		$data = \DB::table('view_armada')->get();
+ 		return view('master.armada.index',[
+ 				'data' => $data
+ 			]);
+@@ -17,8 +17,8 @@ class ArmadaController extends Controller
+ 
+ 	public function create(){
+ 		$drivers = \DB::select('select * 
+-					from VIEW_KARYAWAN 
+-					where VIEW_KARYAWAN.id not in (select karyawan_id from armada where karyawan_id is not null )
++					from view_karyawan  
++					where view_karyawan.id not in (select karyawan_id from armada where karyawan_id is not null )
+ 					');
+ 		$selectDriver = [
+ 				'0' => 'NONE'
+@@ -44,8 +44,8 @@ class ArmadaController extends Controller
+ 	public function edit($id){
+ 		$data = \DB::table('armada')->find($id);
+ 		$drivers = \DB::select('select * 
+-					from VIEW_KARYAWAN 
+-					where VIEW_KARYAWAN.id not in (select karyawan_id from armada where karyawan_id is not null and armada.id != ' . $id . ')
++					from view_karyawan 
++					where view_karyawan.id not in (select karyawan_id from armada where karyawan_id is not null and armada.id != ' . $id . ')
+ 					');
+ 		$selectDriver = [
+ 				'0' => 'NONE'
+diff --git a/app/Http/Controllers/AttendanceController.php b/app/Http/Controllers/AttendanceController.php
+index e5e7931..5722f40 100644
+--- a/app/Http/Controllers/AttendanceController.php
++++ b/app/Http/Controllers/AttendanceController.php
+@@ -131,7 +131,7 @@ class AttendanceController extends Controller
+ 		$tanggal->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+ 
+ 		$data = json_decode('{"presensi":"","status":""}');
+-		$data->presensi = \DB::table('VIEW_ATTEND')
++		$data->presensi = \DB::table('view_attend')
+ 						->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
+ 						->where('jabatan_id',4)
+ 						->get();
+diff --git a/app/Http/Controllers/CustomerController.php b/app/Http/Controllers/CustomerController.php
+index 367385d..079aa84 100644
+--- a/app/Http/Controllers/CustomerController.php
++++ b/app/Http/Controllers/CustomerController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class CustomerController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_CUSTOMER')
++		$data = \DB::table('view_customer')
+ 				->orderBy('created_at','desc')
+ 				->get();
+ 		return view('master.customer.index',[
+@@ -42,7 +42,7 @@ class CustomerController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_CUSTOMER')->find($id);
++		$data = \DB::table('view_customer')->find($id);
+ 
+ 		return view('master.customer.edit',[
+ 				'data' => $data,
+diff --git a/app/Http/Controllers/CustomerInvoiceController.php b/app/Http/Controllers/CustomerInvoiceController.php
+index 9c45b51..d595e45 100644
+--- a/app/Http/Controllers/CustomerInvoiceController.php
++++ b/app/Http/Controllers/CustomerInvoiceController.php
+@@ -11,7 +11,7 @@ class CustomerInvoiceController extends Controller
+ 	// public function index(){
+ 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-	// 	$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++	// 	$data = \DB::table('view_customer_invoice')
+ 	// 		// ->where('status','=','O')
+ 	// 		->orderBy('order_date','desc')
+ 	// 		->paginate($paging_item_number);
+@@ -24,7 +24,7 @@ class CustomerInvoiceController extends Controller
+ 
+ 	public function index(){
+ 		
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 			// ->where('status','=','O')
+ 			->orderBy('order_date','desc')
+ 			->get();
+@@ -43,9 +43,9 @@ class CustomerInvoiceController extends Controller
+ 	}
+ 
+ 	public function edit($invoice_id){
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 				->find($invoice_id);
+-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_detail = \DB::table('view_customer_invoice_detail')
+ 				->where('customer_invoice_id',$data->id)
+ 				->get();
+ 		$sales_order = \DB::table('sales_order')->find($data->order_id);
+@@ -63,21 +63,21 @@ class CustomerInvoiceController extends Controller
+ 	}
+ 
+ 	public function showOneInvoice($invoice_id){
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 				->find($invoice_id);
+-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_detail = \DB::table('view_customer_invoice_detail')
+ 				->where('customer_invoice_id',$data->id)
+ 				->get();
+ 
+-		$data_kubikasi = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_kubikasi = \DB::table('view_customer_invoice_detail')
+ 						->where('customer_invoice_id',$data->id)
+ 						->where('kalkulasi','K')
+ 						->get();
+-		$data_tonase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_tonase= \DB::table('view_customer_invoice_detail')
+ 						->where('customer_invoice_id',$data->id)
+ 						->where('kalkulasi','T')
+ 						->get();
+-		$data_ritase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_ritase= \DB::table('view_customer_invoice_detail')
+ 						->where('customer_invoice_id',$data->id)
+ 						->where('kalkulasi','R')
+ 						->get();
+@@ -100,9 +100,9 @@ class CustomerInvoiceController extends Controller
+ 	}
+ 
+ 	public function payments($invoice_id){
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 				->find($invoice_id);
+-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_detail = \DB::table('view_customer_invoice_detail')
+ 				->where('customer_invoice_id',$data->id)
+ 				->get();
+ 		$payments = \DB::table('customer_payment')
+@@ -151,7 +151,7 @@ class CustomerInvoiceController extends Controller
+ 
+ 	// REGISTER PAYMENT
+ 	function registerPayment($invoice_id){
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')->find($invoice_id);
++		$data = \DB::table('view_customer_invoice')->find($invoice_id);
+ 		return view('invoice.customer.register-payment',[
+ 			'data' => $data
+ 		]);
+diff --git a/app/Http/Controllers/DailyhdController.php b/app/Http/Controllers/DailyhdController.php
+index 791ebe3..6d70db8 100644
+--- a/app/Http/Controllers/DailyhdController.php
++++ b/app/Http/Controllers/DailyhdController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class DailyhdController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_DAILYHD')
++		$data = \DB::table('view_dailyhd')
+ 				->orderBy('tanggal','desc')
+ 				->get();
+ 		
+@@ -63,7 +63,7 @@ class DailyhdController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_DAILYHD')->find($id);
++		$data = \DB::table('view_dailyhd')->find($id);
+ 		if($data->status == 'O'){
+ 			return view('dailyhd.edit',['data'=>$data]);
+ 		}else{
+diff --git a/app/Http/Controllers/DeliveryOrderController.php b/app/Http/Controllers/DeliveryOrderController.php
+index c9583e6..87cd85a 100644
+--- a/app/Http/Controllers/DeliveryOrderController.php
++++ b/app/Http/Controllers/DeliveryOrderController.php
+@@ -12,7 +12,7 @@ class DeliveryOrderController extends Controller
+ 	// public function index(){
+ 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-	// 	$data = \DB::table('VIEW_DELIVERY_ORDER')
++	// 	$data = \DB::table('view_delivery_order')
+ 	// 		//->where('status','!=','D')
+ 	// 		->orderBy('order_date','desc')
+ 	// 		->paginate($paging_item_number);
+@@ -26,7 +26,7 @@ class DeliveryOrderController extends Controller
+ 	public function index(){
+ 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-		$data = \DB::table('VIEW_DELIVERY_ORDER')
++		$data = \DB::table('view_delivery_order')
+ 			//->where('status','!=','D')
+ 			->orderBy('order_date','desc')
+ 			->get();
+@@ -44,7 +44,7 @@ class DeliveryOrderController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($id);
++		$data = \DB::table('view_delivery_order')->find($id);
+ 		
+ 		
+ 		if($data->status == 'D' || $data->status == 'O'){
+@@ -484,7 +484,7 @@ class DeliveryOrderController extends Controller
+             $arr_tgl = explode('-',$date_end);
+             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+ 
+-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
++         	$data = \DB::table('view_delivery_order')
+ 					->orderBy('order_date','desc')
+ 					//->where('status','!=','D')
+ 					->whereBetween($req->filter_by,[$date_start,$date_end])
+@@ -500,7 +500,7 @@ class DeliveryOrderController extends Controller
+ 	                    ]);
+ 
+          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
+-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
++         	$data = \DB::table('view_delivery_order')
+ 					->orderBy('order_date','desc')
+ 					//->where('status','!=','D')
+ 					->where('status','=',$req->filter_by)
+@@ -513,7 +513,7 @@ class DeliveryOrderController extends Controller
+ 	                    ]);
+ 
+          }else{
+-         	$data = \DB::table('VIEW_DELIVERY_ORDER')
++         	$data = \DB::table('view_delivery_order')
+ 					->orderBy('order_date','desc')
+ 					//->where('status','!=','D')
+ 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
+diff --git a/app/Http/Controllers/KaryawanController.php b/app/Http/Controllers/KaryawanController.php
+index f11fa47..61bc3fd 100644
+--- a/app/Http/Controllers/KaryawanController.php
++++ b/app/Http/Controllers/KaryawanController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class KaryawanController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_KARYAWAN')->orderBy('created_at','desc')->get();
++		$data = \DB::table('view_karyawan')->orderBy('created_at','desc')->get();
+ 		return view('master.karyawan.index',[
+ 				'data' => $data
+ 			]);
+@@ -81,7 +81,7 @@ class KaryawanController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_KARYAWAN')->find($id);
++		$data = \DB::table('view_karyawan')->find($id);
+ 
+ 		$jabatans = \DB::table('jabatan')->get();
+ 		$selectJabatan = [];
+diff --git a/app/Http/Controllers/LokasiGalianController.php b/app/Http/Controllers/LokasiGalianController.php
+index 4f7d1cf..eeecd1e 100644
+--- a/app/Http/Controllers/LokasiGalianController.php
++++ b/app/Http/Controllers/LokasiGalianController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class LokasiGalianController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_LOKASI_GALIAN')->get();
++		$data = \DB::table('view_lokasi_galian')->get();
+ 		return view('master.lokasi_galian.index',[
+ 				'data' => $data
+ 			]);
+@@ -35,7 +35,7 @@ class LokasiGalianController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_LOKASI_GALIAN')->find($id);
++		$data = \DB::table('view_lokasi_galian')->find($id);
+ 		return view('master.lokasi_galian.edit',[
+ 				'data' => $data
+ 			]);
+diff --git a/app/Http/Controllers/PayrollDriverController.php b/app/Http/Controllers/PayrollDriverController.php
+index f0ab2eb..9c43e87 100644
+--- a/app/Http/Controllers/PayrollDriverController.php
++++ b/app/Http/Controllers/PayrollDriverController.php
+@@ -11,7 +11,7 @@ class PayrollDriverController extends Controller
+ 	
+ 
+ 	  public function driver(){
+-			$data = \DB::table('VIEW_PAYROLL')
++			$data = \DB::table('view_payroll')
+ 						->where('kategori','D')
+ 						->orderBy('payment_date','desc')
+ 						->get();
+@@ -202,8 +202,8 @@ class PayrollDriverController extends Controller
+ 	}
+ 
+ 	public function edit($payroll_id){
+-		$payroll = \DB::table('VIEW_PAYROLL')->find($payroll_id);
+-		 $payroll_detail = \DB::table('VIEW_PAYROLL_DRIVER')
++		$payroll = \DB::table('view_payroll')->find($payroll_id);
++		 $payroll_detail = \DB::table('view_payroll_DRIVER')
+ 									 	->where('payroll_id',$payroll_id)
+ 										->get();
+ 
+@@ -308,32 +308,32 @@ where delivery_order.id in (select delivery_order_id from payroll_driver_do wher
+ 		$ed_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+ 		$ed_date_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-		// $data = \DB::table('VIEW_DELIVERY_ORDER')
++		// $data = \DB::table('view_delivery_order')
+ 		// 			->where('karyawan_id',$karyawan_id)
+ 		// 			->where('delivery_date','<=',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
+ 		// 			->where('paid_to_driver','N')
+ 		// 			->get();
+ 		$data = \DB::select("SELECT
+-						VIEW_DELIVERY_ORDER.id,
+-						VIEW_DELIVERY_ORDER.paid_to_driver,
+-						VIEW_DELIVERY_ORDER.delivery_order_number,
+-						VIEW_DELIVERY_ORDER.delivery_date,
+-						VIEW_DELIVERY_ORDER.material_id,
+-						VIEW_DELIVERY_ORDER.material,
+-						VIEW_DELIVERY_ORDER.kalkulasi,
++						view_delivery_order.id,
++						view_delivery_order.paid_to_driver,
++						view_delivery_order.delivery_order_number,
++						view_delivery_order.delivery_date,
++						view_delivery_order.material_id,
++						view_delivery_order.material,
++						view_delivery_order.kalkulasi,
+ 						sum(volume) as sum_volume,
+ 						sum(netto) as sum_netto,
+ 						sum(qty) as sum_qty,
+-						VIEW_DELIVERY_ORDER.unit_price,
+-						VIEW_DELIVERY_ORDER.total,
+-						VIEW_DELIVERY_ORDER.pekerjaan,
+-						VIEW_DELIVERY_ORDER.pekerjaan_id,
+-						VIEW_DELIVERY_ORDER.alamat_pekerjaan,
+-						VIEW_DELIVERY_ORDER.desa,
+-						VIEW_DELIVERY_ORDER.kecamatan,
+-						VIEW_DELIVERY_ORDER.kabupaten
++						view_delivery_order.unit_price,
++						view_delivery_order.total,
++						view_delivery_order.pekerjaan,
++						view_delivery_order.pekerjaan_id,
++						view_delivery_order.alamat_pekerjaan,
++						view_delivery_order.desa,
++						view_delivery_order.kecamatan,
++						view_delivery_order.kabupaten
+ 					FROM
+-						VIEW_DELIVERY_ORDER
++						view_delivery_order
+ 					WHERE karyawan_id = " . $karyawan_id . "
+ 					and paid_to_driver = 'N'
+ 					and delivery_date between '" . $st_date_str . "' and '" . $ed_date_str . "'
+diff --git a/app/Http/Controllers/PayrollStaffController.php b/app/Http/Controllers/PayrollStaffController.php
+index c3681c2..2a5c575 100644
+--- a/app/Http/Controllers/PayrollStaffController.php
++++ b/app/Http/Controllers/PayrollStaffController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class PayrollStaffController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_PAYROLL')
++		$data = \DB::table('view_payroll')
+ 				->where('kategori','S')
+ 				->orderBy('payment_date','desc')
+ 				->get();
+@@ -125,7 +125,7 @@ class PayrollStaffController extends Controller
+ 	}
+ 
+ 	public function edit($payroll_id){
+-		$data = \DB::table('VIEW_PAYROLL')->find($payroll_id);
++		$data = \DB::table('view_payroll')->find($payroll_id);
+ 
+ 		if($data->status =='O'){
+ 			return view('payroll.staff.edit',[
+diff --git a/app/Http/Controllers/PekerjaanController.php b/app/Http/Controllers/PekerjaanController.php
+index 382788f..3d28ca3 100644
+--- a/app/Http/Controllers/PekerjaanController.php
++++ b/app/Http/Controllers/PekerjaanController.php
+@@ -16,7 +16,7 @@ class PekerjaanController extends Controller
+ 		// 		->orderBy('customer_id')
+ 		// 		->get();
+ 
+-		$data = \DB::table('VIEW_PEKERJAAN')
++		$data = \DB::table('view_pekerjaan')
+ 				// ->orderBy('customer_id')
+ 				->orderBy('created_at','desc')
+ 				->get();
+@@ -46,7 +46,7 @@ class PekerjaanController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_PEKERJAAN')->find($id);
++		$data = \DB::table('view_pekerjaan')->find($id);
+ 		return view('master.pekerjaan.edit',[
+ 				'data' => $data
+ 			]);
+diff --git a/app/Http/Controllers/PurchaseOrderController.php b/app/Http/Controllers/PurchaseOrderController.php
+index a5b74ce..35b38b9 100644
+--- a/app/Http/Controllers/PurchaseOrderController.php
++++ b/app/Http/Controllers/PurchaseOrderController.php
+@@ -11,11 +11,11 @@ class PurchaseOrderController extends Controller
+ 	public function index(){
+ 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-		// $data = \DB::table('VIEW_PURCHASE_ORDER')
++		// $data = \DB::table('view_purchase_order')
+ 		// 			->orderBy('order_date','desc')
+ 		// 			->paginate($paging_item_number);
+ 
+-		$data = \DB::table('VIEW_PURCHASE_ORDER')
++		$data = \DB::table('view_purchase_order')
+ 					->orderBy('order_date','desc')
+ 					->get();
+ 		$amount_due = \DB::table('supplier_bill')->sum('amount_due');
+@@ -83,11 +83,11 @@ class PurchaseOrderController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data_master = \DB::table('VIEW_PURCHASE_ORDER')->find($id);
+-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')->where('purchase_order_id',$id)->get();
++		$data_master = \DB::table('view_purchase_order')->find($id);
++		$data_detail = \DB::table('view_purchase_order_detail')->where('purchase_order_id',$id)->get();
+ 		
+ 
+-		// $pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('supplier_id',$data_master->supplier_id)->get();
++		// $pekerjaan = \DB::table('view_pekerjaan')->where('supplier_id',$data_master->supplier_id)->get();
+ 		// $select_pekerjaan = [];
+ 		// foreach($pekerjaan as $dt){
+ 		// 	$select_pekerjaan[$dt->id] = $dt->nama;
+@@ -227,10 +227,10 @@ class PurchaseOrderController extends Controller
+ 	}
+ 
+ 	public function delivery($po_id){
+-		$purchase_order = \DB::table('VIEW_PURCHASE_ORDER')->find($po_id);
+-		$purchase_order_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
++		$purchase_order = \DB::table('view_purchase_order')->find($po_id);
++		$purchase_order_detail = \DB::table('view_purchase_order_detail')
+ 								->where('purchase_order_id',$po_id)->get();
+-		$delivery_order = \DB::table('VIEW_DELIVERY_ORDER')->where('purchase_order_id',$po_id)->get();
++		$delivery_order = \DB::table('view_delivery_order')->where('purchase_order_id',$po_id)->get();
+ 		return view('purchase.order.delivery',[
+ 				'purchase_order' => $purchase_order,
+ 				'purchase_order_detail' => $purchase_order_detail,
+@@ -239,7 +239,7 @@ class PurchaseOrderController extends Controller
+ 	}
+ 
+ 	public function deliveryEdit($delivery_id){
+-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
++		$data = \DB::table('view_delivery_order')->find($delivery_id);
+ 
+ 		if($data->status == 'V'){
+ 			return view('purchase.order.delivery_validated',[
+@@ -286,7 +286,7 @@ class PurchaseOrderController extends Controller
+ 				'desa_id' => $req->desa_id,
+ 				'tahun' => $req->tahun,
+ 			]);
+-		$data = \DB::table('VIEW_PEKERJAAN')
++		$data = \DB::table('view_pekerjaan')
+ 
+ 				->find($data_id);
+ 
+@@ -328,7 +328,7 @@ class PurchaseOrderController extends Controller
+             $arr_tgl = explode('-',$date_end);
+             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+ 
+-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
++         	$data = \DB::table('view_purchase_order')
+ 					->orderBy('order_date','desc')
+ 					->whereBetween('order_date',[$date_start,$date_end])
+ 					->paginate($paging_item_number)
+@@ -343,7 +343,7 @@ class PurchaseOrderController extends Controller
+ 	                    ]);
+ 
+          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
+-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
++         	$data = \DB::table('view_purchase_order')
+ 					->orderBy('order_date','desc')
+ 					->where('status','=',$req->filter_by)
+ 					->paginate($paging_item_number)
+@@ -355,7 +355,7 @@ class PurchaseOrderController extends Controller
+ 	                    ]);
+ 
+          }else{
+-         	$data = \DB::table('VIEW_PURCHASE_ORDER')
++         	$data = \DB::table('view_purchase_order')
+ 					->orderBy('order_date','desc')
+ 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
+ 					->paginate($paging_item_number)
+@@ -391,7 +391,7 @@ class PurchaseOrderController extends Controller
+ 
+ 	public function invoices($purchase_order_id){
+ 		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
+-		$data = \DB::table('VIEW_SUPPLIER_BILL')
++		$data = \DB::table('view_supplier_bill')
+ 				->where('purchase_order_id',$purchase_order_id)
+ 				->get();
+ 		return view('purchase.order.invoices',[
+@@ -402,13 +402,13 @@ class PurchaseOrderController extends Controller
+ 
+ 	public function showInvoice($purchase_order_id){
+ 		$purchase_order = \DB::table('purchase_order')->find($purchase_order_id);
+-		$data = \DB::table('VIEW_SUPPLIER_BILL')
++		$data = \DB::table('view_supplier_bill')
+ 				->where('purchase_order_id',$purchase_order_id)
+ 				->first();
+-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
++		$data_detail = \DB::table('view_purchase_order_detail')
+ 				->where('purchase_order_id',$purchase_order_id)
+ 				->get();
+-		$payments = \DB::table('VIEW_SUPPLIER_PAYMENT')->where('supplier_bill_id',$data->id)->get();
++		$payments = \DB::table('view_supplier_payment')->where('supplier_bill_id',$data->id)->get();
+ 
+ 
+ 		return view('purchase.order.invoice-show',[
+diff --git a/app/Http/Controllers/ReportDeliveryController.php b/app/Http/Controllers/ReportDeliveryController.php
+index 4047412..dfaef66 100644
+--- a/app/Http/Controllers/ReportDeliveryController.php
++++ b/app/Http/Controllers/ReportDeliveryController.php
+@@ -22,7 +22,7 @@ class ReportDeliveryController extends Controller
+                         $select_lokasi_galian[$dt->id] = $dt->kode.' - ' . $dt->nama;
+                 }
+ 
+-                $driver = \DB::table('VIEW_KARYAWAN')->select('id','kode','nama')->get();
++                $driver = \DB::table('view_karyawan')->select('id','kode','nama')->get();
+                 $select_driver = [];
+                 foreach($driver as $dt){
+                         $select_driver[$dt->id] = $dt->kode.' - ' . $dt->nama;
+@@ -50,7 +50,7 @@ class ReportDeliveryController extends Controller
+ 
+                 $where_kalkulasi = $req->kalkulasi == 'A' ? 'kalkulasi like "%%"' : 'kalkulasi = "' . $req->kalkulasi . '"';
+ 
+-                $data = \DB::table('VIEW_DELIVERY_ORDER')
++                $data = \DB::table('view_delivery_order')
+                         ->whereRaw($where_kalkulasi)
+                         ->whereBetween('order_date',[$start_str,$end_str])
+                         ->orderBy('order_date','asc')
+@@ -78,7 +78,7 @@ class ReportDeliveryController extends Controller
+                 $where_pekerjaan = $req->pekerjaan_id == '0' ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = ' . $req->pekerjaan_id ;
+ 
+ 
+-                $data = \DB::table('VIEW_DELIVERY_ORDER')
++                $data = \DB::table('view_delivery_order')
+                         ->where('customer_id',$req->customer_id)
+                         ->whereRaw($where_kalkulasi)
+                         ->whereRaw($where_pekerjaan)
+@@ -87,7 +87,7 @@ class ReportDeliveryController extends Controller
+                         ->get();
+ 
+                 $customer = \DB::table('customer')->find($req->customer_id);
+-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
++                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
+ 
+                 return view('report.delivery.report-by-customer',[
+                                 'data' => $data,
+@@ -113,7 +113,7 @@ class ReportDeliveryController extends Controller
+                 $where_lokasi_galian = $req->lokasi_galian_id == '0' ? 'lokasi_galian_id like "%%"' : 'lokasi_galian_id = ' . $req->lokasi_galian_id;
+ 
+ 
+-                $data = \DB::table('VIEW_DELIVERY_ORDER')
++                $data = \DB::table('view_delivery_order')
+                         ->whereRaw($where_kalkulasi)
+                         ->whereRaw($where_lokasi_galian)
+                         ->whereBetween('order_date',[$start_str,$end_str])
+@@ -146,7 +146,7 @@ class ReportDeliveryController extends Controller
+                 $where_driver = $req->driver_id == '0' ? 'karyawan_id like "%%"' : 'karyawan_id = ' . $req->driver_id;
+ 
+ 
+-                $data = \DB::table('VIEW_DELIVERY_ORDER')
++                $data = \DB::table('view_delivery_order')
+                         ->whereRaw($where_kalkulasi)
+                         ->whereRaw($where_driver)
+                         ->whereBetween('order_date',[$start_str,$end_str])
+@@ -154,7 +154,7 @@ class ReportDeliveryController extends Controller
+                         ->get();
+ 
+                 $driver = \DB::table('karyawan')->find($req->driver_id);
+-                $armada = \DB::table('VIEW_ARMADA')->whereKaryawanId($req->driver_id)->first();
++                $armada = \DB::table('view_armada')->whereKaryawanId($req->driver_id)->first();
+ 
+                 return view('report.delivery.report-by-driver',[
+                                 'data' => $data,
+diff --git a/app/Http/Controllers/ReportPurchaseController.php b/app/Http/Controllers/ReportPurchaseController.php
+index 3cf5c10..0e986fc 100644
+--- a/app/Http/Controllers/ReportPurchaseController.php
++++ b/app/Http/Controllers/ReportPurchaseController.php
+@@ -36,22 +36,22 @@ class ReportPurchaseController extends Controller
+         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+         if($req->is_detailed_report == 'true'){
+-            $data = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
++            $data = \DB::table('view_purchase_order_all_detail')
+                 ->orderBy('order_date','asc')
+                 ->whereBetween('order_date',[$start_str,$end_str])
+-                ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER_ALL_DETAIL.id) as amount_due' ))
++                ->select('view_purchase_order_all_detail.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order_all_detail.id) as amount_due' ))
+                 ->get();
+ 
+-            // $data_id  = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
++            // $data_id  = \DB::table('view_purchase_order_all_detail')
+             //             ->orderBy('order_date','asc')
+             //             ->whereBetween('order_date',[$start_str,$end_str])
+-            //             ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.id')
++            //             ->select('view_purchase_order_all_detail.id')
+             //             ->get();   
+-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
++            $total_amount_due = \DB::table('view_supplier_bill')
+                             ->whereBetween('order_date',[$start_str,$end_str])
+                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
+                                 $query->select('id')
+-                                    ->from('VIEW_PURCHASE_ORDER_ALL_DETAIL')
++                                    ->from('view_purchase_order_all_detail')
+                                     ->orderBy('order_date','asc')
+                                     ->whereBetween('order_date',[$start_str,$end_str])
+                                     ->get();  
+@@ -59,23 +59,23 @@ class ReportPurchaseController extends Controller
+                             // ->get();
+                             ->sum('amount_due');
+         }else{
+-            $data = \DB::table('VIEW_PURCHASE_ORDER')
++            $data = \DB::table('view_purchase_order')
+                 ->orderBy('order_date','asc')
+                 ->whereBetween('order_date',[$start_str,$end_str])
+-                ->select('VIEW_PURCHASE_ORDER.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER.id) as amount_due' ))
++                ->select('view_purchase_order.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order.id) as amount_due' ))
+                 ->get();
+ 
+-            // $data_id = \DB::table('VIEW_PURCHASE_ORDER')
++            // $data_id = \DB::table('view_purchase_order')
+             //         ->orderBy('order_date','asc')
+             //         ->whereBetween('order_date',[$start_str,$end_str])
+-            //         ->select('VIEW_PURCHASE_ORDER.id')
++            //         ->select('view_purchase_order.id')
+             //         ->get();
+ 
+-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
++            $total_amount_due = \DB::table('view_supplier_bill')
+                             ->whereBetween('order_date',[$start_str,$end_str])
+                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
+                                 $query->select('id')
+-                                    ->from('VIEW_PURCHASE_ORDER')
++                                    ->from('view_purchase_order')
+                                     ->orderBy('order_date','asc')
+                                     ->whereBetween('order_date',[$start_str,$end_str])
+                                     ->get();  
+@@ -88,7 +88,7 @@ class ReportPurchaseController extends Controller
+                             // ->sum('amount_due');
+ 
+ 
+-        // $total_amount_due = \DB::table('VIEW_SUPPLIER_BILLS')
++        // $total_amount_due = \DB::table('view_supplier_billS')
+         //                     ->whereBetween('order_date',[$start_str,$end_str])
+         //                     ->sum('amount_due');
+ 
+@@ -115,45 +115,45 @@ class ReportPurchaseController extends Controller
+         $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-        // $data = \DB::table('VIEW_PURCHASE_ORDER')
++        // $data = \DB::table('view_purchase_order')
+         //         ->orderBy('order_date','asc')
+         //         ->whereBetween('order_date',[$start_str,$end_str])
+         //         ->whereSupplierId($req->supplier)
+         //         ->get();
+ 
+         if($req->is_detailed_report == 'true'){
+-            $data = \DB::table('VIEW_PURCHASE_ORDER_ALL_DETAIL')
++            $data = \DB::table('view_purchase_order_all_detail')
+                 ->orderBy('order_date','asc')
+                 ->whereBetween('order_date',[$start_str,$end_str])
+                 ->whereSupplierId($req->supplier)
+-                ->select('VIEW_PURCHASE_ORDER_ALL_DETAIL.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER_ALL_DETAIL.id) as amount_due' ))
++                ->select('view_purchase_order_all_detail.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order_all_detail.id) as amount_due' ))
+                 ->get();
+ 
+-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
++            $total_amount_due = \DB::table('view_supplier_bill')
+                             ->whereSupplierId($req->supplier)
+                             ->whereBetween('order_date',[$start_str,$end_str])
+                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
+                                 $query->select('id')
+-                                    ->from('VIEW_PURCHASE_ORDER_ALL_DETAIL')
++                                    ->from('view_purchase_order_all_detail')
+                                     ->orderBy('order_date','asc')
+                                     ->whereBetween('order_date',[$start_str,$end_str])
+                                     ->get();  
+                             })
+                             ->sum('amount_due');
+         }else{
+-            $data = \DB::table('VIEW_PURCHASE_ORDER')
++            $data = \DB::table('view_purchase_order')
+                 ->orderBy('order_date','asc')
+                 ->whereBetween('order_date',[$start_str,$end_str])
+                 ->whereSupplierId($req->supplier)
+-                ->select('VIEW_PURCHASE_ORDER.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = VIEW_PURCHASE_ORDER.id) as amount_due' ))
++                ->select('view_purchase_order.*',\DB::raw('(select amount_due from supplier_bill where purchase_order_id = view_purchase_order.id) as amount_due' ))
+                 ->get();    
+ 
+-            $total_amount_due = \DB::table('VIEW_SUPPLIER_BILL')
++            $total_amount_due = \DB::table('view_supplier_bill')
+                             ->whereBetween('order_date',[$start_str,$end_str])
+                             ->whereSupplierId($req->supplier)
+                             ->whereIn('purchase_order_id',function($query)use($start_str,$end_str){
+                                 $query->select('id')
+-                                    ->from('VIEW_PURCHASE_ORDER')
++                                    ->from('view_purchase_order')
+                                     ->orderBy('order_date','asc')
+                                     ->whereBetween('order_date',[$start_str,$end_str])
+                                     ->get();  
+@@ -190,7 +190,7 @@ class ReportPurchaseController extends Controller
+         $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+         $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-        $data = \DB::table('VIEW_PURCHASE_ORDER')
++        $data = \DB::table('view_purchase_order')
+         		->orderBy('order_date','asc')
+         		->whereBetween('order_date',[$start_str,$end_str])
+         		->get();
+diff --git a/app/Http/Controllers/ReportSalesController.php b/app/Http/Controllers/ReportSalesController.php
+index ecfded6..81c12d4 100644
+--- a/app/Http/Controllers/ReportSalesController.php
++++ b/app/Http/Controllers/ReportSalesController.php
+@@ -52,18 +52,18 @@ class ReportSalesController extends Controller
+ 
+                 $direct_sales = $req->sales_type == 0 ? '%%' : ($req->sales_type == 1 ? 'Y':'N'); 
+ 
+-                $data = \DB::table('VIEW_SALES_ORDER')
++                $data = \DB::table('view_sales_order')
+                 		->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('is_direct_sales','like',$direct_sales)
+-                		->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                		->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                                 ->orderBy('order_date','asc')
+                 		->get();
+ 
+-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total = \DB::table('view_customer_invoice')
+                 		// ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
+-                                                $query->from('VIEW_SALES_ORDER')
++                                                $query->from('view_sales_order')
+                                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                                 ->where('is_direct_sales','like',$direct_sales)
+                                                 ->select('id');
+@@ -71,9 +71,9 @@ class ReportSalesController extends Controller
+                                         })
+                 		->sum('total');
+ 
+-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total_amount_due = \DB::table('view_customer_invoice')
+                 		->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
+-                                                $query->from('VIEW_SALES_ORDER')
++                                                $query->from('view_sales_order')
+                                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                                 ->where('is_direct_sales','like',$direct_sales)
+                                                 ->select('id');
+@@ -101,22 +101,22 @@ class ReportSalesController extends Controller
+                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-                // $data = \DB::table('VIEW_SALES_ORDER')
++                // $data = \DB::table('view_sales_order')
+                 // 		->whereBetween('order_date',[$start_str,$end_str])
+-                // 		->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                // 			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                // 		->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                // 			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                 // 		->get();
+ 
+-                $data = \DB::table('VIEW_SALES_ORDER_ALL_DETAIL')
++                $data = \DB::table('view_sales_order_ALL_DETAIL')
+                 		->whereBetween('order_date',[$start_str,$end_str])
+                 		->get();
+ 
+ 
+-                // $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                // $total = \DB::table('view_customer_invoice')
+                 // 		->whereBetween('order_date',[$start_str,$end_str])
+                 // 		->sum('total');
+ 
+-                // $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                // $total_amount_due = \DB::table('view_customer_invoice')
+                 // 		->whereBetween('order_date',[$start_str,$end_str])
+                 // 		->sum('amount_due');
+ 
+@@ -145,21 +145,21 @@ class ReportSalesController extends Controller
+                 $where_pekerjaan = $req->pekerjaan_id == 0 ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = '. $req->pekerjaan_id;
+ 
+                 $customer = \DB::table('customer')->find($req->customer_id);
+-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
++                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
+                 
+-                $data = \DB::table('VIEW_SALES_ORDER')
++                $data = \DB::table('view_sales_order')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('is_direct_sales','like',$direct_sales)                                
+                                 ->whereRaw($where_pekerjaan)                                
+-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                                 ->where('customer_id',$req->customer_id)
+                                 ->orderBy('order_date','asc')
+                                 ->get();
+ 
+-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total = \DB::table('view_customer_invoice')
+                                 ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales,$where_pekerjaan,$customer){
+-                                        $query->from('VIEW_SALES_ORDER')
++                                        $query->from('view_sales_order')
+                                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                                 ->where('is_direct_sales','like',$direct_sales)                                
+                                                 ->whereRaw($where_pekerjaan)                                
+@@ -168,7 +168,7 @@ class ReportSalesController extends Controller
+                                 })
+                                 ->sum('total');
+ 
+-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total_amount_due = \DB::table('view_customer_invoice')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('customer_id',$req->customer_id)
+                                 ->sum('amount_due');
+@@ -197,28 +197,28 @@ class ReportSalesController extends Controller
+                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-                $data = \DB::table('VIEW_SALES_ORDER')
++                $data = \DB::table('view_sales_order')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                                 ->where('customer_id',$req->customer_id)
+                                 ->where('pekerjaan_id',$req->pekerjaan_id)
+                                 ->get();
+ 
+-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total = \DB::table('view_customer_invoice')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('pekerjaan_id',$req->pekerjaan_id)
+                                 ->where('customer_id',$req->customer_id)
+                                 ->sum('total');
+ 
+-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total_amount_due = \DB::table('view_customer_invoice')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('pekerjaan_id',$req->pekerjaan_id)
+                                 ->where('customer_id',$req->customer_id)
+                                 ->sum('amount_due');
+ 
+                 $customer = \DB::table('customer')->find($req->customer_id);
+-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
++                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
+ 
+                 return view('report.sales.report-by-customer-pekerjaan',[
+                                 'data' => $data,
+@@ -242,7 +242,7 @@ class ReportSalesController extends Controller
+                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-                $data = \DB::table('VIEW_SALES_ORDER_ALL_DETAIL')
++                $data = \DB::table('view_sales_order_ALL_DETAIL')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('customer_id',$req->customer_id)
+                                 ->get();
+@@ -278,21 +278,21 @@ class ReportSalesController extends Controller
+ 
+                 // if($sales_type == 1){
+                         
+-                        // $data = \DB::table('VIEW_SALES_ORDER')
++                        // $data = \DB::table('view_sales_order')
+                         //              ->whereBetween('order_date',[$start_str,$end_str])
+                         //              ->get();
+-                        $data = \DB::table('VIEW_SALES_ORDER')
++                        $data = \DB::table('view_sales_order')
+                                         ->whereBetween('order_date',[$start_str,$end_str])
+                                         ->where('is_direct_sales',$direct_sales)
+-                                        ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                                                \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                                        ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                                                \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                                         ->orderBy('order_date','asc')
+                                         ->get();
+ 
+-                        $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                        $total = \DB::table('view_customer_invoice')
+                                         ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
+                                                 $query->select('id')
+-                                                ->from('VIEW_SALES_ORDER')
++                                                ->from('view_sales_order')
+                                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                                 ->where('is_direct_sales',$direct_sales);
+                                                 // ->get();
+@@ -300,9 +300,9 @@ class ReportSalesController extends Controller
+                                         })
+                                         ->sum('total');
+ 
+-                        $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                        $total_amount_due = \DB::table('view_customer_invoice')
+                                         ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
+-                                                $query->from('VIEW_SALES_ORDER')
++                                                $query->from('view_sales_order')
+                                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                                 ->where('is_direct_sales',$direct_sales)
+                                                 ->select('id')
+@@ -335,24 +335,24 @@ class ReportSalesController extends Controller
+                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
+ 
+-                $data = \DB::table('VIEW_SALES_ORDER')
++                $data = \DB::table('view_sales_order')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
+-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
++                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
++                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
+                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
+                                 ->get();
+ 
+-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total = \DB::table('view_customer_invoice')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
+                                 ->sum('total');
+ 
+-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
++                $total_amount_due = \DB::table('view_customer_invoice')
+                                 ->whereBetween('order_date',[$start_str,$end_str])
+                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
+                                 ->sum('amount_due');
+ 
+-                $lokasi_galian = \DB::table('VIEW_LOKASI_GALIAN')->find($req->lokasi_galian_id);
++                $lokasi_galian = \DB::table('view_lokasi_galian')->find($req->lokasi_galian_id);
+ 
+                 return view('report.sales.report-by-lokasi-galian',[
+                                 'data' => $data,
+diff --git a/app/Http/Controllers/SalesOrderController.php b/app/Http/Controllers/SalesOrderController.php
+index e979f19..9a304a1 100644
+--- a/app/Http/Controllers/SalesOrderController.php
++++ b/app/Http/Controllers/SalesOrderController.php
+@@ -12,7 +12,7 @@ class SalesOrderController extends Controller
+ 	// public function index(){
+ 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-	// 	$data = \DB::table('VIEW_SALES_ORDER')
++	// 	$data = \DB::table('view_sales_order')
+ 	// 				->orderBy('order_date','desc')
+ 	// 				->paginate($paging_item_number);
+ 		
+@@ -25,7 +25,7 @@ class SalesOrderController extends Controller
+ 	public function index(){
+ 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-		$data = \DB::table('VIEW_SALES_ORDER')
++		$data = \DB::table('view_sales_order')
+ 					->orderBy('order_date','desc')
+ 					->get();
+ 		$delivery_to_do = \DB::table('delivery_order')
+@@ -96,10 +96,10 @@ class SalesOrderController extends Controller
+ 
+ 
+ 	public function edit($id){
+-		$data_master = \DB::table('VIEW_SALES_ORDER')->find($id);
+-		$data_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')->where('sales_order_id',$id)->get();
++		$data_master = \DB::table('view_sales_order')->find($id);
++		$data_detail = \DB::table('view_sales_order_DETAIL')->where('sales_order_id',$id)->get();
+ 
+-		$pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$data_master->customer_id)->get();
++		$pekerjaan = \DB::table('view_pekerjaan')->where('customer_id',$data_master->customer_id)->get();
+ 		$select_pekerjaan = [];
+ 		foreach($pekerjaan as $dt){
+ 			$select_pekerjaan[$dt->id] = $dt->nama;
+@@ -252,10 +252,10 @@ class SalesOrderController extends Controller
+ 	}
+ 
+ 	public function delivery($so_id){
+-		$sales_order = \DB::table('VIEW_SALES_ORDER')->find($so_id);
+-		$sales_order_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')
++		$sales_order = \DB::table('view_sales_order')->find($so_id);
++		$sales_order_detail = \DB::table('view_sales_order_DETAIL')
+ 								->where('sales_order_id',$so_id)->get();
+-		$delivery_order = \DB::table('VIEW_DELIVERY_ORDER')->where('sales_order_id',$so_id)->get();
++		$delivery_order = \DB::table('view_delivery_order')->where('sales_order_id',$so_id)->get();
+ 		return view('sales.order.delivery',[
+ 				'sales_order' => $sales_order,
+ 				'sales_order_detail' => $sales_order_detail,
+@@ -264,7 +264,7 @@ class SalesOrderController extends Controller
+ 	}
+ 
+ 	public function deliveryEdit($delivery_id){
+-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
++		$data = \DB::table('view_delivery_order')->find($delivery_id);
+ 
+ 		if($data->status == 'V'){
+ 			return view('sales.order.delivery_validated',[
+@@ -311,7 +311,7 @@ class SalesOrderController extends Controller
+ 				'desa_id' => $req->desa_id,
+ 				'tahun' => $req->tahun,
+ 			]);
+-		$data = \DB::table('VIEW_PEKERJAAN')
++		$data = \DB::table('view_pekerjaan')
+ 
+ 				->find($data_id);
+ 
+@@ -353,7 +353,7 @@ class SalesOrderController extends Controller
+             $arr_tgl = explode('-',$date_end);
+             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
+ 
+-         	$data = \DB::table('VIEW_SALES_ORDER')
++         	$data = \DB::table('view_sales_order')
+ 					->orderBy('order_date','desc')
+ 					->whereBetween('order_date',[$date_start,$date_end])
+ 					->paginate($paging_item_number)
+@@ -368,7 +368,7 @@ class SalesOrderController extends Controller
+ 	                    ]);
+ 
+          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
+-         	$data = \DB::table('VIEW_SALES_ORDER')
++         	$data = \DB::table('view_sales_order')
+ 					->orderBy('order_date','desc')
+ 					->where('status','=',$req->filter_by)
+ 					->paginate($paging_item_number)
+@@ -380,7 +380,7 @@ class SalesOrderController extends Controller
+ 	                    ]);
+ 
+          }else{
+-         	$data = \DB::table('VIEW_SALES_ORDER')
++         	$data = \DB::table('view_sales_order')
+ 					->orderBy('order_date','desc')
+ 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
+ 					->paginate($paging_item_number)
+@@ -420,7 +420,7 @@ class SalesOrderController extends Controller
+ 
+ 	public function invoices($sales_order_id){
+ 		$sales_order = \DB::table('sales_order')->find($sales_order_id);
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 				->where('order_id',$sales_order_id)
+ 				->get();
+ 		return view('sales.order.invoices',[
+@@ -430,9 +430,9 @@ class SalesOrderController extends Controller
+ 	}
+ 
+ 	public function showInvoice($invoice_id){
+-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
++		$data = \DB::table('view_customer_invoice')
+ 				->find($invoice_id);
+-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
++		$data_detail = \DB::table('view_customer_invoice_DETAIL')
+ 				->where('customer_invoice_id',$invoice_id)
+ 				->get();
+ 		$sales_order = \DB::table('sales_order')->find($data->order_id);
+diff --git a/app/Http/Controllers/SupplierBillController.php b/app/Http/Controllers/SupplierBillController.php
+index ab09f43..e4c3af9 100644
+--- a/app/Http/Controllers/SupplierBillController.php
++++ b/app/Http/Controllers/SupplierBillController.php
+@@ -11,7 +11,7 @@ class SupplierBillController extends Controller
+ 	// public function index(){
+ 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+ 
+-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
++	// 	$data = \DB::table('view_supplier_bill')
+ 	// 		// ->where('status','=','O')
+ 	// 		->orderBy('order_date','desc')
+ 	// 		->paginate($paging_item_number);
+@@ -25,7 +25,7 @@ class SupplierBillController extends Controller
+ 	// }
+ 
+ 	public function index(){
+-		$data = \DB::table('VIEW_SUPPLIER_BILL')
++		$data = \DB::table('view_supplier_bill')
+ 			// ->where('status','=','O')
+ 			->orderBy('order_date','desc')
+ 			->get();
+@@ -39,10 +39,10 @@ class SupplierBillController extends Controller
+ 	}
+ 
+ 	public function edit($bill_id){
+-		$data = \DB::table('VIEW_SUPPLIER_BILL')
++		$data = \DB::table('view_supplier_bill')
+ 					->find($bill_id);
+ 		$purchase_order = \DB::table('purchase_order')->find($data->purchase_order_id);
+-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
++		$data_detail = \DB::table('view_purchase_order_DETAIL')
+ 						->where('purchase_order_id',$data->purchase_order_id)
+ 						->get();
+ 		$payments = \DB::table('supplier_payment')
+@@ -60,7 +60,7 @@ class SupplierBillController extends Controller
+ 	}
+ 
+ 	public function regPayment($bill_id){
+-		$data_bill = \DB::table('VIEW_SUPPLIER_BILL')->find($bill_id);
++		$data_bill = \DB::table('view_supplier_bill')->find($bill_id);
+ 		return view('invoice/supplier/regpayment',[
+ 				'data' => $data_bill
+ 			]);
+@@ -137,7 +137,7 @@ class SupplierBillController extends Controller
+ 
+ 	// tampilkan payments
+ 	public function showPayment($payment_id){
+-		$payment = \DB::table('VIEW_SUPPLIER_PAYMENT')->find($payment_id);
++		$payment = \DB::table('view_supplier_payment')->find($payment_id);
+ 		return view('invoice/supplier/show-payment',[
+ 			'data' => $payment
+ 		]);
+@@ -195,9 +195,9 @@ class SupplierBillController extends Controller
+ 	}
+ 
+ 	// public function edit($bill_id){
+-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
++	// 	$data = \DB::table('view_supplier_bill')
+ 	// 			->find($bill_id);
+-	// 	$data_detail = \DB::table('VIEW_SUPPLIER_BILL_DETAIL')
++	// 	$data_detail = \DB::table('view_supplier_bill_DETAIL')
+ 	// 			->where('supplier_bill_id',$data->id)
+ 	// 			->get();
+ 	// 	$payments = \DB::table('supplier_payment')
+@@ -213,9 +213,9 @@ class SupplierBillController extends Controller
+ 	// }
+ 
+ 	// public function payments($bill_id){
+-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
++	// 	$data = \DB::table('view_supplier_bill')
+ 	// 			->find($bill_id);
+-	// 	$data_detail = \DB::table('VIEW_SUPPLIER_BILL_DETAIL')
++	// 	$data_detail = \DB::table('view_supplier_bill_DETAIL')
+ 	// 			->where('supplier_bill_id',$data->id)
+ 	// 			->get();
+ 	// 	$payments = \DB::table('supplier_payment')
+@@ -264,7 +264,7 @@ class SupplierBillController extends Controller
+ 
+ 	// // REGISTER PAYMENT
+ 	// function registerPayment($bill_id){
+-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')->find($bill_id);
++	// 	$data = \DB::table('view_supplier_bill')->find($bill_id);
+ 	// 	return view('bill.supplier.register-payment',[
+ 	// 		'data' => $data
+ 	// 	]);
+diff --git a/app/Http/Controllers/SupplierController.php b/app/Http/Controllers/SupplierController.php
+index b6526b8..de89e61 100644
+--- a/app/Http/Controllers/SupplierController.php
++++ b/app/Http/Controllers/SupplierController.php
+@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
+ class SupplierController extends Controller
+ {
+ 	public function index(){
+-		$data = \DB::table('VIEW_SUPPLIER')->get();
++		$data = \DB::table('view_supplier')->get();
+ 		return view('master.supplier.index',[
+ 				'data' => $data
+ 			]);
+@@ -38,7 +38,7 @@ class SupplierController extends Controller
+ 	}
+ 
+ 	public function edit($id){
+-		$data = \DB::table('VIEW_SUPPLIER')->find($id);
++		$data = \DB::table('view_supplier')->find($id);
+ 
+ 		return view('master.supplier.edit',[
+ 				'data' => $data,

@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class LokasiGalianController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_LOKASI_GALIAN')->get();
+		$data = \DB::table('view_lokasi_galian')->get();
 		return view('master.lokasi_galian.index',[
 				'data' => $data
 			]);
@@ -35,7 +35,7 @@ class LokasiGalianController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_LOKASI_GALIAN')->find($id);
+		$data = \DB::table('view_lokasi_galian')->find($id);
 		return view('master.lokasi_galian.edit',[
 				'data' => $data
 			]);

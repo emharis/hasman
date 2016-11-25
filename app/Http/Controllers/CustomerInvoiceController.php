@@ -11,7 +11,7 @@ class CustomerInvoiceController extends Controller
 	// public function index(){
 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-	// 	$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+	// 	$data = \DB::table('view_customer_invoice')
 	// 		// ->where('status','=','O')
 	// 		->orderBy('order_date','desc')
 	// 		->paginate($paging_item_number);
@@ -24,7 +24,7 @@ class CustomerInvoiceController extends Controller
 
 	public function index(){
 		
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 			// ->where('status','=','O')
 			->orderBy('order_date','desc')
 			->get();
@@ -43,9 +43,9 @@ class CustomerInvoiceController extends Controller
 	}
 
 	public function edit($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 				->find($invoice_id);
-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_detail = \DB::table('view_customer_invoice_detail')
 				->where('customer_invoice_id',$data->id)
 				->get();
 		$sales_order = \DB::table('sales_order')->find($data->order_id);
@@ -63,21 +63,21 @@ class CustomerInvoiceController extends Controller
 	}
 
 	public function showOneInvoice($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 				->find($invoice_id);
-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_detail = \DB::table('view_customer_invoice_detail')
 				->where('customer_invoice_id',$data->id)
 				->get();
 
-		$data_kubikasi = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_kubikasi = \DB::table('view_customer_invoice_detail')
 						->where('customer_invoice_id',$data->id)
 						->where('kalkulasi','K')
 						->get();
-		$data_tonase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_tonase= \DB::table('view_customer_invoice_detail')
 						->where('customer_invoice_id',$data->id)
 						->where('kalkulasi','T')
 						->get();
-		$data_ritase= \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_ritase= \DB::table('view_customer_invoice_detail')
 						->where('customer_invoice_id',$data->id)
 						->where('kalkulasi','R')
 						->get();
@@ -100,9 +100,9 @@ class CustomerInvoiceController extends Controller
 	}
 
 	public function payments($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 				->find($invoice_id);
-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_detail = \DB::table('view_customer_invoice_detail')
 				->where('customer_invoice_id',$data->id)
 				->get();
 		$payments = \DB::table('customer_payment')
@@ -151,7 +151,7 @@ class CustomerInvoiceController extends Controller
 
 	// REGISTER PAYMENT
 	function registerPayment($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')->find($invoice_id);
+		$data = \DB::table('view_customer_invoice')->find($invoice_id);
 		return view('invoice.customer.register-payment',[
 			'data' => $data
 		]);

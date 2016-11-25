@@ -11,7 +11,7 @@ class SupplierBillController extends Controller
 	// public function index(){
 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
+	// 	$data = \DB::table('view_supplier_bill')
 	// 		// ->where('status','=','O')
 	// 		->orderBy('order_date','desc')
 	// 		->paginate($paging_item_number);
@@ -25,7 +25,7 @@ class SupplierBillController extends Controller
 	// }
 
 	public function index(){
-		$data = \DB::table('VIEW_SUPPLIER_BILL')
+		$data = \DB::table('view_supplier_bill')
 			// ->where('status','=','O')
 			->orderBy('order_date','desc')
 			->get();
@@ -39,10 +39,10 @@ class SupplierBillController extends Controller
 	}
 
 	public function edit($bill_id){
-		$data = \DB::table('VIEW_SUPPLIER_BILL')
+		$data = \DB::table('view_supplier_bill')
 					->find($bill_id);
 		$purchase_order = \DB::table('purchase_order')->find($data->purchase_order_id);
-		$data_detail = \DB::table('VIEW_PURCHASE_ORDER_DETAIL')
+		$data_detail = \DB::table('view_purchase_order_DETAIL')
 						->where('purchase_order_id',$data->purchase_order_id)
 						->get();
 		$payments = \DB::table('supplier_payment')
@@ -60,7 +60,7 @@ class SupplierBillController extends Controller
 	}
 
 	public function regPayment($bill_id){
-		$data_bill = \DB::table('VIEW_SUPPLIER_BILL')->find($bill_id);
+		$data_bill = \DB::table('view_supplier_bill')->find($bill_id);
 		return view('invoice/supplier/regpayment',[
 				'data' => $data_bill
 			]);
@@ -137,7 +137,7 @@ class SupplierBillController extends Controller
 
 	// tampilkan payments
 	public function showPayment($payment_id){
-		$payment = \DB::table('VIEW_SUPPLIER_PAYMENT')->find($payment_id);
+		$payment = \DB::table('view_supplier_payment')->find($payment_id);
 		return view('invoice/supplier/show-payment',[
 			'data' => $payment
 		]);
@@ -195,9 +195,9 @@ class SupplierBillController extends Controller
 	}
 
 	// public function edit($bill_id){
-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
+	// 	$data = \DB::table('view_supplier_bill')
 	// 			->find($bill_id);
-	// 	$data_detail = \DB::table('VIEW_SUPPLIER_BILL_DETAIL')
+	// 	$data_detail = \DB::table('view_supplier_bill_DETAIL')
 	// 			->where('supplier_bill_id',$data->id)
 	// 			->get();
 	// 	$payments = \DB::table('supplier_payment')
@@ -213,9 +213,9 @@ class SupplierBillController extends Controller
 	// }
 
 	// public function payments($bill_id){
-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')
+	// 	$data = \DB::table('view_supplier_bill')
 	// 			->find($bill_id);
-	// 	$data_detail = \DB::table('VIEW_SUPPLIER_BILL_DETAIL')
+	// 	$data_detail = \DB::table('view_supplier_bill_DETAIL')
 	// 			->where('supplier_bill_id',$data->id)
 	// 			->get();
 	// 	$payments = \DB::table('supplier_payment')
@@ -264,7 +264,7 @@ class SupplierBillController extends Controller
 
 	// // REGISTER PAYMENT
 	// function registerPayment($bill_id){
-	// 	$data = \DB::table('VIEW_SUPPLIER_BILL')->find($bill_id);
+	// 	$data = \DB::table('view_supplier_bill')->find($bill_id);
 	// 	return view('bill.supplier.register-payment',[
 	// 		'data' => $data
 	// 	]);

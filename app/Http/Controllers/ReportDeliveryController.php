@@ -22,7 +22,7 @@ class ReportDeliveryController extends Controller
                         $select_lokasi_galian[$dt->id] = $dt->kode.' - ' . $dt->nama;
                 }
 
-                $driver = \DB::table('VIEW_KARYAWAN')->select('id','kode','nama')->get();
+                $driver = \DB::table('view_karyawan')->select('id','kode','nama')->get();
                 $select_driver = [];
                 foreach($driver as $dt){
                         $select_driver[$dt->id] = $dt->kode.' - ' . $dt->nama;
@@ -50,7 +50,7 @@ class ReportDeliveryController extends Controller
 
                 $where_kalkulasi = $req->kalkulasi == 'A' ? 'kalkulasi like "%%"' : 'kalkulasi = "' . $req->kalkulasi . '"';
 
-                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                $data = \DB::table('view_delivery_order')
                         ->whereRaw($where_kalkulasi)
                         ->whereBetween('order_date',[$start_str,$end_str])
                         ->orderBy('order_date','asc')
@@ -78,7 +78,7 @@ class ReportDeliveryController extends Controller
                 $where_pekerjaan = $req->pekerjaan_id == '0' ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = ' . $req->pekerjaan_id ;
 
 
-                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                $data = \DB::table('view_delivery_order')
                         ->where('customer_id',$req->customer_id)
                         ->whereRaw($where_kalkulasi)
                         ->whereRaw($where_pekerjaan)
@@ -87,7 +87,7 @@ class ReportDeliveryController extends Controller
                         ->get();
 
                 $customer = \DB::table('customer')->find($req->customer_id);
-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
+                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
 
                 return view('report.delivery.report-by-customer',[
                                 'data' => $data,
@@ -113,7 +113,7 @@ class ReportDeliveryController extends Controller
                 $where_lokasi_galian = $req->lokasi_galian_id == '0' ? 'lokasi_galian_id like "%%"' : 'lokasi_galian_id = ' . $req->lokasi_galian_id;
 
 
-                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                $data = \DB::table('view_delivery_order')
                         ->whereRaw($where_kalkulasi)
                         ->whereRaw($where_lokasi_galian)
                         ->whereBetween('order_date',[$start_str,$end_str])
@@ -146,7 +146,7 @@ class ReportDeliveryController extends Controller
                 $where_driver = $req->driver_id == '0' ? 'karyawan_id like "%%"' : 'karyawan_id = ' . $req->driver_id;
 
 
-                $data = \DB::table('VIEW_DELIVERY_ORDER')
+                $data = \DB::table('view_delivery_order')
                         ->whereRaw($where_kalkulasi)
                         ->whereRaw($where_driver)
                         ->whereBetween('order_date',[$start_str,$end_str])
@@ -154,7 +154,7 @@ class ReportDeliveryController extends Controller
                         ->get();
 
                 $driver = \DB::table('karyawan')->find($req->driver_id);
-                $armada = \DB::table('VIEW_ARMADA')->whereKaryawanId($req->driver_id)->first();
+                $armada = \DB::table('view_armada')->whereKaryawanId($req->driver_id)->first();
 
                 return view('report.delivery.report-by-driver',[
                                 'data' => $data,

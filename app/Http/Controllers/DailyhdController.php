@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class DailyhdController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_DAILYHD')
+		$data = \DB::table('view_dailyhd')
 				->orderBy('tanggal','desc')
 				->get();
 		
@@ -63,7 +63,7 @@ class DailyhdController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_DAILYHD')->find($id);
+		$data = \DB::table('view_dailyhd')->find($id);
 		if($data->status == 'O'){
 			return view('dailyhd.edit',['data'=>$data]);
 		}else{

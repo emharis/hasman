@@ -52,18 +52,18 @@ class ReportSalesController extends Controller
 
                 $direct_sales = $req->sales_type == 0 ? '%%' : ($req->sales_type == 1 ? 'Y':'N'); 
 
-                $data = \DB::table('VIEW_SALES_ORDER')
+                $data = \DB::table('view_sales_order')
                 		->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('is_direct_sales','like',$direct_sales)
-                		->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                		->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                                 ->orderBy('order_date','asc')
                 		->get();
 
-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total = \DB::table('view_customer_invoice')
                 		// ->whereBetween('order_date',[$start_str,$end_str])
                                 ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
-                                                $query->from('VIEW_SALES_ORDER')
+                                                $query->from('view_sales_order')
                                                 ->whereBetween('order_date',[$start_str,$end_str])
                                                 ->where('is_direct_sales','like',$direct_sales)
                                                 ->select('id');
@@ -71,9 +71,9 @@ class ReportSalesController extends Controller
                                         })
                 		->sum('total');
 
-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total_amount_due = \DB::table('view_customer_invoice')
                 		->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
-                                                $query->from('VIEW_SALES_ORDER')
+                                                $query->from('view_sales_order')
                                                 ->whereBetween('order_date',[$start_str,$end_str])
                                                 ->where('is_direct_sales','like',$direct_sales)
                                                 ->select('id');
@@ -101,22 +101,22 @@ class ReportSalesController extends Controller
                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-                // $data = \DB::table('VIEW_SALES_ORDER')
+                // $data = \DB::table('view_sales_order')
                 // 		->whereBetween('order_date',[$start_str,$end_str])
-                // 		->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                // 			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                // 		->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                // 			\DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                 // 		->get();
 
-                $data = \DB::table('VIEW_SALES_ORDER_ALL_DETAIL')
+                $data = \DB::table('view_sales_order_ALL_DETAIL')
                 		->whereBetween('order_date',[$start_str,$end_str])
                 		->get();
 
 
-                // $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                // $total = \DB::table('view_customer_invoice')
                 // 		->whereBetween('order_date',[$start_str,$end_str])
                 // 		->sum('total');
 
-                // $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                // $total_amount_due = \DB::table('view_customer_invoice')
                 // 		->whereBetween('order_date',[$start_str,$end_str])
                 // 		->sum('amount_due');
 
@@ -145,21 +145,21 @@ class ReportSalesController extends Controller
                 $where_pekerjaan = $req->pekerjaan_id == 0 ? 'pekerjaan_id like "%%"' : 'pekerjaan_id = '. $req->pekerjaan_id;
 
                 $customer = \DB::table('customer')->find($req->customer_id);
-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
+                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
                 
-                $data = \DB::table('VIEW_SALES_ORDER')
+                $data = \DB::table('view_sales_order')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('is_direct_sales','like',$direct_sales)                                
                                 ->whereRaw($where_pekerjaan)                                
-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                                 ->where('customer_id',$req->customer_id)
                                 ->orderBy('order_date','asc')
                                 ->get();
 
-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total = \DB::table('view_customer_invoice')
                                 ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales,$where_pekerjaan,$customer){
-                                        $query->from('VIEW_SALES_ORDER')
+                                        $query->from('view_sales_order')
                                                 ->whereBetween('order_date',[$start_str,$end_str])
                                                 ->where('is_direct_sales','like',$direct_sales)                                
                                                 ->whereRaw($where_pekerjaan)                                
@@ -168,7 +168,7 @@ class ReportSalesController extends Controller
                                 })
                                 ->sum('total');
 
-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total_amount_due = \DB::table('view_customer_invoice')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('customer_id',$req->customer_id)
                                 ->sum('amount_due');
@@ -197,28 +197,28 @@ class ReportSalesController extends Controller
                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-                $data = \DB::table('VIEW_SALES_ORDER')
+                $data = \DB::table('view_sales_order')
                                 ->whereBetween('order_date',[$start_str,$end_str])
-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                                 ->where('customer_id',$req->customer_id)
                                 ->where('pekerjaan_id',$req->pekerjaan_id)
                                 ->get();
 
-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total = \DB::table('view_customer_invoice')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('pekerjaan_id',$req->pekerjaan_id)
                                 ->where('customer_id',$req->customer_id)
                                 ->sum('total');
 
-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total_amount_due = \DB::table('view_customer_invoice')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('pekerjaan_id',$req->pekerjaan_id)
                                 ->where('customer_id',$req->customer_id)
                                 ->sum('amount_due');
 
                 $customer = \DB::table('customer')->find($req->customer_id);
-                $pekerjaan = \DB::table('VIEW_PEKERJAAN')->find($req->pekerjaan_id);
+                $pekerjaan = \DB::table('view_pekerjaan')->find($req->pekerjaan_id);
 
                 return view('report.sales.report-by-customer-pekerjaan',[
                                 'data' => $data,
@@ -242,7 +242,7 @@ class ReportSalesController extends Controller
                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-                $data = \DB::table('VIEW_SALES_ORDER_ALL_DETAIL')
+                $data = \DB::table('view_sales_order_ALL_DETAIL')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('customer_id',$req->customer_id)
                                 ->get();
@@ -278,21 +278,21 @@ class ReportSalesController extends Controller
 
                 // if($sales_type == 1){
                         
-                        // $data = \DB::table('VIEW_SALES_ORDER')
+                        // $data = \DB::table('view_sales_order')
                         //              ->whereBetween('order_date',[$start_str,$end_str])
                         //              ->get();
-                        $data = \DB::table('VIEW_SALES_ORDER')
+                        $data = \DB::table('view_sales_order')
                                         ->whereBetween('order_date',[$start_str,$end_str])
                                         ->where('is_direct_sales',$direct_sales)
-                                        ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                                                \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                                        ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                                                \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                                         ->orderBy('order_date','asc')
                                         ->get();
 
-                        $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                        $total = \DB::table('view_customer_invoice')
                                         ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
                                                 $query->select('id')
-                                                ->from('VIEW_SALES_ORDER')
+                                                ->from('view_sales_order')
                                                 ->whereBetween('order_date',[$start_str,$end_str])
                                                 ->where('is_direct_sales',$direct_sales);
                                                 // ->get();
@@ -300,9 +300,9 @@ class ReportSalesController extends Controller
                                         })
                                         ->sum('total');
 
-                        $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                        $total_amount_due = \DB::table('view_customer_invoice')
                                         ->whereIn('order_id',function($query)use($start_str,$end_str,$direct_sales){
-                                                $query->from('VIEW_SALES_ORDER')
+                                                $query->from('view_sales_order')
                                                 ->whereBetween('order_date',[$start_str,$end_str])
                                                 ->where('is_direct_sales',$direct_sales)
                                                 ->select('id')
@@ -335,24 +335,24 @@ class ReportSalesController extends Controller
                 $end->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
                 $end_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-                $data = \DB::table('VIEW_SALES_ORDER')
+                $data = \DB::table('view_sales_order')
                                 ->whereBetween('order_date',[$start_str,$end_str])
-                                ->select('VIEW_SALES_ORDER.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as total'),
-                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = VIEW_SALES_ORDER.id) as amount_due'))
+                                ->select('view_sales_order.*',\DB::raw('(select sum(total) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as total'),
+                                        \DB::raw('(select sum(amount_due) from customer_invoices where customer_invoices.order_id = view_sales_order.id) as amount_due'))
                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
                                 ->get();
 
-                $total = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total = \DB::table('view_customer_invoice')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
                                 ->sum('total');
 
-                $total_amount_due = \DB::table('VIEW_CUSTOMER_INVOICE')
+                $total_amount_due = \DB::table('view_customer_invoice')
                                 ->whereBetween('order_date',[$start_str,$end_str])
                                 ->where('lokasi_galian_id',$req->lokasi_galian_id)
                                 ->sum('amount_due');
 
-                $lokasi_galian = \DB::table('VIEW_LOKASI_GALIAN')->find($req->lokasi_galian_id);
+                $lokasi_galian = \DB::table('view_lokasi_galian')->find($req->lokasi_galian_id);
 
                 return view('report.sales.report-by-lokasi-galian',[
                                 'data' => $data,

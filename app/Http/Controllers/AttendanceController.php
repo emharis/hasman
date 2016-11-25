@@ -131,7 +131,7 @@ class AttendanceController extends Controller
 		$tanggal->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
 
 		$data = json_decode('{"presensi":"","status":""}');
-		$data->presensi = \DB::table('VIEW_ATTEND')
+		$data->presensi = \DB::table('view_attend')
 						->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
 						->where('jabatan_id',4)
 						->get();

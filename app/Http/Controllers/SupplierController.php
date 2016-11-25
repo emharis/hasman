@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class SupplierController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_SUPPLIER')->get();
+		$data = \DB::table('view_supplier')->get();
 		return view('master.supplier.index',[
 				'data' => $data
 			]);
@@ -38,7 +38,7 @@ class SupplierController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_SUPPLIER')->find($id);
+		$data = \DB::table('view_supplier')->find($id);
 
 		return view('master.supplier.edit',[
 				'data' => $data,

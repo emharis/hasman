@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class PayrollStaffController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_PAYROLL')
+		$data = \DB::table('view_payroll')
 				->where('kategori','S')
 				->orderBy('payment_date','desc')
 				->get();
@@ -125,7 +125,7 @@ class PayrollStaffController extends Controller
 	}
 
 	public function edit($payroll_id){
-		$data = \DB::table('VIEW_PAYROLL')->find($payroll_id);
+		$data = \DB::table('view_payroll')->find($payroll_id);
 
 		if($data->status =='O'){
 			return view('payroll.staff.edit',[

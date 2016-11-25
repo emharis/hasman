@@ -11,7 +11,7 @@ class PayrollDriverController extends Controller
 	
 
 	  public function driver(){
-			$data = \DB::table('VIEW_PAYROLL')
+			$data = \DB::table('view_payroll')
 						->where('kategori','D')
 						->orderBy('payment_date','desc')
 						->get();
@@ -202,8 +202,8 @@ class PayrollDriverController extends Controller
 	}
 
 	public function edit($payroll_id){
-		$payroll = \DB::table('VIEW_PAYROLL')->find($payroll_id);
-		 $payroll_detail = \DB::table('VIEW_PAYROLL_DRIVER')
+		$payroll = \DB::table('view_payroll')->find($payroll_id);
+		 $payroll_detail = \DB::table('view_payroll_DRIVER')
 									 	->where('payroll_id',$payroll_id)
 										->get();
 
@@ -308,32 +308,32 @@ where delivery_order.id in (select delivery_order_id from payroll_driver_do wher
 		$ed_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
 		$ed_date_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-		// $data = \DB::table('VIEW_DELIVERY_ORDER')
+		// $data = \DB::table('view_delivery_order')
 		// 			->where('karyawan_id',$karyawan_id)
 		// 			->where('delivery_date','<=',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
 		// 			->where('paid_to_driver','N')
 		// 			->get();
 		$data = \DB::select("SELECT
-						VIEW_DELIVERY_ORDER.id,
-						VIEW_DELIVERY_ORDER.paid_to_driver,
-						VIEW_DELIVERY_ORDER.delivery_order_number,
-						VIEW_DELIVERY_ORDER.delivery_date,
-						VIEW_DELIVERY_ORDER.material_id,
-						VIEW_DELIVERY_ORDER.material,
-						VIEW_DELIVERY_ORDER.kalkulasi,
+						view_delivery_order.id,
+						view_delivery_order.paid_to_driver,
+						view_delivery_order.delivery_order_number,
+						view_delivery_order.delivery_date,
+						view_delivery_order.material_id,
+						view_delivery_order.material,
+						view_delivery_order.kalkulasi,
 						sum(volume) as sum_volume,
 						sum(netto) as sum_netto,
 						sum(qty) as sum_qty,
-						VIEW_DELIVERY_ORDER.unit_price,
-						VIEW_DELIVERY_ORDER.total,
-						VIEW_DELIVERY_ORDER.pekerjaan,
-						VIEW_DELIVERY_ORDER.pekerjaan_id,
-						VIEW_DELIVERY_ORDER.alamat_pekerjaan,
-						VIEW_DELIVERY_ORDER.desa,
-						VIEW_DELIVERY_ORDER.kecamatan,
-						VIEW_DELIVERY_ORDER.kabupaten
+						view_delivery_order.unit_price,
+						view_delivery_order.total,
+						view_delivery_order.pekerjaan,
+						view_delivery_order.pekerjaan_id,
+						view_delivery_order.alamat_pekerjaan,
+						view_delivery_order.desa,
+						view_delivery_order.kecamatan,
+						view_delivery_order.kabupaten
 					FROM
-						VIEW_DELIVERY_ORDER
+						view_delivery_order
 					WHERE karyawan_id = " . $karyawan_id . "
 					and paid_to_driver = 'N'
 					and delivery_date between '" . $st_date_str . "' and '" . $ed_date_str . "'

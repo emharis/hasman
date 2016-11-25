@@ -16,7 +16,7 @@ class PekerjaanController extends Controller
 		// 		->orderBy('customer_id')
 		// 		->get();
 
-		$data = \DB::table('VIEW_PEKERJAAN')
+		$data = \DB::table('view_pekerjaan')
 				// ->orderBy('customer_id')
 				->orderBy('created_at','desc')
 				->get();
@@ -46,7 +46,7 @@ class PekerjaanController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_PEKERJAAN')->find($id);
+		$data = \DB::table('view_pekerjaan')->find($id);
 		return view('master.pekerjaan.edit',[
 				'data' => $data
 			]);

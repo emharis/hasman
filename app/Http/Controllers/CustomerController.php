@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class CustomerController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_CUSTOMER')
+		$data = \DB::table('view_customer')
 				->orderBy('created_at','desc')
 				->get();
 		return view('master.customer.index',[
@@ -42,7 +42,7 @@ class CustomerController extends Controller
 	}
 
 	public function edit($id){
-		$data = \DB::table('VIEW_CUSTOMER')->find($id);
+		$data = \DB::table('view_customer')->find($id);
 
 		return view('master.customer.edit',[
 				'data' => $data,

@@ -12,7 +12,7 @@ class SalesOrderController extends Controller
 	// public function index(){
 	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-	// 	$data = \DB::table('VIEW_SALES_ORDER')
+	// 	$data = \DB::table('view_sales_order')
 	// 				->orderBy('order_date','desc')
 	// 				->paginate($paging_item_number);
 		
@@ -25,7 +25,7 @@ class SalesOrderController extends Controller
 	public function index(){
 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
 
-		$data = \DB::table('VIEW_SALES_ORDER')
+		$data = \DB::table('view_sales_order')
 					->orderBy('order_date','desc')
 					->get();
 		$delivery_to_do = \DB::table('delivery_order')
@@ -96,10 +96,10 @@ class SalesOrderController extends Controller
 
 
 	public function edit($id){
-		$data_master = \DB::table('VIEW_SALES_ORDER')->find($id);
-		$data_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')->where('sales_order_id',$id)->get();
+		$data_master = \DB::table('view_sales_order')->find($id);
+		$data_detail = \DB::table('view_sales_order_DETAIL')->where('sales_order_id',$id)->get();
 
-		$pekerjaan = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$data_master->customer_id)->get();
+		$pekerjaan = \DB::table('view_pekerjaan')->where('customer_id',$data_master->customer_id)->get();
 		$select_pekerjaan = [];
 		foreach($pekerjaan as $dt){
 			$select_pekerjaan[$dt->id] = $dt->nama;
@@ -252,10 +252,10 @@ class SalesOrderController extends Controller
 	}
 
 	public function delivery($so_id){
-		$sales_order = \DB::table('VIEW_SALES_ORDER')->find($so_id);
-		$sales_order_detail = \DB::table('VIEW_SALES_ORDER_DETAIL')
+		$sales_order = \DB::table('view_sales_order')->find($so_id);
+		$sales_order_detail = \DB::table('view_sales_order_DETAIL')
 								->where('sales_order_id',$so_id)->get();
-		$delivery_order = \DB::table('VIEW_DELIVERY_ORDER')->where('sales_order_id',$so_id)->get();
+		$delivery_order = \DB::table('view_delivery_order')->where('sales_order_id',$so_id)->get();
 		return view('sales.order.delivery',[
 				'sales_order' => $sales_order,
 				'sales_order_detail' => $sales_order_detail,
@@ -264,7 +264,7 @@ class SalesOrderController extends Controller
 	}
 
 	public function deliveryEdit($delivery_id){
-		$data = \DB::table('VIEW_DELIVERY_ORDER')->find($delivery_id);
+		$data = \DB::table('view_delivery_order')->find($delivery_id);
 
 		if($data->status == 'V'){
 			return view('sales.order.delivery_validated',[
@@ -311,7 +311,7 @@ class SalesOrderController extends Controller
 				'desa_id' => $req->desa_id,
 				'tahun' => $req->tahun,
 			]);
-		$data = \DB::table('VIEW_PEKERJAAN')
+		$data = \DB::table('view_pekerjaan')
 
 				->find($data_id);
 
@@ -353,7 +353,7 @@ class SalesOrderController extends Controller
             $arr_tgl = explode('-',$date_end);
             $date_end = $arr_tgl[2]. '-' . $arr_tgl[1] . '-' . $arr_tgl[0];
 
-         	$data = \DB::table('VIEW_SALES_ORDER')
+         	$data = \DB::table('view_sales_order')
 					->orderBy('order_date','desc')
 					->whereBetween('order_date',[$date_start,$date_end])
 					->paginate($paging_item_number)
@@ -368,7 +368,7 @@ class SalesOrderController extends Controller
 	                    ]);
 
          }else if($req->filter_by == 'O' || $req->filter_by == 'V' || $req->filter_by == 'D' ){
-         	$data = \DB::table('VIEW_SALES_ORDER')
+         	$data = \DB::table('view_sales_order')
 					->orderBy('order_date','desc')
 					->where('status','=',$req->filter_by)
 					->paginate($paging_item_number)
@@ -380,7 +380,7 @@ class SalesOrderController extends Controller
 	                    ]);
 
          }else{
-         	$data = \DB::table('VIEW_SALES_ORDER')
+         	$data = \DB::table('view_sales_order')
 					->orderBy('order_date','desc')
 					->where($req->filter_by,'like','%' . $req->filter_string . '%')
 					->paginate($paging_item_number)
@@ -420,7 +420,7 @@ class SalesOrderController extends Controller
 
 	public function invoices($sales_order_id){
 		$sales_order = \DB::table('sales_order')->find($sales_order_id);
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 				->where('order_id',$sales_order_id)
 				->get();
 		return view('sales.order.invoices',[
@@ -430,9 +430,9 @@ class SalesOrderController extends Controller
 	}
 
 	public function showInvoice($invoice_id){
-		$data = \DB::table('VIEW_CUSTOMER_INVOICE')
+		$data = \DB::table('view_customer_invoice')
 				->find($invoice_id);
-		$data_detail = \DB::table('VIEW_CUSTOMER_INVOICE_DETAIL')
+		$data_detail = \DB::table('view_customer_invoice_DETAIL')
 				->where('customer_invoice_id',$invoice_id)
 				->get();
 		$sales_order = \DB::table('sales_order')->find($data->order_id);

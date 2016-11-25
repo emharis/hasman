@@ -67,7 +67,7 @@ class ApiController extends Controller
 	public function getAutoCompleteArmada(Request $req){
 
 		$data = \DB::select('select id as data,concat("[",kode,"] ",nama," - ",nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama
-				from VIEW_ARMADA
+				from view_armada
 				where karyawan_id is not NULL and (
 				nama like "%'.$req->get('nama').'%"
 				or kode like "%'.$req->get('nama').'%"
@@ -83,7 +83,7 @@ class ApiController extends Controller
 	public function getAutoCompleteDriver(Request $req){
 
 		$data = \DB::select('select id as data,concat("[",kode,"] ", nopol ," - ","[",kode_karyawan,"] ",karyawan) as value, nama , nopol
-				from VIEW_ARMADA
+				from view_armada
 				where karyawan_id is not NULL and (
 				nama like "%'.$req->get('nama').'%"
 				or kode like "%'.$req->get('nama').'%"
@@ -97,7 +97,7 @@ class ApiController extends Controller
 	}
 
 	public function getAutoCompleteStaff(Request $req){
-		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from VIEW_KARYAWAN where jabatan_id = 4 and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
+		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from view_karyawan where jabatan_id = 4 and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
 		$data_res = ['query'=>'Unit','suggestions' => $data];
 
 		return json_encode($data_res);
@@ -125,7 +125,7 @@ class ApiController extends Controller
 	}
 
 	public function getSelectCustomer(){
-		$data = \DB::table('VIEW_CUSTOMER')->get();
+		$data = \DB::table('view_customer')->get();
 		$selectCustomer = [];
 		foreach($data as $dt){
 			$selectCustomer[$dt->id] = '[' . $dt->kode . '] ' . $dt->nama;
@@ -135,7 +135,7 @@ class ApiController extends Controller
 	}
 
 	public function getSelectPekerjaan($customer_id){
-		$data = \DB::table('VIEW_PEKERJAAN')->where('customer_id',$customer_id)->get();
+		$data = \DB::table('view_pekerjaan')->where('customer_id',$customer_id)->get();
 		$selectPekerjaan = [];
 		foreach($data as $dt){
 			$selectPekerjaan[$dt->id] =  $dt->nama;

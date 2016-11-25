@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class ArmadaController extends Controller
 {
 	public function index(){
-		$data = \DB::table('VIEW_ARMADA')->get();
+		$data = \DB::table('view_armada')->get();
 		return view('master.armada.index',[
 				'data' => $data
 			]);
@@ -17,8 +17,8 @@ class ArmadaController extends Controller
 
 	public function create(){
 		$drivers = \DB::select('select * 
-					from VIEW_KARYAWAN 
-					where VIEW_KARYAWAN.id not in (select karyawan_id from armada where karyawan_id is not null )
+					from view_karyawan  
+					where view_karyawan.id not in (select karyawan_id from armada where karyawan_id is not null )
 					');
 		$selectDriver = [
 				'0' => 'NONE'
@@ -44,8 +44,8 @@ class ArmadaController extends Controller
 	public function edit($id){
 		$data = \DB::table('armada')->find($id);
 		$drivers = \DB::select('select * 
-					from VIEW_KARYAWAN 
-					where VIEW_KARYAWAN.id not in (select karyawan_id from armada where karyawan_id is not null and armada.id != ' . $id . ')
+					from view_karyawan 
+					where view_karyawan.id not in (select karyawan_id from armada where karyawan_id is not null and armada.id != ' . $id . ')
 					');
 		$selectDriver = [
 				'0' => 'NONE'
