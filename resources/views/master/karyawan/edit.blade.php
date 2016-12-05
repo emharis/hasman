@@ -59,7 +59,7 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control"  autocomplete="off" required value="{{$data->kode}}" >
+                        <input type="text" name="kode" class="form-control"  autocomplete="off" required value="{{$data->kode}}" readonly >
                     </td>
 
                 </tr>
@@ -68,7 +68,7 @@
                         <label>Jabatan</label>
                     </td>
                     <td>
-                        {!! Form::select('jabatan',$selectJabatan,$data->jabatan_id,['class'=>'form-control']) !!}
+                        {!! Form::select('jabatan',$selectJabatan,$data->kode_jabatan,['class'=>'form-control']) !!}
                     </td>
 
                 </tr>

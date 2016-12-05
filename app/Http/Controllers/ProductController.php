@@ -29,9 +29,30 @@ class ProductController extends Controller
 	}
 
 	public function insert(Request $req){
+		// generate kode
+		//------------------------------------------------------------------
+		$prefix = \DB::table('appsetting')->whereName('product_prefix')->first()->value;
+		$counter = \DB::table('appsetting')->whereName('product_counter')->first()->value;
+		$zero;
+
+		if( strlen($counter) == 1){
+				$zero = "000";
+			}elseif( strlen($counter) == 2){
+					$zero = "00";
+			}elseif( strlen($counter) == 3){
+					$zero = "0";
+			}else{
+					$zero =  "";
+			}
+
+		$kode = $prefix . $zero . $counter++;
+
+		\DB::table('appsetting')->whereName('product_counter')->update(['value'=>$counter]);
+		//------------------------------------------------------------------
+
 		\DB::table('product')
 			->insert([
-					'kode' => $req->kode,
+					'kode' => $kode,
 					'nama' => $req->nama,
 					'product_unit_id' => $req->product_unit,
 				]);
@@ -58,7 +79,7 @@ class ProductController extends Controller
 		\DB::table('product')
 			->where('id',$req->id)
 			->update([
-					'kode' => $req->kode,
+					// 'kode' => $req->kode,
 					'nama' => $req->nama,
 					'product_unit_id' => $req->product_unit,
 				]);

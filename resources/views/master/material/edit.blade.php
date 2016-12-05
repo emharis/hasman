@@ -44,7 +44,7 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control" required autocomplete="off" value="{{$data->kode}}" >
+                        <input type="text" name="kode" class="form-control" required autocomplete="off" value="{{$data->kode}}" readonly >
                     </td>
                 </tr>
                 <tr>

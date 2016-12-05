@@ -50,7 +50,7 @@
                     </td>
 
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Kode</label>
                     </td>
@@ -58,7 +58,7 @@
                         <input type="text" name="kode" class="form-control"  autocomplete="off" required >
                     </td>
 
-                </tr>
+                </tr> --}}
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Jabatan</label>
@@ -227,7 +227,7 @@
         var bulan = $('input[name=bulan]').val();
         var tahun = $('input[name=tahun]').val();
 
-        if(nama != "" && kode != ""){
+        if(nama != "" ){
 
         // alert('masuk kondisi');
             var formdata = $('<form>').attr('method','POST').attr('action','master/karyawan/insert').attr('enctype','multipart/form-data');

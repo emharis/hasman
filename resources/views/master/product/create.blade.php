@@ -37,14 +37,14 @@
                         <input type="text" name="nama" class="form-control" required autofocus autocomplete="off" >
                     </td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td>
                         <label>Kode</label>
                     </td>
                     <td>
                         <input type="text" name="kode" class="form-control" required autocomplete="off" >
                     </td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td >
                         <label>Product Unit</label>

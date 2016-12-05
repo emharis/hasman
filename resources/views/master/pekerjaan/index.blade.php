@@ -78,7 +78,7 @@
                             {{$dt->nama}}
                         </td>
                         <td>
-                            {{$dt->customer}}
+                            {{$dt->nama_customer}}
                         </td>
                         <td>
                             {{$dt->tahun}}

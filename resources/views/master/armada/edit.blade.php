@@ -32,11 +32,10 @@
              <tbody>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
-                        <label>Nama</label>
+                        <label>Nopol</label>
                     </td>
                     <td>
-                        <input type="text" name="nama" class="form-control" required autofocus autocomplete="off" value="{{$data->nama}}" >
-                        <input type="hidden" name="id" value="{{$data->id}}" >
+                        <input type="text" name="nopol" class="form-control " data-id="" autofocus required value="{{$data->nopol}}">
                     </td>
                 </tr>
                 <tr>
@@ -44,15 +43,16 @@
                         <label>Kode</label>
                     </td>
                     <td>
-                        <input type="text" name="kode" class="form-control " required autocomplete="off" value="{{$data->kode}}" >
+                        <input type="text" name="kode" class="form-control " required autocomplete="off" value="{{$data->kode}}" readonly >
                     </td>
                 </tr>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
-                        <label>Nopol</label>
+                        <label>Keterangan</label>
                     </td>
                     <td>
-                        <input type="text" name="nopol" class="form-control " data-id="" required value="{{$data->nopol}}">
+                        <input type="text" name="nama" class="form-control" autocomplete="off" value="{{$data->nama}}" >
+                        <input type="hidden" name="id" value="{{$data->id}}" >
                     </td>
                 </tr>
                 <tr>
@@ -93,7 +93,7 @@
         var nopol = $('input[name=nopol]').val();
         var driver = $('select[name=driver]').val();
 
-        if(nama != "" && kode != "" && nopol != "" ){
+        if( nopol != "" ){
             var formdata = $('<form>').attr('method','POST').attr('action','master/armada/update');
             formdata.append($('<input>').attr('type','hidden').attr('name','id').val(id));
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));

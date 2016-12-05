@@ -25,10 +25,31 @@ class CustomerController extends Controller
 	}
 
 	public function insert(Request $req){
+		// generate kode
+		//------------------------------------------------------------------
+		$prefix = \DB::table('appsetting')->whereName('customer_prefix')->first()->value;
+		$counter = \DB::table('appsetting')->whereName('customer_counter')->first()->value;
+		$zero;
+
+		if( strlen($counter) == 1){
+				$zero = "000";
+			}elseif( strlen($counter) == 2){
+					$zero = "00";
+			}elseif( strlen($counter) == 3){
+					$zero = "0";
+			}else{
+					$zero =  "";
+			}
+
+		$kode = $prefix . $zero . $counter++;
+
+		\DB::table('appsetting')->whereName('customer_counter')->update(['value'=>$counter]);
+		//------------------------------------------------------------------
+
 		\DB::table('customer')
 			->insert([
 					'nama' => $req->nama,
-					'kode' => $req->kode,
+					'kode' => $kode,
 					'npwp' => $req->npwp,
 					'owner' => $req->owner,
 					'alamat' => $req->alamat,
@@ -54,7 +75,7 @@ class CustomerController extends Controller
 			->where('id',$req->id)
 			->update([
 					'nama' => $req->nama,
-					'kode' => $req->kode,
+					// 'kode' => $req->kode,
 					'npwp' => $req->npwp,
 					'owner' => $req->owner,
 					'alamat' => $req->alamat,

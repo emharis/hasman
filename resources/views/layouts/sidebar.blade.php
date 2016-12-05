@@ -7,7 +7,7 @@
         <ul class="sidebar-menu">
 
             @foreach($sidemenu as $dt )
-                @if(count($dt->childMenus ) > 0)
+                @if(count($dt->childmenu) > 0)
                     <li class="treeview {{Request::is($dt->class_request) ? 'active':''}}" >
                         <a href="{{$dt->href}}">
                             <i class="{{$dt->icon}}"></i>
@@ -15,7 +15,7 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            @foreach($dt->childMenus as $chd)
+                            @foreach($dt->childmenu as $chd)
                                 <li class="{{Request::is($chd->class_request) ? 'active':''}}" ><a href="{{$chd->href}}"><i class="fa fa-circle-o"></i> {{$chd->title }}</a></li>
                             @endforeach
                         </ul>

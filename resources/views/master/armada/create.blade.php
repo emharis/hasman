@@ -31,28 +31,28 @@
             <tbody>
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
-                        <label>Nama</label>
+                        <label>Nopol</label>
                     </td>
                     <td>
-                        <input type="text" name="nama" class="form-control" required autofocus autocomplete="off" >
+                        <input type="text" name="nopol" class="form-control " data-id="" required autofocus>
                     </td>
                 </tr>
                 <tr>
+                    <td class="col-lg-2 col-md-2 col-sm-2" >
+                        <label>Keterangan</label>
+                    </td>
+                    <td>
+                        <input type="text" name="nama" class="form-control"  autocomplete="off" >
+                    </td>
+                </tr>
+                {{-- <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Kode</label>
                     </td>
                     <td>
                         <input type="text" name="kode" class="form-control " required autocomplete="off" >
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-lg-2 col-md-2 col-sm-2" >
-                        <label>Nopol</label>
-                    </td>
-                    <td>
-                        <input type="text" name="nopol" class="form-control " data-id="" required>
-                    </td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td>
                         <label>Driver</label>
@@ -82,19 +82,20 @@
 <script type="text/javascript">
 (function ($) {
    
-    // SAVE LOKASI GALIAN
-   
+    // SAVE ARMADA
     $('#btn-save').click(function(){
         // cek kelengkapan data
         var nama = $('input[name=nama]').val();
         var kode = $('input[name=kode]').val();
         var nopol = $('input[name=nopol]').val();
+        var driver = $('select[name=driver]').val();
 
-        if(nama != "" && kode != "" && nopol != "" ){
+        if(nopol != "" ){
             var formdata = $('<form>').attr('method','POST').attr('action','master/armada/insert');
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));
             formdata.append($('<input>').attr('type','hidden').attr('name','nopol').val(nopol));
+            formdata.append($('<input>').attr('type','hidden').attr('name','driver').val(driver));
             formdata.submit();
         }else{
             alert('Lengkapi data yang kosong.');

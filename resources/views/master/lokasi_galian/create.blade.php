@@ -37,14 +37,14 @@
                         <input type="text" name="nama" class="form-control" required autofocus autocomplete="off" >
                     </td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Kode</label>
                     </td>
                     <td>
                         <input type="text" name="kode" class="form-control" required autocomplete="off" >
                     </td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td class="col-lg-2 col-md-2 col-sm-2" >
                         <label>Alamat</label>
@@ -206,7 +206,7 @@
         var desa_id = $('input[name=desa]').data('id');
         var alamat = $('input[name=alamat]').val();
 
-        if(nama != "" && prov != "" && prov_id != "" && kab != "" && kab_id != "" && kec != "" && kec_id != "" && desa != "" && desa_id != ""){
+        if(nama != "" ){
             var formdata = $('<form>').attr('method','POST').attr('action','master/lokasi/insert');
             formdata.append($('<input>').attr('type','hidden').attr('name','nama').val(nama));
             formdata.append($('<input>').attr('type','hidden').attr('name','kode').val(kode));

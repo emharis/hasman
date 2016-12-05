@@ -23,10 +23,31 @@ class SupplierController extends Controller
 	}
 
 	public function insert(Request $req){
+		// generate kode
+		//------------------------------------------------------------------
+		$prefix = \DB::table('appsetting')->whereName('supplier_prefix')->first()->value;
+		$counter = \DB::table('appsetting')->whereName('supplier_counter')->first()->value;
+		$zero;
+
+		if( strlen($counter) == 1){
+				$zero = "000";
+			}elseif( strlen($counter) == 2){
+					$zero = "00";
+			}elseif( strlen($counter) == 3){
+					$zero = "0";
+			}else{
+					$zero =  "";
+			}
+
+		$kode = $prefix . $zero . $counter++;
+
+		\DB::table('appsetting')->whereName('supplier_counter')->update(['value'=>$counter]);
+		//------------------------------------------------------------------
+
 		\DB::table('supplier')
 			->insert([
 					'nama' => $req->nama,
-					'kode' => $req->kode,
+					'kode' => $kode,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,
@@ -50,7 +71,7 @@ class SupplierController extends Controller
 			->where('id',$req->id)
 			->update([
 					'nama' => $req->nama,
-					'kode' => $req->kode,
+					// 'kode' => $req->kode,
 					'alamat' => $req->alamat,
 					'desa_id' => $req->desa_id,
 					'telp' => $req->telp,
