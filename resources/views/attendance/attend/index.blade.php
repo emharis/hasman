@@ -72,7 +72,7 @@
 
       <div class="row data-presensi hide" >
         <div class="col-sm-12 col-md-12 col-lg-12" >
-          <table id="table-presensi" class="table table-bordered ">
+          <table id="table-presensi" class="table table-bordered table-data">
             <thead>
               <tr>
                 <th style="width:25px;" class="text-center">No</th>

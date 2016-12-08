@@ -97,10 +97,15 @@
                                     <label>Pekerjaan</label>
                                 </td>
                                 <td>
-                                    @if($data->pekerjaan)
+                                     @if($data->pekerjaan)
                                         {{$data->pekerjaan}}<br/>
-                                        {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                        @if($data->alamat_pekerjaan != '')
+                                            {{$data->alamat_pekerjaan}}
+                                        @endif
+                                        @if($data->desa != "" )
+                                         {{', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
                                         {{$data->kabupaten . ', ' . $data->provinsi }}
+                                        @endif
                                     @else
                                         -
                                     @endif

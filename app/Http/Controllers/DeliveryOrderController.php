@@ -29,7 +29,19 @@ class DeliveryOrderController extends Controller
 		$data = \DB::table('view_delivery_order')
 			//->where('status','!=','D')
 			->orderBy('order_date','desc')
+			->orderBy('status','desc')
 			->get();
+
+		$so_ref = \DB::table('sales_order')
+					->select('id','order_number')
+					->where('status','V')
+					->orderBy('order_date','asc')
+					->get();
+		$select_so_ref = [];
+		foreach($so_ref as $dt){
+			$select_so_ref[$dt->id] = $dt->order_number;
+		}
+
 			// ->paginate($paging_item_number);
 		$delivery_to_do = \DB::table('delivery_order')
 							->where('status','!=' ,'V')
@@ -38,9 +50,84 @@ class DeliveryOrderController extends Controller
 			
 		return view('delivery.order.index',[
 				'data' => $data,
-				'delivery_to_do' => $delivery_to_do
+				'delivery_to_do' => $delivery_to_do,
+				'select_so_ref' => $select_so_ref,
 				// 'paging_item_number' => $paging_item_number
 			]);
+	}
+
+	public function batchEdit($sales_order_id){
+		$sales_order = \DB::table('view_sales_order')->find($sales_order_id);
+		$sales_order_detail = \DB::table('view_sales_order_detail')->where('sales_order_id',$sales_order_id)->get();
+		$delivery_orders = \DB::table('view_delivery_order')->whereSalesOrderId($sales_order_id)->get();
+
+		$armada = \DB::table('view_armada')
+						->select('id','nopol','karyawan')
+						->get();
+		$selectArmada = [];
+		foreach($armada as $dt){
+			$selectArmada[$dt->id] = $dt->nopol . ' - ' . $dt->karyawan;
+		}
+
+		$galian = \DB::table('lokasi_galian')
+						->select('id','nama')
+						->get();
+		$selectGalian = [];
+		foreach($galian as $dt){
+			$selectGalian[$dt->id] = $dt->nama;
+		}
+
+
+		return view('delivery.order.batch-edit',[
+			'sales_order'=>$sales_order,
+			'sales_order_detail'=>$sales_order_detail,
+			'delivery_order'=>$delivery_orders,
+			'selectArmada'=>$selectArmada,
+			'selectGalian'=>$selectGalian,
+			]);
+	}
+
+	public function batchUpdate(Request $req){
+		return \DB::transaction(function()use($req){
+			$data_delivery = json_decode($req->data_delivery);
+
+			// echo $req->data_delivery . '<br/><br/><br/><br/>';
+
+			foreach($data_delivery->do as $dt){
+				// echo $dt->id . ' ----- ' . $dt->armada_id . '<br/>';
+
+				$data_do = \DB::table('delivery_order')->find($dt->id);
+
+				if($data_do->status == 'O' || $data_do->status == 'D'){
+					// generate tanggal
+		            $delivery_date = $dt->delivery_date;
+		            $arr_tgl = explode('-',$delivery_date);
+		            $fix_delivery_date = new \DateTime();
+		            $fix_delivery_date->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]); 
+
+		            if($dt->armada_id != "" && $dt->lokasi_galian_id != ""){
+		            	
+						\DB::table('delivery_order')
+							->where('id',$dt->id)
+							->update([
+									'armada_id' => $dt->armada_id,
+									'lokasi_galian_id' => $dt->lokasi_galian_id,
+									'keterangan' => $dt->keterangan,
+									'status' => 'O',
+									'delivery_date' => $fix_delivery_date,
+								]);
+		            }
+
+					
+				}
+
+			}
+
+			// return redirect('delivery/order');
+			return redirect()->back();
+		});
+
+		
 	}
 
 	public function edit($id){
@@ -81,7 +168,15 @@ class DeliveryOrderController extends Controller
 						'delivery_date' => $fix_delivery_date,
 					]);
 
-			return redirect()->back();
+			if($req->ajax()){
+				return 'true';
+			}else{
+				return redirect()->back();	
+			}
+
+				// return 'true';
+
+			
 		});
 	}
 

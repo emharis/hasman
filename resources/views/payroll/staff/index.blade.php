@@ -32,7 +32,7 @@
             <br/>
 
             <?php $rownum=1; ?>
-            <table class="table table-bordered table-condensed table-striped table-hover" id="table-payroll" >
+            <table class="table table-bordered table-condensed table-striped table-hover table-data" id="table-payroll" >
                 <thead>
                     <tr>
                         <th style="width:25px;" class="text-center"  >

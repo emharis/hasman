@@ -140,6 +140,11 @@
                 border-top-left-radius:0;
                 border-bottom-left-radius:0;
             }
+
+            #table-data thead tr th, .table-data thead tr th{
+                text-align: center;
+                text-transform: uppercase;
+            }
         </style>
 
         @yield('styles')

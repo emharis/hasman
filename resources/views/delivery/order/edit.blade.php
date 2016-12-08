@@ -439,14 +439,8 @@
         var delivery_date = $('input[name=delivery_date]').val();
 
         if(
-            // armada_id != ""
             lokasi_galian_id != ""
             && delivery_date != ""
-            // && alamat != ""
-            // && provinsi_id != ""
-            // && kabupaten_id != ""
-            // && kecamatan_id != ""
-            // && desa_id != ""
             ){
 
             var doForm = $('<form>').attr('method','POST').attr('action','delivery/order/update');

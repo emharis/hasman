@@ -65,7 +65,7 @@
             @endif
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Validated</a>
+            <a class="btn btn-arrow-right pull-right disabled bg-blue" >Done</a>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn btn-arrow-right pull-right disabled bg-gray" >Open</a>
@@ -118,9 +118,18 @@
                             <label>Pekerjaan</label>
                         </td>
                         <td>
-                            {{$data->pekerjaan}}<br/>
-                            {{$data->alamat_pekerjaan .', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
-                            {{$data->kabupaten . ', ' . $data->provinsi }}
+                             @if($data->pekerjaan)
+                                {{$data->pekerjaan}}<br/>
+                                @if($data->alamat_pekerjaan != '')
+                                    {{$data->alamat_pekerjaan}}
+                                @endif
+                                @if($data->desa != "" )
+                                 {{', ' . $data->desa . ', ' . $data->kecamatan}} <br/>
+                                {{$data->kabupaten . ', ' . $data->provinsi }}
+                                @endif
+                            @else
+                                -
+                            @endif
                         </td>
                         <td>
                             <label>Lokasi Galian</label>

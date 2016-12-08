@@ -28,6 +28,35 @@
         padding-right: 5px;
         padding-left: 5px;
     }
+
+     /*clear border select2*/
+     /*span.select2-selection.select2-selection--single {
+        outline: none;
+    }*/
+
+    span.select2-selection.select2-selection--single.select-clear {
+        outline: none;
+        border: none;
+        /*padding: 0; 
+        margin: 0; 
+        border: 0; */
+        /*width: 100%;*/
+        background-color:#EEF0F0;
+        /*float:right;*/
+        padding-right: 5px;
+        padding-left: 5px;
+        height: 30px;
+    }
+    
+    /*span.select2-selection.select2-selection--single.select-clear .select2-dropdown.select2-dropdown--below{
+        background-color:red;
+    }
+*/
+
+    span.select2-selection.select2-selection--single.select-clear .select2-selection__arrow{
+        visibility: hidden;
+    }
+
 </style>
 
 @append
@@ -65,25 +94,27 @@
             <table class="table" >
                 <tbody>
                     <tr>
-                        <td class="col-lg-2">
-                            <label>Direct Sales</label>
-                        </td>
-                        <td class="col-lg-4" >
-                            <input type="checkbox" name="is_direct_sales">
-                        </td>
                         <td class="col-lg-2" >
                             <label>Order Date</label>
                         </td>
                         <td class="col-lg-4" >
                             <input type="text" name="tanggal" class="input-tanggal form-control" value="{{date('d-m-Y')}}" required>
                         </td>
+                        <td class="col-lg-2">
+                            <label>Direct Sales</label>
+                        </td>
+                        <td class="col-lg-4" >
+                            <input type="checkbox" name="is_direct_sales">
+                        </td>
+                        
                     </tr>
                     <tr  >
                         <td >
                             <label>Customer</label>
                         </td>
                         <td >
-                            <input type="text" name="customer" autofocus class="form-control " data-customerid="" required>
+                            {{-- <input type="text" name="customer" autofocus class="form-control " data-customerid="" required> --}}
+                            {!! Form::select('customer',$selectCustomer,null,['class'=>'form-control']) !!}
                         </td>
                         <td class="normal_sales_input">
                             <label>Pekerjaan</label>
@@ -352,6 +383,13 @@
 <!-- /.modal -->
 </div>
 
+<div class="hide" >
+    {{-- data element untuk di cloning --}}
+    <div id="select-material-for-clone" >
+        {!! Form::select('material',$selectMaterial,null,['class'=>'form-control input-sm','style'=>'width:100%;']) !!}
+    </div>
+</div>
+
 @stop
 
 @section('scripts')
@@ -377,7 +415,18 @@
           });
 
     //Initialize Select2 Elements
-    $(".select2").select2();
+    $("select[name=pekerjaan]").select2();
+
+    $('select[name=customer]').val([]);
+    $('select[name=customer]').select2();
+    $('select[name=customer]').on('select2:select', function (evt) {
+        var customer_id = $(this).val();
+        // get data pekerjaan
+        fillSelectPekerjaan(customer_id);
+
+        // enablekan select pekerjaan
+        $('select[name=pekerjaan]').removeAttr('disabled');
+    });
 
 
     // SET DATEPICKER
@@ -423,7 +472,7 @@
                 $('select[name=pekerjaan]').val([]);
 
                 //Initialize Select2 Elements
-                $(".select2").select2();
+                $("select[name=pekerjaan]").select2();
             });
     }
     // END OF SET AUTOCOMPLETE CUSTOMER
@@ -547,6 +596,16 @@
     $('#btn-add-item').click(function(){
         // tampilkan form add new item
         var newrow = $('#row-add-product').clone();
+
+        // revisi ganti input material dengan select material
+            newrow.children('td:first').next().find('input').remove();
+            var selectMaterial = $('#select-material-for-clone').find('select[name=material]').clone();
+            newrow.children('td:first').next().append(selectMaterial);
+            // format select 2 
+            selectMaterial.val([]);
+            selectMaterial.select2({ containerCssClass : "select-clear" });
+        // ---- end revisi ganti input material dengan select material
+
         newrow.addClass('row-product');
         newrow.removeClass('hide');
         newrow.removeAttr('id');
@@ -656,7 +715,7 @@
 
     function generateInput(inputElm){
         first_col = inputElm.parent().parent().children('td:first');
-        input_product = first_col.next().children('input');
+        input_product = first_col.next().children('select');
         // input_qty_on_hand = first_col.next().next().children('input');
         input_qty = first_col.next().next().children('input');
         input_unit_price = first_col.next().next().next().children('input');
@@ -741,7 +800,8 @@
                              // "total":""
                          };
             // set so_master data
-            so_master.customer_id = $('input[name=customer]').data('customerid');
+            // so_master.customer_id = $('input[name=customer]').data('customerid');
+            so_master.customer_id = $('select[name=customer]').val();
             // so_master.salesperson_id = $('input[name=salesperson]').data('salespersonid');
             // so_master.no_inv = $('input[name=no_inv]').val();
             so_master.order_date = $('input[name=tanggal]').val();
@@ -756,11 +816,12 @@
             var so_material = JSON.parse('{"material" : [] }');
 
             // set data barant
-            $('input.input-product').each(function(){
+            // $('input.input-product').each(function(){
+            $('#table-product').find('select[name=material]').each(function(){
                 if($(this).parent().parent().hasClass('row-product')){
                     generateInput($(this));
 
-                    if(input_product.data('materialid') != "" 
+                    if(input_product.val() != "" 
                         // && input_qty_on_hand.val() != "" 
                         // && Number(input_qty_on_hand.val()) > 0 
                         && input_qty.val() != "" 
@@ -774,7 +835,7 @@
                         ){
 
                         so_material.material.push({
-                            id:input_product.data('materialid'),
+                            id:input_product.val(),
                             // qoh:input_qty_on_hand.val(),
                             qty:input_qty.val(),
                             // unit_price : input_unit_price.autoNumeric('get'),
@@ -791,8 +852,8 @@
             // alert(so_material.material.length);
             // alert('Pekerjaan id : ' + so_master.pekerjaan_id);
             if(so_master.customer_id != "" 
-                && $('input[name=customer]').val() != "" 
-                && $('input[name=customer]').val() != null 
+                // && $('input[name=customer]').val() != "" 
+                // && $('input[name=customer]').val() != null 
                 && so_master.order_date != "" 
                 && so_master.order_date != null 
                 // && so_master.pekerjaan_id != "" 
@@ -805,6 +866,8 @@
                     newform.append($('<input>').attr('type','hidden').attr('name','so_master').val(JSON.stringify(so_master)));
                     newform.append($('<input>').attr('type','hidden').attr('name','so_material').val(JSON.stringify(so_material)));
                     newform.submit();
+
+                    // alert(JSON.stringify(so_material));
 
             }else{
                 alert('Lengkapi data yang kosong');

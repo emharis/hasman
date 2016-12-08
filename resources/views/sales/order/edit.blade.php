@@ -2,6 +2,7 @@
 
 @section('styles')
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
 <style>
     .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
     .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
@@ -24,6 +25,23 @@
         float:right;
         padding-right: 5px;
         padding-left: 5px;
+    }
+
+    span.select2-selection.select2-selection--single.select-clear {
+        outline: none;
+        border: none;
+        /*padding: 0; 
+        margin: 0; 
+        border: 0; */
+        /*width: 100%;*/
+        background-color:#EEF0F0;
+        /*float:right;*/
+        padding-right: 5px;
+        padding-left: 5px;
+        height: 30px;
+    }
+    span.select2-selection.select2-selection--single.select-clear .select2-selection__arrow{
+        visibility: hidden;
     }
 </style>
 
@@ -163,7 +181,8 @@
                         <tr class="row-product"  >
                             <td class="text-right" >{{$rownum++}}</td>
                             <td>
-                                <input autocomplete="off" type="text"  data-materialid="{{$dt->material_id}}" data-kode="{{$dt->kode_material}}" class=" form-control input-product input-sm input-clear" value="{{'['.$dt->kode_material.'] ' . $dt->material}}">
+                                {{-- <input autocomplete="off" type="text"  data-materialid="{{$dt->material_id}}" data-kode="{{$dt->kode_material}}" class=" form-control input-product input-sm input-clear" value="{{'['.$dt->kode_material.'] ' . $dt->material}}"> --}}
+                                {!! Form::select('material',$selectMaterial,$dt->material_id,['class'=>'form-control','style'=>'width:100%;']) !!}
                             </td>
                             <td>
                                 <input type="number" autocomplete="off" min="1" class="form-control text-right input-quantity input-sm input-clear" value="{{$dt->qty}}" >
@@ -311,6 +330,13 @@
 
 </section><!-- /.content -->
 
+<div class="hide" >
+    {{-- data element untuk di cloning --}}
+    <div id="select-material-for-clone" >
+        {!! Form::select('material',$selectMaterial,null,['class'=>'form-control input-sm','style'=>'width:100%;']) !!}
+    </div>
+</div>
+
 @stop
 
 @section('scripts')
@@ -320,6 +346,7 @@
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
+<script src="plugins/select2/select2.full.min.js"></script>
 
 <script type="text/javascript">
 (function ($) {
@@ -330,6 +357,10 @@
         autoclose: true
     });
     // END OF SET DATEPICKER
+
+    //Initialize Select2 Elements
+    $("select[name=pekerjaan]").select2();
+    $("select[name=material]").select2({ containerCssClass : "select-clear" });
 
     // SET AUTOCOMPLETE CUSTOMER
     $('input[name=customer]').autocomplete({
@@ -493,6 +524,16 @@
     $('#btn-add-item').click(function(){
         // tampilkan form add new item
         var newrow = $('#row-add-product').clone();
+
+             // revisi ganti input material dengan select material
+                newrow.children('td:first').next().find('input').remove();
+                var selectMaterial = $('#select-material-for-clone').find('select[name=material]').clone();
+                newrow.children('td:first').next().append(selectMaterial);
+                // format select 2 
+                selectMaterial.val([]);
+                selectMaterial.select2({ containerCssClass : "select-clear" });
+            // ---- end revisi ganti input material dengan select material
+
         newrow.addClass('row-product');
         newrow.removeClass('hide');
         newrow.removeAttr('id');
@@ -597,7 +638,9 @@
 
     function generateInput(inputElm){
         first_col = inputElm.parent().parent().children('td:first');
-        input_product = first_col.next().children('input');
+        // input_product = first_col.next().children('input');
+        input_product = first_col.next().children('select');
+
         // input_qty_on_hand = first_col.next().next().children('input');
         input_qty = first_col.next().next().children('input');
         // input_unit_price = first_col.next().next().next().next().children('input');
@@ -685,6 +728,8 @@
         // set so_master data
         so_master.sales_order_id = $('input[name=sales_order_id]').val();
         so_master.customer_id = $('input[name=customer]').data('customerid');
+            // so_master.customer_id = $('select[name=customer]').val();
+
         // so_master.salesperson_id = $('input[name=salesperson]').data('salespersonid');
         // so_master.no_inv = $('input[name=no_inv]').val();
         so_master.order_date = $('input[name=tanggal]').val();
@@ -699,11 +744,11 @@
         var so_material = JSON.parse('{"material" : [] }');
 
         // set data barant
-        $('input.input-product').each(function(){
+        $('#table-product').find('select[name=material]').each(function(){
             if($(this).parent().parent().hasClass('row-product')){
                 generateInput($(this));
 
-                if(input_product.data('materialid') != "" 
+                if(input_product.val() != "" 
                     // && input_qty_on_hand.val() != "" 
                     // && Number(input_qty_on_hand.val()) > 0 
                     && input_qty.val() != "" 
@@ -717,7 +762,7 @@
                     ){
 
                     so_material.material.push({
-                        id:input_product.data('materialid'),
+                        id:input_product.val(),
                         // qoh:input_qty_on_hand.val(),
                         qty:input_qty.val(),
                         // unit_price : input_unit_price.autoNumeric('get'),
@@ -733,8 +778,11 @@
         // save ke database
         // alert(so_master.customer_id);
         // alert(so_material.material.length);
+        // alert(so_master.customer_id);
+        // alert(so_master.order_date);
+        // alert(so_material.material.length);
         if(so_master.customer_id != "" 
-            && $('input[name=customer]').val() != "" 
+            // && $('input[name=customer]').val() != "" 
             // && so_master.salesperson_id != "" 
             // && $('input[name=salesperson]').val() != "" 
             && so_master.order_date != "" 

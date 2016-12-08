@@ -4,6 +4,7 @@
 <!--Bootsrap Data Table-->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
 <style>
     #table-data > tbody > tr{
         cursor:pointer;
@@ -26,7 +27,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" >
-            <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Delivery Orders</h3></label> &nbsp;
+            {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;font-size: 1.3em;" >Delivery Orders</h3></label> &nbsp; --}}
+            <button class="btn btn-primary " id="btn-batch-edit" href="#" >Batch Edit</button>
             <button class="btn btn-danger hide" id="btn-delete" href="#" >Delete</button>
 
             <div class="pull-right" >
@@ -44,42 +46,78 @@
                     </tr>
                 </table>
             </div>
+            
         </div>
         <div class="box-body">
-            
+            <div class="row hide" id="row-form-batch-edit" >
+                <div class="col-sm-4 col-md-4 col-lg-4 " >
+                    <form name="form-batch-edit" method="POST" action="delivery/order/batch-edit"  class="form-horizontal">
+                        <table class="table table-bordered" >
+                            <tbody>
+                                <tr>
+                                    <td colspan="2"  >
+                                        <label>Batch Edit</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-sm-3" >
+                                        SO Ref#
+                                    </td>
+                                    <td class="col-sm-9">
+                                        {!! Form::select('select_so_ref',$select_so_ref,null,['class'=>'form-control','style'=>'width:100%!important']) !!}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-sm-3" >
+                                        
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="submit" >Submit</button>
+                                        <button class="btn btn-danger" id="btn-cancel-batch-edit" type="reset" >Cancel</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
             <table class="table table-bordered table-condensed table-striped table-hover" id="table-data" >
                 <thead>
                     <tr>
-                        <th style="width:10px;" class="text-center">
+                        {{-- <th style="width:10px;" class="text-center">
                             <input type="checkbox" name="ck_all" style="margin-left:15px;padding:0;" >
-                        </th>
+                        </th> --}}
                         <th>Ref#</th>
                         <th>SO Date</th>
                         <th>Delivery Date</th>
+                        <th>Armada</th>
                         <th>SO Ref#</th>
                         <th>Customer</th>
                         <th>Material</th>
                         <th>Pekerjaan</th>
                         {{-- <th>Driver</th> --}}
-                        {{-- <th>Armada</th> --}}
                         {{-- <th>Tujuan</th> --}}
                         {{-- <th>Lokasi Galian</th> --}}
                         <th>Status</th>
-                        <th style="width:25px;"></th>
+                        <th ></th>
                     </tr>
                 </thead>
                 <tbody>
                    @foreach($data as $dt)
                         @for($i=0;$i<$dt->qty;$i++)
                             <tr class="" data-id="{{$dt->id}}" >
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     @if($dt->status != 'V')
                                         <input type="checkbox" class="ck-row" data-orderid="{{$dt->sales_order_id}}" >
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>{{$dt->delivery_order_number}}</td>
                                 <td>{{$dt->order_date_formatted}}</td>
                                 <td>{{$dt->delivery_date_formatted}}</td>
+                                <td>
+                                    {{$dt->nopol}}
+                                </td>
                                 <td>{{$dt->order_number}}</td>
                                 <td>
                                     {{ $dt->customer}}
@@ -94,9 +132,6 @@
                                     {{$dt->karyawan}}
                                 </td> --}}
                                 {{-- <td>
-                                    {{$dt->nopol}}
-                                </td> --}}
-                                {{-- <td>
                                     {{  $dt->kecamatan  }}
                                 </td>
                                 <td>
@@ -104,11 +139,11 @@
                                 </td> --}}
                                 <td class="text-center" >
                                     @if($dt->status == 'D')
-                                        <label class="label bg-yellow" >DRAFT</label>
+                                        <label class="label label-warning" >DRAFT</label>
                                     @elseif($dt->status == 'O')
-                                        <label class="label label-warning" >OPEN</label>
+                                        <label class="label label-primary" >OPEN</label>
                                     @elseif($dt->status == 'V')
-                                        <label class="label label-danger" >VALIDATED</label>
+                                        <label class="label bg-maroon" >VALIDATED</label>
                                     @elseif($dt->status == 'DN')
                                         <label class="label label-success" >DONE</label>
                                     @else
@@ -116,7 +151,10 @@
                                     @endif
                                 </td>
                                 <td class="text-center" >
-                                    <a class="btn btn-primary btn-xs" href="delivery/order/edit/{{$dt->id}}" ><i class="fa fa-edit" ></i></a>
+                                    <a class="btn btn-primary btn-xs" href="delivery/order/edit/{{$dt->id}}" data-toggle="tooltip" title="Edit" ><i class="fa fa-edit" ></i></a>
+                                    @if($dt->status == 'O' || $dt->status == 'V' || $dt->status == 'DN')
+                                        <a class="btn btn-success btn-xs" data-toggle="tooltip" title="Cetak Surat Jalan" ><i class="fa fa-print" ></i></a>
+                                    @endif
                                 </td>
                             </tr>
                         @endfor
@@ -136,29 +174,17 @@
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="plugins/jqueryform/jquery.form.min.js" type="text/javascript"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/select2/select2.full.min.js"></script>
 
 <script type="text/javascript">
 (function ($) {
 
     var TBL_DATA = $('#table-data').DataTable({
-    //     "columns": [
-    //         {className: "text-right","orderable": false},
-    //         {className: "text-left"},
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         null,
-    //         // null,
-    //         // null,
-    //         // null,
-    //         {className: "text-center","orderable": false},
-    //         // {className: "text-center"}
-    //     ],
         sort: false,
     });
+
+    // select 2
+    $('select[name=select_so_ref]').select2();
 
     // ==========================================================================
     // FILTER SECTION
@@ -277,6 +303,30 @@
         }
 
         e.preventDefault();
+        return false;
+    });
+
+    // TAMPILKAN FORM OPTION BATCH EDIT
+    $('#btn-batch-edit').click(function(){
+        if($('#row-form-batch-edit').hasClass('hide')){
+            $('#row-form-batch-edit').removeClass('hide');
+            $('#row-form-batch-edit').hide();
+            $('#row-form-batch-edit').slideDown(250);
+        }
+    });
+
+    // CANCEL BATCH EDIT
+    $('#btn-cancel-batch-edit').click(function(){
+        $('#row-form-batch-edit').slideUp(250,function(){
+            $('#row-form-batch-edit').addClass('hide');
+        });
+    });
+
+    // SUBMIT BATCH EDIT
+    $('form[name=form-batch-edit]').submit(function(){
+            var sales_order_id = $('select[name=select_so_ref]').val();
+            location.href = 'delivery/order/batch-edit/' + sales_order_id;
+
         return false;
     });
 

@@ -261,6 +261,9 @@ Route::group(['middleware' => ['web','auth']], function () {
         // ORDERS
         Route::get('order','DeliveryOrderController@index');
         Route::get('order/edit/{id}','DeliveryOrderController@edit');
+        // Route::post('order/batch-edit','DeliveryOrderController@batchEdit');
+        Route::get('order/batch-edit/{sales_order_id}','DeliveryOrderController@batchEdit');
+        Route::post('order/batch-update','DeliveryOrderController@batchUpdate');
         Route::post('order/delete','DeliveryOrderController@delete');
         Route::post('order/update','DeliveryOrderController@update');
         Route::post('order/to-validate','DeliveryOrderController@toValidate');

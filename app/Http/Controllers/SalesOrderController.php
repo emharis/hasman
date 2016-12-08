@@ -47,9 +47,27 @@ class SalesOrderController extends Controller
 		// 	$selectPekerjaan[$dt->id] = $dt->nama;
 		// }
 
+		$select_customer = [];
+		$customers = \DB::table('customer')
+						->select('id','nama')
+						->get();
+		foreach($customers as $dt){
+			$select_customer[$dt->id] = $dt->nama;
+		}
+
+		$select_material = [];
+		$materials = \DB::table('material')
+						->select('id','nama')
+						->get();
+		foreach($materials as $dt){
+			$select_material[$dt->id] = $dt->nama;
+		}
+
 		return view('sales.order.create',[
 				// 'selectPekerjaan' => $selectPekerjaan
-			]);
+			'selectCustomer' => $select_customer,
+			'selectMaterial' => $select_material,
+		]);
 	}
 
 	public function insert(Request $req){
@@ -105,12 +123,21 @@ class SalesOrderController extends Controller
 			$select_pekerjaan[$dt->id] = $dt->nama;
 		}
 
+		$select_material = [];
+		$materials = \DB::table('material')
+						->select('id','nama')
+						->get();
+		foreach($materials as $dt){
+			$select_material[$dt->id] = $dt->nama;
+		}
+
 		// jika direct selling
 		if($data_master->is_direct_sales == 'Y'){
 			if($data_master->status == 'O'){
 				return view('sales.order.ds_edit',[
 					'data_master' => $data_master,
-					'data_detail' => $data_detail
+					'data_detail' => $data_detail,
+					'selectMaterial' => $select_material,
 				]);
 			}elseif($data_master->status == 'V'){
 				return view('sales.order.ds_validated',[
@@ -125,7 +152,8 @@ class SalesOrderController extends Controller
 			return view('sales.order.edit',[
 				'data_master' => $data_master,
 				'data_detail' => $data_detail,
-				'select_pekerjaan' => $select_pekerjaan
+				'select_pekerjaan' => $select_pekerjaan,
+				'selectMaterial' => $select_material,
 			]);
 		}elseif($data_master->status == 'V' ){
 		// }elseif($data_master->status == 'V'){
@@ -146,6 +174,7 @@ class SalesOrderController extends Controller
 					'select_pekerjaan' => $select_pekerjaan,
 					'delivery_order_count' => $delivery_order_count,
 					'invoices_count' => $invoices_count,
+					'selectMaterial' => $select_material,
 				]);
 		}
 
@@ -266,7 +295,7 @@ class SalesOrderController extends Controller
 	public function deliveryEdit($delivery_id){
 		$data = \DB::table('view_delivery_order')->find($delivery_id);
 
-		if($data->status == 'V'){
+		if($data->status == 'V' || $data->status == 'DN'){
 			return view('sales.order.delivery_validated',[
 				'data' => $data
 			]);

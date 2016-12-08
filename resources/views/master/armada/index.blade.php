@@ -55,8 +55,8 @@
                         </th>
                         {{-- <th style="width:25px;">No</th> --}}
                         <th class="col-lg-1 col-md-1 col-sm-1">Kode</th>
-                        <th>Nama</th>
                         <th>Nopol</th>
+                        <th>Keterangan</th>
                         <th>Driver</th>
                         <th class="col-lg-1 col-md-1 col-sm-1"></th>
                 </thead>
@@ -73,10 +73,10 @@
                             {{$dt->kode}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->nama}}
+                            {{$dt->nopol}}
                         </td>
                         <td class="row-to-edit" >
-                            {{$dt->nopol}}
+                            {{$dt->nama}}
                         </td>
                         <td class="row-to-edit" >
                             {{$dt->karyawan}}

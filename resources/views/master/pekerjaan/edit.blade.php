@@ -35,7 +35,7 @@
                         <label>Customer</label>
                     </td>
                     <td>
-                        <input type="text" name="nama" class="form-control" required autocomplete="off" value="{{$data->customer}}" readonly >
+                        <input type="text" name="customer" class="form-control" required autocomplete="off" value="{{$data->customer}}" readonly >
                     </td>
                 </tr>
                 <tr>
