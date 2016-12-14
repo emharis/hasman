@@ -26,6 +26,19 @@
         padding-right: 5px;
         padding-left: 5px;
     }
+
+    span.select2-selection.select2-selection--single.select-clear {
+        outline: none;
+        border: none;
+        background-color:#EEF0F0;
+        padding-right: 5px;
+        padding-left: 5px;
+        height: 30px;
+    }
+
+    span.select2-selection.select2-selection--single.select-clear .select2-selection__arrow{
+        visibility: hidden;
+    }
 </style>
 
 @append
@@ -43,7 +56,7 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             {{-- <label> <small>Sales Order</small> <h4 style="font-weight: bolder;margin-top:0;padding-top:0;margin-bottom:0;padding-bottom:0;" >New</h4></label> --}}
-            <button class="btn btn-primary btn-sm" id="btn-validate-po" data-href="purchase/order/validate/{{$data_master->id}}" >Validate</button>
+            <button class="btn btn-primary" id="btn-validate-po" data-href="purchase/order/validate/{{$data_master->id}}" >Validate</button>
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled bg-gray" >Done</a>
@@ -83,7 +96,7 @@
                             <label>Supplier</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="supplier" autofocus class="form-control " data-supplierid="{{$data_master->supplier_id}}" value="{{'[' . $data_master->kode_supplier . '] ' . $data_master->supplier}}" required>
+                            <input type="text" name="supplier" autofocus class="form-control " data-supplierid="{{$data_master->supplier_id}}" value="{{'[' . $data_master->kode_supplier . '] ' . $data_master->supplier}}" readonly>
                         </td>
                         <td class="col-lg-2" ></td>
                         <td class="col-lg-2" >
@@ -154,10 +167,10 @@
                             <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" readonly="">
                         </td> --}}
                         <td>
-                            <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear">
+                            <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" name="unit_price" >
                         </td>
                         <td>
-                            <input autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear">
+                            <input autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear" name="subtotal" >
                         </td>
                         <td class="text-center" >
                             <a href="#" class="btn-delete-row-product" ><i class="fa fa-trash" ></i></a>
@@ -168,17 +181,23 @@
                     <tr class="row-product">
                         <td class="text-right" >{{$rownum++}}</td>
                         <td>
-                            <input autocomplete="off" type="text"  data-productid="{{$dt->product_id}}" data-kode="{{$dt->kode_product}}" class=" form-control input-product input-sm input-clear" value="{{'[' . $dt->kode_product .'] ' . $dt->product}}" readonly >
+                            {{-- <input autocomplete="off" type="text"  data-productid="{{$dt->product_id}}" data-kode="{{$dt->kode_product}}" class=" form-control input-product input-sm input-clear" value="{{'[' . $dt->kode_product .'] ' . $dt->product}}" readonly > --}}
+
+                            <select name="product" class="form-control" required style="width: 100%;" disabled >
+                                @foreach($product as $pd)
+                                    <option {{$pd->id == $dt->product_id ? 'selected':'' }} value="{{$pd->id}}" data-unit="{{$pd->product_unit}}">{{$pd->nama}}</option>
+                                @endforeach
+                            </select>
                         </td>
                         <td class="label-satuan" >{{$dt->product_unit}}</td>
                         <td>
-                            <input type="number" autocomplete="off" min="1" class="form-control text-right input-quantity input-sm input-clear" value="{{$dt->qty}}" >
+                            <input name="input_quantity" type="number" autocomplete="off" min="1" class="form-control text-right input-quantity input-sm input-clear" value="{{$dt->qty}}" >
                         </td>
                         <td>
-                            <input autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" value="{{$dt->unit_price}}" >
+                            <input name="unit_price" autocomplete="off" type="text" class="text-right form-control input-unit-price input-sm input-clear" value="{{$dt->unit_price}}" >
                         </td>
                         <td>
-                            <input autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear" value="{{$dt->unit_price *  $dt->qty}}" >
+                            <input name="subtotal" autocomplete="off" type="text" readonly  class="text-right form-control input-subtotal input-sm input-clear" value="{{$dt->unit_price *  $dt->qty}}" >
                         </td>
                         <td class="text-center" >
                             <a href="#" class="btn-delete-row-product" ><i class="fa fa-trash" ></i></a>
@@ -256,6 +275,16 @@
 <!-- /.modal -->
 </div>
 
+<div class="hide">
+    <div id="select-product-for-clone" >
+        <select name="product" class="form-control" required style="width: 100%;" >
+            @foreach($product as $dt)
+                <option value="{{$dt->id}}" data-unit="{{$dt->product_unit}}">{{$dt->nama}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
 @stop
 
 @section('scripts')
@@ -274,7 +303,7 @@
 (function ($) {
 
     //Initialize Select2 Elements
-    $(".select2").select2();
+    $("select[name=product]").select2({ containerCssClass : "select-clear" });
 
 
     // SET DATEPICKER
@@ -457,20 +486,48 @@
     $('#btn-add-item').click(function(){
         // tampilkan form add new item
         var newrow = $('#row-add-product').clone();
+
+        // revisi ganti input material dengan select product
+            newrow.children('td:first').next().find('input').remove();
+            var selectProduct = $('#select-product-for-clone').find('select[name=product]').clone();
+            newrow.children('td:first').next().append(selectProduct);
+            // format select 2 
+            selectProduct.val([]);
+            selectProduct.select2({ containerCssClass : "select-clear" });
+            selectProduct.on('select2:select', function (evt) {
+               // label_satuan.text(suggestions.unit);
+               var unit  = selectProduct.find(':selected').data('unit');
+               selectProduct.parent().next().text(unit);
+            });
+        // ---- end revisi ganti input material dengan select material
+
         newrow.addClass('row-product');
         newrow.removeClass('hide');
         newrow.removeAttr('id');
-        first_col = newrow.children('td:first');
-        input_product = first_col.next().children('input');
+        // first_col = newrow.children('td:first');
+        // input_product = first_col.next().children('input');
         // input_qty_on_hand = first_col.next().next().children('input');
-        input_qty = first_col.next().next().next().children('input');
-        label_satuan = first_col.next().next();
-        input_unit_price = first_col.next().next().next().next().children('input');
+        // input_qty = first_col.next().next().next().children('input');
+        // label_satuan = first_col.next().next();
+        // input_unit_price = first_col.next().next().next().next().children('input');
         // input_sup = first_col.next().next().next().next().next().children('input');
-        input_subtotal = first_col.next().next().next().next().next().children('input');
+        // input_subtotal = first_col.next().next().next().next().next().children('input');
 
         // tambahkan newrow ke table
-        $(this).parent().parent().prev().after(newrow);
+        // $(this).parent().parent().prev().after(newrow);
+        $('#table-product tbody').children('tr:last').before(newrow);
+
+        // newrow.find('input[name=unit_price]').fadeOut(500);
+
+        // format numeric
+        newrow.find('input[name=unit_price]').autoNumeric('init',{
+            vMin:'0',
+            vMax:'9999999999'
+        });
+        newrow.find('input[name=subtotal]').autoNumeric('init',{
+            vMin:'0',
+            vMax:'9999999999'
+        });
 
         // // format auto numeric
         // input_unit_price.autoNumeric('init',{
@@ -493,62 +550,62 @@
         rownumReorder();
        
         // format autocomplete
-        input_product.autocomplete({
-            serviceUrl: 'api/get-auto-complete-product',
-            params: {  
-                        'nama' : function() {
-                                    return input_product.val();
-                                },
-                        // 'exceptdata':JSON.stringify(getExceptionData())
-                    },
-            onSelect:function(suggestions){
-                input_product.data('productid',suggestions.data);
-                input_product.data('kode',suggestions.kode);
+        // input_product.autocomplete({
+        //     serviceUrl: 'api/get-auto-complete-product',
+        //     params: {  
+        //                 'nama' : function() {
+        //                             return input_product.val();
+        //                         },
+        //                 // 'exceptdata':JSON.stringify(getExceptionData())
+        //             },
+        //     onSelect:function(suggestions){
+        //         input_product.data('productid',suggestions.data);
+        //         input_product.data('kode',suggestions.kode);
                 
-                // disable input_product
-                input_product.attr('readonly','readonly');
+        //         // disable input_product
+        //         input_product.attr('readonly','readonly');
 
-                // tampilkan satuan
-                label_satuan.text(suggestions.unit);
+        //         // tampilkan satuan
+        //         label_satuan.text(suggestions.unit);
 
-                // get quantity on hand dan tampilkan ke input-quantity-on-hand
-                // input_product.parent().next().children('input').val(suggestions.stok);
-                // input_qty_on_hand.val(suggestions.stok);
+        //         // get quantity on hand dan tampilkan ke input-quantity-on-hand
+        //         // input_product.parent().next().children('input').val(suggestions.stok);
+        //         // input_qty_on_hand.val(suggestions.stok);
 
-                // set maks input-quanity
-                // input_product.parent().next().next().children('input').attr('max',suggestions.stok);
-                // input_qty.attr('max',suggestions.stok);
+        //         // set maks input-quanity
+        //         // input_product.parent().next().next().children('input').attr('max',suggestions.stok);
+        //         // input_qty.attr('max',suggestions.stok);
 
-                // get unit_price & tampikan ke input-unit-price
-                // input_product.parent().next().next().children('input').autoNumeric('set',suggestions.harga_jual);
-                // input_unit_price.autoNumeric('set',suggestions.harga_jual);
+        //         // get unit_price & tampikan ke input-unit-price
+        //         // input_product.parent().next().next().children('input').autoNumeric('set',suggestions.harga_jual);
+        //         // input_unit_price.autoNumeric('set',suggestions.harga_jual);
 
-                //set SUP default unit price
-                // input_sup.autoNumeric('set',suggestions.harga_jual);
+        //         //set SUP default unit price
+        //         // input_sup.autoNumeric('set',suggestions.harga_jual);
 
-                 // input_unit_price.autoNumeric('init',{
-                input_unit_price.autoNumeric('init',{
-                    vMin:'0',
-                    vMax:'9999999999'
-                });
-                input_subtotal.autoNumeric('init',{
-                    vMin:'0',
-                    vMax:'9999999999'
-                });
+        //          // input_unit_price.autoNumeric('init',{
+        //         input_unit_price.autoNumeric('init',{
+        //             vMin:'0',
+        //             vMax:'9999999999'
+        //         });
+        //         input_subtotal.autoNumeric('init',{
+        //             vMin:'0',
+        //             vMax:'9999999999'
+        //         });
 
-                // fokuskan ke input quantity
-                // input_product.parent().next().children('input').focus();
-                // alert('ok');
-                input_qty.focus();
-                // alert('done');
+        //         // fokuskan ke input quantity
+        //         // input_product.parent().next().children('input').focus();
+        //         // alert('ok');
+        //         input_qty.focus();
+        //         // alert('done');
 
-            }
-        });
+        //     }
+        // });
 
         
 
-        // fokuskan ke input product
-        input_product.focus();
+        // // fokuskan ke input product
+        // input_product.focus();
 
         return false;
     });
@@ -665,6 +722,8 @@
         // set po_master data
         po_master.purchase_order_id = $('input[name=purchase_order_id]').val();
         po_master.supplier_id = $('input[name=supplier]').data('supplierid');
+        // po_master.supplier_id = $('select[name=supplier]').val();
+
         // po_master.purchaseperson_id = $('input[name=purchaseperson]').data('purchasepersonid');
         // po_master.no_inv = $('input[name=no_inv]').val();
         po_master.order_date = $('input[name=tanggal]').val();
@@ -679,44 +738,88 @@
         // get data product;
         var po_product = JSON.parse('{"product" : [] }');
 
-        // set data barang
-        $('input.input-product').each(function(){
-            if($(this).parent().parent().hasClass('row-product')){
-                generateInput($(this));
+        // // set data barang
+        // $('input.input-product').each(function(){
+        //     if($(this).parent().parent().hasClass('row-product')){
+        //         generateInput($(this));
 
-                if(input_product.data('productid') != "" 
-                    // && input_qty_on_hand.val() != "" 
-                    // && Number(input_qty_on_hand.val()) > 0 
-                    && input_qty.val() != "" 
-                    && Number(input_qty.val()) > 0 
-                    // &&input_unit_price.val() != "" 
-                    // && Number(input_unit_price.autoNumeric('get')) > 0 
-                    // && input_sup.val() != "" 
-                    // && Number(input_sup.autoNumeric('get')) > 0 
-                    // && input_subtotal.val() != "" 
-                    // && Number(input_subtotal.autoNumeric('get')) > 0 
+        //         if(input_product.data('productid') != "" 
+        //             // && input_qty_on_hand.val() != "" 
+        //             // && Number(input_qty_on_hand.val()) > 0 
+        //             && input_qty.val() != "" 
+        //             && Number(input_qty.val()) > 0 
+        //             // &&input_unit_price.val() != "" 
+        //             // && Number(input_unit_price.autoNumeric('get')) > 0 
+        //             // && input_sup.val() != "" 
+        //             // && Number(input_sup.autoNumeric('get')) > 0 
+        //             // && input_subtotal.val() != "" 
+        //             // && Number(input_subtotal.autoNumeric('get')) > 0 
+        //             ){
+
+        //             po_product.product.push({
+        //                 id:input_product.data('productid'),
+        //                 // qoh:input_qty_on_hand.val(),
+        //                 qty:input_qty.val(),
+        //                 unit_price : input_unit_price.autoNumeric('get'),
+        //                 // sup_price:input_sup.autoNumeric('get'),
+        //                 // subtotal:input_subtotal.autoNumeric('get')
+        //             });
+
+        //         }
+                
+        //     }
+        // });
+
+        // set data barang
+        $('.row-product').each(function(){
+        // $('input.input-product').each(function(){
+            // if($(this).parent().parent().hasClass('row-product')){
+                // generateInput($(this));
+
+                var row = $(this);
+                var product_id = row.find('select[name=product]').val();
+                var qty = row.find('input.input-quantity').val();
+                var unit_price = row.find('input[name=unit_price]').autoNumeric('get');
+                var subtotal = row.find('input[name=subtotal]').autoNumeric('get');
+
+                // alert(product_id);
+                // alert(qty);
+                // alert(unit_price);
+                // alert(subtotal);
+
+                if(product_id != ""
+                    // && input_qty_on_hand.val() != ""
+                    // && Number(input_qty_on_hand.val()) > 0
+                    && qty != ""
+                    && qty > 0
+                    // &&input_unit_price.val() != ""
+                    // && Number(input_unit_price.autoNumeric('get')) > 0
+                    // && input_sup.val() != ""
+                    // && Number(input_sup.autoNumeric('get')) > 0
+                    // && input_subtotal.val() != ""
+                    // && Number(input_subtotal.autoNumeric('get')) > 0
                     ){
 
                     po_product.product.push({
-                        id:input_product.data('productid'),
+                        id:product_id,
                         // qoh:input_qty_on_hand.val(),
-                        qty:input_qty.val(),
-                        unit_price : input_unit_price.autoNumeric('get'),
+                        qty:qty,
+                        unit_price : unit_price,
                         // sup_price:input_sup.autoNumeric('get'),
                         // subtotal:input_subtotal.autoNumeric('get')
                     });
 
                 }
-                
-            }
+
+            // }
         });
 
         // save ke database
         // alert(po_product.product.length);
         // alert('Pekerjaan id : ' + po_master.pekerjaan_id);
         if(po_master.supplier_id != "" 
-            && $('input[name=supplier]').val() != "" 
-            && $('input[name=supplier]').val() != null 
+            // && $('input[name=supplier]').val() != "" 
+            // && $('input[name=supplier]').val() != null 
             && po_master.order_date != "" 
             && po_master.order_date != null 
             // && po_master.pekerjaan_id != "" 

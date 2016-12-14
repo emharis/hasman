@@ -54,7 +54,7 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             @if($data->status == 'O')
-              <button class="btn btn-primary btn-sm" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
+              <button class="btn btn-primary" id="btn-reg-payment" data-href="invoice/supplier/bill/reg-payment/{{$data->id}}" >Register Payment</button>
             @elseif($data->status == 'P')
                 <div class="btn-group ">
                     <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

@@ -19,7 +19,17 @@ class PayrollStaffController extends Controller
 	}
 
 	public function create(){
-		return view('payroll.staff.create');
+		$staff = \DB::table('view_karyawan')
+						->whereKodeJabatan('ST')
+						->get();
+		$selectStaff = [];
+		foreach ($staff as $dt) {
+			$selectStaff[$dt->id] = $dt->nama;
+		}
+
+		return view('payroll.staff.create',[
+				'selectStaff' => $selectStaff
+			]);
 	}
 
 	public function getAttendance($staff_id, $awal, $akhir){

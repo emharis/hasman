@@ -28,8 +28,25 @@ class PurchaseOrderController extends Controller
 	}
 
 	public function create(){
-		return view('purchase.order.create',[
+		$supplier = \DB::table('supplier')
+					->select('id','nama')
+					->get();
+		$selectSupplier = [];
+		foreach($supplier as $dt){
+			$selectSupplier[$dt->id] = $dt->nama;
+		}
 
+		$product = \DB::table('view_product')
+					->select('id','nama','product_unit_id','product_unit')
+					->get();
+		// $selectProduct = [];
+		// foreach($product as $dt){
+		// 	$selectProduct[$dt->id] = $dt->nama;
+		// }
+
+		return view('purchase.order.create',[
+				'selectSupplier' => $selectSupplier,
+				'product' => $product,
 			]);
 	}
 
@@ -111,9 +128,14 @@ class PurchaseOrderController extends Controller
 			$view = 'purchase.order.validated';
 		}
 
+		$product = \DB::table('view_product')
+					->select('id','nama','product_unit_id','product_unit')
+					->get();
+
 		return view($view,[
 						'data_master' => $data_master,
 						'data_detail' => $data_detail,
+						'product' => $product,
 					]);
 
 	}

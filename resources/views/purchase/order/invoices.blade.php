@@ -112,7 +112,7 @@
 
         </div><!-- /.box-body -->
         <div class="box-footer" >
-            <a class="btn btn-danger btn-sm" href="sales/order/edit/{{$sales_order->id}}" >Close</a>
+            <a class="btn btn-danger" href="sales/order/edit/{{$sales_order->id}}" >Close</a>
         </div>
     </div><!-- /.box -->
 

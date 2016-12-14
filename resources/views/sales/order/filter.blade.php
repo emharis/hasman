@@ -29,8 +29,8 @@
         <div class="box-header with-border" >
             <div class="row" >
                 <div class="col-sm-6 col-md-6 col-lg-6" >
-                    <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
-                    <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+                    <a class="btn btn-primary" id="btn-add" href="sales/order/create" >Create</a>
+                    <a class="btn btn-danger hide" id="btn-delete" href="#" >Delete</a>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6" >
                     {{-- Filter section --}}

@@ -26,8 +26,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-body">
-            <a class="btn btn-primary btn-sm" id="btn-add" href="sales/order/create" >Create</a>
-            <a class="btn btn-danger btn-sm hide" id="btn-delete" href="#" >Delete</a>
+            <a class="btn btn-primary" id="btn-add" href="sales/order/create" >Create</a>
+            <a class="btn btn-danger hide" id="btn-delete" href="#" >Delete</a>
             <div class="clearfix" ></div>
             <br/>
 

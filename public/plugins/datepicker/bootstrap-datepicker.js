@@ -1017,9 +1017,14 @@
 			if (!date){
 				this.dates.clear();
 			}
-			else if (ix !== -1){
-				this.dates.remove(ix);
-			}
+			//else if (ix !== -1){
+			//	this.dates.remove(ix);
+			//}
+			// revisi mengatasi value hilang saay pilih tanggal yang sama
+			else if (ix !== -1 && this.o.allowDeselection){
+	            this.dates.remove(ix);
+	        }
+	        // end revisi
 			else {
 				this.dates.push(date);
 			}
@@ -1392,6 +1397,9 @@
 		autoclose: false,
 		beforeShowDay: $.noop,
 		calendarWeeks: false,
+		// revisi mengatasi value hilang saay pilih tanggal yang sama
+		allowDeselection: false,
+		// revisi
 		clearBtn: false,
 		daysOfWeekDisabled: [],
 		endDate: Infinity,

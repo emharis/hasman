@@ -74,7 +74,8 @@
                             <label>Staff</label>
                         </td>
                         <td class="col-lg-4" >
-                            <input type="text" name="staff" autofocus class="form-control " data-staffid="" required>
+                            {{-- <input type="text" name="staff" autofocus class="form-control " data-staffid="" required> --}}
+                            {!! Form::select('staff',$selectStaff,null,['class'=>'form-control', 'required']) !!}
                         </td>
                         <td class="col-lg-2" >
                             <label>Payment Date</label>
@@ -100,7 +101,7 @@
                     <tr>
                       <td></td>
                       <td>
-                        <button class="btn btn-primary" id="btn-show" >Show</button>
+                        <button class="btn btn-primary" id="btn-show" >Submit</button>
                       </td>
                       <td></td>
                       <td></td>
@@ -219,14 +220,41 @@
     // END OF SET DATEPICKER
 
     // START DATE CHANGE
+    $('input[name=payment_date]').change(function(){
+      // sett start date on end_date
+      $('input[name=start_date]').val('');
+      $('input[name=end_date]').val('');
+
+      $('input[name=start_date]').datepicker('remove');
+      $('input[name=end_date]').datepicker('remove');
+      
+      $('input[name=start_date]').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        // startDate : $('input[name=start_date]').val(),
+        endDate : $('input[name=payment_date]').val()
+      });
+
+      $('input[name=end_date]').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        // startDate : $('input[name=start_date]').val(),
+        endDate : $('input[name=payment_date]').val()
+      });
+    });
+
     $('input[name=start_date]').change(function(){
       // sett start date on end_date
+      $('input[name=end_date]').val('');
       $('input[name=end_date]').datepicker('remove');
       $('input[name=end_date]').datepicker({
         format: 'dd-mm-yyyy',
         todayHighlight: true,
         autoclose: true,
-        startDate : $('input[name=start_date]').val()
+        startDate : $('input[name=start_date]').val(),
+        endDate : $('input[name=payment_date]').val()
       });
     });
     // END OF START DATE CHANGE
@@ -273,7 +301,7 @@
       if(staff_id != "" && staff != "" && tanggal != "" && start_date != "" && end_date != ""){
 
         var url = 'payroll/staff/get-workday/' + staff_id + "/" + start_date + "/" + end_date;
-
+        alert(url);
         $.get(url,null,function(res){
             var data_do = JSON.parse(res);
             
@@ -375,7 +403,9 @@
                        "net_pay":"",
                        "potongan_bon":"",
                    };
-      payroll.karyawan_id = $('input[name=staff]').data('staffid');
+                   alert('submit');
+      // payroll.karyawan_id = $('input[name=staff]').data('staffid');
+      payroll.karyawan_id = $('select[name=staff]').val();
       payroll.payment_date = $('input[name=payment_date]').val();
       payroll.start_date = $('input[name=start_date]').val();
       payroll.end_date = $('input[name=end_date]').val();
@@ -384,7 +414,7 @@
       payroll.potongan_bon = $('input[name=input_potongan').autoNumeric('get');
       payroll.net_pay = $('#label-net-pay').autoNumeric('get');
       
-
+      alert(JSON.stringify(payroll));
       // alert(JSON.stringify(payroll));
       
       // submitting data

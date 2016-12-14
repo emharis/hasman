@@ -57,7 +57,7 @@
             
             @if($data->status != 'D')
                 {{-- <a  class="btn btn-primary btn-sm" href="sales/order/delivery/validate/{{$data->id}}" >Validate</a> --}}
-                <a class="btn btn-success btn-sm" >Print</a>
+                <a class="btn btn-success" >Print</a>
             @else
                 
                 {{-- Form Header --}}

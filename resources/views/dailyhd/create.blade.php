@@ -2,6 +2,7 @@
 
 @section('styles')
 <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
 <link type="text/css" href="plugins/timepicker/timepicker.less" />
 <style>
     .col-top-item{
@@ -57,15 +58,17 @@
                             <label>Alat</label>
                         </td>
                         <td class="col-sm-3 col-md-3 col-lg-3" >
-                            <input type="text" name="alat" class="form-control" required autofocus >
-                            <input type="hidden" name="alat_id" class="form-control" required  >
+                            {!! Form::select('alat_id',$selectAlat,null,['class'=>'form-control','required']) !!}
+                            {{-- <input type="text" name="alat" class="form-control" required autofocus > --}}
+                            {{-- <input type="hidden" name="alat_id" class="form-control" required  > --}}
                         </td>
                         <td class="col-sm-1 col-md-1 col-lg-1" >
                             <label>Lokasi Galian</label>
                         </td>
                         <td class="col-sm-3 col-md-3 col-lg-3" >
-                            <input type="text" name="lokasi" class="form-control" required>
-                            <input type="hidden" name="lokasi_id" class="form-control" required>
+                        {!! Form::select('lokasi_id',$selectGalian,null,['class'=>'form-control','required']) !!}
+                            {{-- <input type="text" name="lokasi" class="form-control" required> --}}
+                            {{-- <input type="hidden" name="lokasi_id" class="form-control" required> --}}
                         </td>
                     </tr>
                     <tr>
@@ -73,15 +76,17 @@
                             <label>Pengawas</label>
                         </td>
                         <td>
-                            <input type="text" name="pengawas" class="form-control" required>
-                            <input type="hidden" name="pengawas_id" class="form-control" required>
+                            {!! Form::select('pengawas_id',$selectStaff,null,['class'=>'form-control','required']) !!}
+                            {{-- <input type="text" name="pengawas" class="form-control" required> --}}
+                            {{-- <input type="hidden" name="pengawas_id" class="form-control" required> --}}
                         </td>
                         <td>
                             <label>Operator</label>
                         </td>
                         <td>
-                            <input type="text" name="operator" class="form-control" required>
-                            <input type="hidden" name="operator_id" class="form-control" required>
+                            {!! Form::select('operator_id',$selectStaff,null,['class'=>'form-control']) !!}
+                            {{-- <input type="text" name="operator" class="form-control" required> --}}
+                            {{-- <input type="hidden" name="operator_id" class="form-control" required> --}}
                         </td>
                         <td></td>
                         <td></td>
@@ -168,6 +173,7 @@
 <script type="text/javascript" src="plugins/timepicker/bootstrap-timepicker.js"></script>
 <script src="plugins/autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="plugins/autonumeric/autoNumeric-min.js" type="text/javascript"></script>
+<script src="plugins/select2/select2.full.min.js"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
@@ -179,6 +185,19 @@
                 showMeridian: false,
                 defaultTime: false
             });
+
+   // FORMAT SELECT 2
+   $('select[name=alat_id]').val([]);
+   $('select[name=alat_id]').select2();
+
+   $('select[name=lokasi_id]').val([]);
+   $('select[name=lokasi_id]').select2();
+
+   $('select[name=pengawas_id]').val([]);
+   $('select[name=pengawas_id]').select2();
+   
+   $('select[name=operator_id]').val([]);
+   $('select[name=operator_id]').select2();
 
    // AUTONUMERIC
    $('.input-liter').autoNumeric('init',{

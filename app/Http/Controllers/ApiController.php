@@ -100,7 +100,8 @@ class ApiController extends Controller
 	}
 
 	public function getAutoCompleteStaff(Request $req){
-		$data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from view_karyawan where jabatan_id = 4 and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
+		// $data = \DB::select('select id as data,concat("[",kode,"] ",nama) as value, nama from view_karyawan where kode_jabatan = "ST" and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
+		$data = \DB::select('select id as data,nama as value, nama from view_karyawan where kode_jabatan = "ST" and (nama like "%'.$req->get('nama').'%" or kode like "%'.$req->get('nama').'%")');
 		$data_res = ['query'=>'Unit','suggestions' => $data];
 
 		return json_encode($data_res);

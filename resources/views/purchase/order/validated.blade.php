@@ -49,8 +49,8 @@
     <!-- Default box -->
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-            <button class="btn btn-danger btn-sm " id="btn-cancel-order" data-href="purchase/order/cancel-order/{{$data_master->id}}" >Cancel Order</button>
-            <button class="btn btn-success btn-sm" >Print</button>
+            <button class="btn btn-danger" id="btn-cancel-order" data-href="purchase/order/cancel-order/{{$data_master->id}}" >Cancel Order</button>
+            {{-- <button class="btn btn-success" >Print</button> --}}
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'DN' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
@@ -110,7 +110,7 @@
                     {{-- INVOICES SHORTCUT --}}
                     <a class="btn btn-app pull-right" href="purchase/order/invoices/show/{{$data_master->id}}" >
                             <span class="badge bg-green">1</span>
-                            <i class="fa fa-newspaper-o"></i> Invoices
+                            <i class="fa fa-newspaper-o"></i> Bills
                         </a>
                 </div>
             </div>

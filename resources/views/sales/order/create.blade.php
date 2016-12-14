@@ -47,11 +47,6 @@
         padding-left: 5px;
         height: 30px;
     }
-    
-    /*span.select2-selection.select2-selection--single.select-clear .select2-dropdown.select2-dropdown--below{
-        background-color:red;
-    }
-*/
 
     span.select2-selection.select2-selection--single.select-clear .select2-selection__arrow{
         visibility: hidden;
@@ -178,8 +173,8 @@
                         <th style="width:25px;" >NO</th>
                         <th  >MATERIAL</th>
                         {{-- <th class="col-lg-1" >SATUAN</th> --}}
-                        <th class="col-lg-1" >QUANTITY</th>
-                        <th class="col-lg-2 direct_sales_input hide" >UNIT PRICE</th>
+                        <th class="col-sm-1" >QUANTITY</th>
+                        <th class="col-sm-2 direct_sales_input hide" >UNIT PRICE</th>
                         {{-- <th class="col-lg-2" >S.U.P</th> --}}
                         <th class="col-lg-2 direct_sales_input hide" >TOTAL</th>
                         <th style="width:50px;" ></th>

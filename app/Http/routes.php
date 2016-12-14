@@ -203,6 +203,11 @@ Route::group(['middleware' => ['web','auth']], function () {
     });
 
     Route::group(['prefix' => 'payroll'], function () {
+        // Default Payroll System
+        Route::get('payroll','PayrollController@index');
+        Route::post('payroll/show-payroll-table','PayrollController@showPayrollTable');
+        Route::post('payroll/get-pay-day','PayrollController@getPayDay');
+
         // PAYROLL STAFF
         // Route::get('staff','PayrollDriverController@staff');
 

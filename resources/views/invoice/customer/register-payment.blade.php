@@ -35,7 +35,7 @@
     <h1>
         <a href="invoice/customer" >Customer Invoices</a> 
         <i class="fa fa-angle-double-right" ></i> 
-        <a href="invoice/customer/show/{{$data->id}}" >{{$data->inv_number}}</a> 
+        <a href="invoice/customer/show-one-invoice/{{$data->id}}" >{{$data->inv_number}}</a> 
         <i class="fa fa-angle-double-right" ></i> 
         Register Payment
     </h1>
@@ -104,7 +104,7 @@
                         <tr>
                             <td colspan="5" >
                                 <button type="submit" class="btn btn-primary" id="btn-save" >Save</button>
-                                <a class="btn btn-danger" id="btn-cancel" href="invoice/customer/show/{{$data->id}}" >Cancel</a>
+                                <a class="btn btn-danger" id="btn-cancel" href="invoice/customer/show-one-invoice/{{$data->id}}" >Cancel</a>
                             </td>
                         </tr>
                         

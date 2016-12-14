@@ -19,7 +19,29 @@ class DailyhdController extends Controller
 	}
 
 	public function create(){
-		return view('dailyhd.create');
+		$alat = \DB::table('alat')->get();
+		$select_alat = [];
+		foreach($alat as $dt){
+			$select_alat[$dt->id] = $dt->kode . ' - ' . $dt->nama;
+		}
+
+		$galian = \DB::table('lokasi_galian')->get();
+		$select_galian = [];
+		foreach($galian as $dt){
+			$select_galian[$dt->id] =  $dt->nama;
+		}
+
+		$staff = \DB::table('view_karyawan')->whereKodeJabatan('ST')->get();
+		$select_staff = [];
+		foreach($staff as $dt){
+			$select_staff[$dt->id] = $dt->nama;
+		}
+
+		return view('dailyhd.create',[
+				'selectAlat' => $select_alat,
+				'selectGalian' => $select_galian,
+				'selectStaff' => $select_staff,
+			]);
 	}
 
 	public function insert(Request $req){
