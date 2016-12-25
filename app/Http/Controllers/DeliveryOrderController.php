@@ -7,21 +7,42 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 
+
 class DeliveryOrderController extends Controller
 {
-	// public function index(){
-	// 	$paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;
+	public function cetakDeliveryOrder($id){
+		$data = \DB::table('view_delivery_order')->find($id);
 
-	// 	$data = \DB::table('view_delivery_order')
-	// 		//->where('status','!=','D')
-	// 		->orderBy('order_date','desc')
-	// 		->paginate($paging_item_number);
-			
-	// 	return view('delivery.order.index',[
-	// 			'data' => $data,
-	// 			'paging_item_number' => $paging_item_number
-	// 		]);
-	// }
+		$tmpdir = sys_get_temp_dir();   # ambil direktori temporary untuk simpan file.
+		$file =  tempnam($tmpdir, 'ctk');  # nama file temporary yang akan dicetak
+		$handle = fopen($file, 'w');
+		$condensed = Chr(27) . Chr(33) . Chr(4);
+		$bold1 = Chr(27) . Chr(69);
+		$bold0 = Chr(27) . Chr(70);
+		$initialized = chr(27).chr(64);
+		$condensed1 = chr(15);
+		$condensed0 = chr(18);
+		$Data  = $initialized;
+		$Data .= $condensed1;
+		$Data .= "================================================================================\n";
+		$Data .= "  ".$bold1."UD Hasil Mancing".$bold0."      |\n";
+		$Data .= "  ".$bold1."Ngaban Rt 5 RW 2 ".$bold0."      |\n";
+		$Data .= "  ".$bold1."Tanggulangin, Sidoarjo 61272".$bold0."      |\n";
+		$Data .= "================================================================================\n";
+		$Data .= "Kepada : " . $data->customer . " \n";
+		$Data .= "Pekerjaan : " . $data->pekerjaan . "\n";
+		$Data .= "Alamat : " . $data->alamat_pekerjaan . ', ' . $data->desa . "\n";
+		$Data .= "         " . $data->kecamatan . ', ' . $data->kabupaten . "\n";
+		
+		$Data .= "--------------------------\n";
+
+		// echo $Data;
+
+		fwrite($handle, $Data);
+		fclose($handle);
+		copy($file, "//localhost/LX-300");  # Lakukan cetak
+		unlink($file);
+	}
 
 	public function index(){
 		// $paging_item_number = \DB::table('appsetting')->whereName('paging_item_number')->first()->value;

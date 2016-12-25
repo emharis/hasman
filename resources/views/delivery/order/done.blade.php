@@ -53,12 +53,17 @@
             
             {{-- @if($data->status != 'D') --}}
                 {{-- <a  class="btn btn-danger btn-sm" href="delivery/order/reconcile/{{$data->id}}" id="btn-reconcile" >Reconcile</a> --}}
-                <a class="btn btn-success btn-sm" >Print</a>
+                {{-- <a class="btn btn-success btn-sm" >Print</a> --}}
             {{-- @else --}}
                 
                 {{-- Form Header --}}
                 {{-- <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->delivery_order_number}}</h3></label> --}}
             {{-- @endif --}}
+
+            @if($data->status != 'D')
+            {{-- Form Header --}}
+            <label><h3 style="margin:0;padding:0;font-weight:bold;vertical-align: middle;" >{{$data->delivery_order_number}}</h3></label>
+            @endif
 
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn btn-arrow-right pull-right disabled bg-blue" >Done</a>
@@ -74,10 +79,7 @@
         </div>
         <div class="box-body">
             
-            @if($data->status != 'D')
-            {{-- Form Header --}}
-            <label><h3 style="margin:0;padding:0;font-weight:bold;" >{{$data->delivery_order_number}}</h3></label>
-            @endif
+            
 
             <input type="hidden" name="delivery_order_id" value="{{$data->id}}">
             <table class="table" id="table-do-master" >
@@ -249,6 +251,16 @@
         <div class="box-footer" >
             {{-- <button type="submit" class="btn btn-primary" id="btn-save" >Save</button> --}}
             <a class="btn btn-danger" id="btn-cancel-save" href="delivery/order" >Close</a>
+
+            <div class="btn-group ">
+                <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  Print <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a target="_blank" id="btn-direct-print" href="cetak-delivery-order/{{$data->id}}" >Print</a></li>
+                  <li><a href="#" onclick="return false;" id="btn-print-pdf" >Print & Copy</a></li>
+                </ul>
+            </div>
         </div>
     </div><!-- /.box -->
 

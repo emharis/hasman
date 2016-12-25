@@ -162,11 +162,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-         Collective\Html\HtmlServiceProvider::class,
-         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-         Barryvdh\DomPDF\ServiceProvider::class,
-         Codedge\Fpdf\FpdfServiceProvider::class,
+        browner12\helpers\HelperServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Codedge\Fpdf\FpdfServiceProvider::class,
 
     ],
 
@@ -217,8 +217,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
         'Helper' => App\Helpers\Helper::class,
+        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
 
     ],
 

@@ -115,7 +115,7 @@ class SalesOrderController extends Controller
 
 	public function edit($id){
 		$data_master = \DB::table('view_sales_order')->find($id);
-		$data_detail = \DB::table('view_sales_order_DETAIL')->where('sales_order_id',$id)->get();
+		$data_detail = \DB::table('view_sales_order_detail')->where('sales_order_id',$id)->get();
 
 		$pekerjaan = \DB::table('view_pekerjaan')->where('customer_id',$data_master->customer_id)->get();
 		$select_pekerjaan = [];
@@ -282,7 +282,7 @@ class SalesOrderController extends Controller
 
 	public function delivery($so_id){
 		$sales_order = \DB::table('view_sales_order')->find($so_id);
-		$sales_order_detail = \DB::table('view_sales_order_DETAIL')
+		$sales_order_detail = \DB::table('view_sales_order_detail')
 								->where('sales_order_id',$so_id)->get();
 		$delivery_order = \DB::table('view_delivery_order')->where('sales_order_id',$so_id)->get();
 		return view('sales.order.delivery',[
@@ -461,7 +461,7 @@ class SalesOrderController extends Controller
 	public function showInvoice($invoice_id){
 		$data = \DB::table('view_customer_invoice')
 				->find($invoice_id);
-		$data_detail = \DB::table('view_customer_invoice_DETAIL')
+		$data_detail = \DB::table('view_customer_invoice_detail')
 				->where('customer_invoice_id',$invoice_id)
 				->get();
 		$sales_order = \DB::table('sales_order')->find($data->order_id);

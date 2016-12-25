@@ -54,7 +54,7 @@
             @if($data->status != 'D')
                 <a  class="btn btn-primary" href="delivery/order/validate/{{$data->id}}" id="btn-validate" >Validate</a>
                 {{-- <a class="btn btn-success btn-sm" >Print</a> --}}
-                <div class="btn-group ">
+                {{-- <div class="btn-group ">
                     <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       Print <span class="caret"></span>
                     </button>
@@ -62,7 +62,8 @@
                       <li><a href="#" onclick="return false;" id="btn-direct-print" >Direct Print</a></li>
                       <li><a href="#" onclick="return false;" id="btn-print-pdf" >PDF</a></li>
                     </ul>
-                </div>
+                </div> --}}
+                <a class="btn btn-success" href="cetak-delivery-order/{{$data->id}}" target="_blank" >Cetak</a>
             @else
                 
                 {{-- Form Header --}}

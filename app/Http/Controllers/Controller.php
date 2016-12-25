@@ -19,9 +19,9 @@ class Controller extends BaseController
                 ->first();
         \View::share('sidebar_collapse', $sidebar_collapse);
 
-        $sidemenu = Menu::get();
+        $sidemenu = Menu::whereActive('Y')->get();
         foreach($sidemenu as $sd){
-        	$sd->childmenu = \DB::table('menu')->whereMenuId($sd->id)->orderBy('order','asc')->get();
+        	$sd->childmenu = \DB::table('menu')->whereMenuId($sd->id)->whereActive('Y')->orderBy('order','asc')->get();
         }
 
         \View::share('sidemenu', $sidemenu);

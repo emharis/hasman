@@ -123,34 +123,51 @@ class AttendanceController extends Controller
 		});
 	}
 
-	public function getAttendanceTable($tgl){
+	public function getAttendanceTable(Request $req){
 		// generate date
-		$tanggal = $tgl;
+		$tanggal = $req->tanggal;
 		$arr_tgl = explode('-',$tanggal);
 		$tanggal = new \DateTime();
 		$tanggal->setDate($arr_tgl[2],$arr_tgl[1],$arr_tgl[0]);
+		$tanggal_str = $arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0];
 
-		$data = json_decode('{"presensi":"","status":""}');
-		$data->presensi = \DB::table('view_attend')
-						->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
-						->where('jabatan_id',4)
-						->get();
-		$data->status = 'P';
+		// $data = json_decode('{"presensi":"","status":""}');
+		// $data->presensi = \DB::table('view_attend')
+		// 				->where('tgl',$arr_tgl[2].'-'.$arr_tgl[1].'-'.$arr_tgl[0])
+		// 				->where('jabatan_id',4)
+		// 				->get();
+		// $data->status = 'P';
 
-		if(count($data->presensi) == 0){
-			$data->presensi = \DB::select('SELECT
-								karyawan.id,
-								karyawan.kode,
-								karyawan.nama,
-								karyawan.jabatan_id,
-								jabatan.nama AS jabatan
-							FROM
-								karyawan
-								INNER JOIN jabatan
-								 ON karyawan.jabatan_id = jabatan.id
-							where jabatan_id = 4 and is_active ="Y"
-								 ');
-			$data->status = 'D';
+		// if(count($data->presensi) == 0){
+		// 	$data->presensi = \DB::select('SELECT
+		// 						karyawan.id,
+		// 						karyawan.kode,
+		// 						karyawan.nama,
+		// 						karyawan.jabatan_id,
+		// 						jabatan.nama AS jabatan
+		// 					FROM
+		// 						karyawan
+		// 						INNER JOIN jabatan
+		// 						 ON karyawan.jabatan_id = jabatan.id
+		// 					where jabatan_id = 4 and is_active ="Y"
+		// 						 ');
+		// 	$data->status = 'D';
+		// }
+
+		$data = json_decode('{"karyawan":""}');
+		$data->karyawan = \DB::table('view_karyawan')
+							->where('kode_jabatan','ST')
+							->where('is_active','Y')
+							->get();
+
+		foreach($data->karyawan as $dk){
+			$dk->presensi = \DB::table('attend')
+								->select('tgl','pagi','siang','karyawan_id')
+								->whereKaryawanId($dk->id)
+								->whereTgl($tanggal_str)
+								->first();
+
+			// echo json_encode($dk->presensi .'<br/><br/><br/>';
 		}
 
 		return json_encode($data);

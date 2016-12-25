@@ -56,7 +56,18 @@ Route::get('logout', function() {
 });
 
 Route::group(['middleware' => ['web','auth']], function () {
+    Route::get('fpdf',function(){
+        $pdfOpt = new Fpdf();
+    });
+
     Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
+
+    // cetak 
+    Route::get('cetak-sales-order/{id}',function($id){
+        CetakSalesOrder($id);
+    });
+    Route::get('cetak-delivery-order/{id}','DeliveryOrderController@cetakDeliveryOrder');
+
 
     Route::group(['prefix' => 'dailyhd'], function () {
         Route::get('/','DailyhdController@index');
@@ -199,14 +210,24 @@ Route::group(['middleware' => ['web','auth']], function () {
         // ATTENDANCE
         Route::get('attend','AttendanceController@attend');
         Route::post('attend/insert','AttendanceController@insertAttend');
-        Route::get('get-attendance-table/{tanggal}','AttendanceController@getAttendanceTable');
+        Route::post('get-attendance-table','AttendanceController@getAttendanceTable');
     });
 
     Route::group(['prefix' => 'payroll'], function () {
         // Default Payroll System
         Route::get('payroll','PayrollController@index');
-        Route::post('payroll/show-payroll-table','PayrollController@showPayrollTable');
+        // Route::post('payroll/show-payroll-table','PayrollController@showPayrollTable');
+        Route::get('payroll/show-payroll-table/{tanggal}/{kode_jabatan}','PayrollController@showPayrollTable');
         Route::post('payroll/get-pay-day','PayrollController@getPayDay');
+        Route::get('payroll/pay/{karyawan_id}/{tanggal}','PayrollController@addPay');
+        Route::get('payroll/edit-pay/{payroll_id}','PayrollController@editPay');
+        Route::post('payroll/insert-pay','PayrollController@insertPay');
+        Route::post('payroll/update-pay','PayrollController@updatePay');
+        Route::get('payroll/validate-pay/{payroll_id}','PayrollController@validatePay');
+        Route::get('payroll/reset/{payroll_id}','PayrollController@resetPay');
+        Route::get('payroll/print-pdf/{payroll_id}','PayrollController@printPdf');
+        Route::get('payroll/print-copy/{payroll_id}','PayrollController@printCopy');
+        Route::get('payroll/print-direct/{payroll_id}','PayrollController@printDirect');
 
         // PAYROLL STAFF
         // Route::get('staff','PayrollDriverController@staff');

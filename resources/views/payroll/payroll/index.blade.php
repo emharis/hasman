@@ -18,7 +18,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Payroll
+        Payroll Option
     </h1>
 </section>
 
@@ -46,7 +46,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <label>Tanggal Penggajian</label>
+                                <label>Periode Pembayaran</label>
                             </td>
                             <td>
                                 <select name="payday" class="form-control"></select>
@@ -124,6 +124,17 @@
             
         });
 
+    });
+
+    // submit
+    $('form[name=form-option]').submit(function(){
+        var bulan = $('input[name=bulan]').val();
+        var select_tanggal = $('select[name=payday]').val();
+        var tanggal = select_tanggal + "-" + bulan;
+        var kode_jabatan = $('select[name=jabatan]').val();
+        location.href = 'payroll/payroll/show-payroll-table/' + tanggal + '/' + kode_jabatan; 
+
+        return false;
     });
 
 })(jQuery);

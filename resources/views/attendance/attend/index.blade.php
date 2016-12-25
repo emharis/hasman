@@ -24,7 +24,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Attend Now
+        Presensi
     </h1>
 </section>
 
@@ -32,13 +32,13 @@
 <section class="content">
   <div class="box box-solid" >
     <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
-        <label><h3 style="margin:0;padding:0;font-weight:bold;" >Attendance</h3></label>
-
+        <label><h3 style="margin:0;padding:0;font-weight:bold;" >Presensi</h3></label>
+{{-- 
         <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
         <a class="btn  btn-arrow-right pull-right disabled bg-gray" id="label-status-posted" >Posted</a>
 
         <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
-        <a class="btn  btn-arrow-right pull-right disabled bg-blue" id="label-status-draft" >Draft</a>
+        <a class="btn  btn-arrow-right pull-right disabled bg-blue" id="label-status-draft" >Draft</a> --}}
 
     </div>
     <div class="box-body" >
@@ -48,12 +48,14 @@
             <tr>
               <td class="col-sm-2 col-md-2 col-lg-2" >Tanggal</td>
               <td>
-                <div class="input-group" >
-                  <input class="form-control input-tanggal" name="tanggal" />
-                  <div class="input-group-btn" >
-                    <button class="btn btn-primary" id="btn-show-data-presensi"  ><i class="fa fa-search" ></i></button>
-                  </div>
-                </div>
+                  <form name="form_presensi" method="POST" action="attendance/get-attendance-table" >
+                    <div class="input-group" >
+                        <input class="form-control input-tanggal" name="tanggal" required />
+                        <div class="input-group-btn" >
+                          <button class="btn btn-primary" id="btn-show-data-presensi" type="submit" ><i class="fa fa-search" ></i></button>
+                        </div>
+                    </div>
+                  </form>
                 {{-- <input class="form-control input-tanggal" name="tanggal" /> --}}
               </td>
             </tr>
@@ -138,46 +140,139 @@
   //   });
 
   // TAMPILKAN INPUT PRESENSI
-  $('#btn-show-data-presensi').click(function(){
-    // get data presensi
-    var tanggal = $('input[name=tanggal]').val();
-    if(tanggal != ""){
-      $.get('attendance/get-attendance-table/' + tanggal,null,function(res){
+  // $('#btn-show-data-presensi').click(function(){
+  //   // get data presensi
+    
+
+
+  //   // var tanggal = $('input[name=tanggal]').val();
+  //   // if(tanggal != ""){
+  //   //   $.post('attendance/get-attendance-table' ,{
+  //   //     'tanggal' : tanggal
+  //   //   },function(res){
+  //   //     // tampilkan data ke table
+  //   //     var data_presensi = JSON.parse(res);
+  //   //     var tablePresensi = $('#table-presensi tbody');
+  //   //     $('.data-presensi').hide();
+  //   //     // $('#ck-all').prop('checked',false);
+  //   //     tablePresensi.empty();
+  //   //     $.each(data_presensi.presensi,function(i,data){
+  //   //       // // dengan datatable
+  //   //       // tablePresensi.row.add([
+  //   //       //     i+1,data.nama,'<input type="checkbox" name="ck_hadir_' + data.id + '" />'
+  //   //       // ]).draw();
+
+  //   //       // table biasa
+  //   //       tablePresensi.append($('<tr>')
+  //   //                               .append($('<td>').addClass('text-right').text(i+1))
+  //   //                               .append($('<td>').text(data.kode))
+  //   //                               .append($('<td>').text(data.nama))
+  //   //                               .append($('<td>').addClass('text-center').append($('<input>')
+  //   //                                                                               .attr('data-karyawanid',data.id)
+  //   //                                                                               .addClass('ck-row ck-row-pagi')
+  //   //                                                                               .attr('type','checkbox')
+  //   //                                                                               .attr('name','ck_hadir_pagi_' + data.id)
+  //   //                                                                               .prop('checked',data.pagi == 'Y' && true)
+  //   //                                                                             ))
+  //   //                               .append($('<td>').addClass('text-center').append($('<input>')
+  //   //                                                                               .attr('data-karyawanid',data.id)
+  //   //                                                                               .addClass('ck-row ck-row-siang')
+  //   //                                                                               .attr('type','checkbox')
+  //   //                                                                               .attr('name','ck_hadir_siang_' + data.id)
+  //   //                                                                               .prop('checked',data.siang == 'Y' && true)
+  //   //                                                                             ))
+  //   //                           );
+
+          
+  //   //       // $(".ck-row-siang").bootstrapSwitch();
+  //   //     });
+
+  //   //     // tampilkan data table presensi
+  //   //     $('.data-presensi').removeClass('hide');
+  //   //     $('.data-presensi').fadeIn(250);
+
+  //   //     // tampilkan status data
+  //   //     if(data_presensi.status == 'P'){
+  //   //       $('#label-status-posted').removeClass('bg-gray');
+  //   //       $('#label-status-posted').removeClass('bg-blue');
+  //   //       $('#label-status-posted').addClass('bg-blue');
+
+  //   //       $('#label-status-draft').removeClass('bg-gray');
+  //   //       $('#label-status-draft').removeClass('bg-blue');
+  //   //       $('#label-status-draft').addClass('bg-gray');
+  //   //     }else{
+  //   //       $('#label-status-posted').removeClass('bg-gray');
+  //   //       $('#label-status-posted').removeClass('bg-blue');
+  //   //       $('#label-status-posted').addClass('bg-gray');
+
+  //   //       $('#label-status-draft').removeClass('bg-gray');
+  //   //       $('#label-status-draft').removeClass('bg-blue');
+  //   //       $('#label-status-draft').addClass('bg-blue');
+  //   //     }
+
+  //   //     // format checkbox to switch
+  //   //       $(".ck-row").bootstrapSwitch({
+  //   //         size:'small',
+  //   //         onText:'YES',
+  //   //         offText:'NO'
+  //   //       });
+  //   //       // $(".ck-row-pagi").bootstrapSwitch({
+  //   //       //   size:'small',
+  //   //       //   onText:'YES',
+  //   //       //   offText:'NO'
+  //   //       // });
+
+  //   //   });
+  //   // }else{
+  //   //   alert('Lengkapi data yang kosong.');
+  //   //   // focuskan ke input tanggal
+  //   //   $('input[name=tanggal]').focus();
+  //   // }
+
+
+  // });
+
+  $('form[name=form_presensi]').ajaxForm(function(res){
+
         // tampilkan data ke table
-        var data_presensi = JSON.parse(res);
+        var data = JSON.parse(res);
         var tablePresensi = $('#table-presensi tbody');
         $('.data-presensi').hide();
         // $('#ck-all').prop('checked',false);
         tablePresensi.empty();
-        $.each(data_presensi.presensi,function(i,data){
+        $.each(data.karyawan,function(i,data){
           // // dengan datatable
           // tablePresensi.row.add([
           //     i+1,data.nama,'<input type="checkbox" name="ck_hadir_' + data.id + '" />'
           // ]).draw();
 
           // table biasa
+          // alert('ok');
           tablePresensi.append($('<tr>')
-                                  .append($('<td>').addClass('text-right').text(i+1))
-                                  .append($('<td>').text(data.kode))
-                                  .append($('<td>').text(data.nama))
-                                  .append($('<td>').addClass('text-center').append($('<input>')
-                                                                                  .attr('data-karyawanid',data.id)
-                                                                                  .addClass('ck-row ck-row-pagi')
-                                                                                  .attr('type','checkbox')
-                                                                                  .attr('name','ck_hadir_pagi_' + data.id)
-                                                                                  .prop('checked',data.pagi == 'Y' && true)
-                                                                                ))
-                                  .append($('<td>').addClass('text-center').append($('<input>')
-                                                                                  .attr('data-karyawanid',data.id)
-                                                                                  .addClass('ck-row ck-row-siang')
-                                                                                  .attr('type','checkbox')
-                                                                                  .attr('name','ck_hadir_siang_' + data.id)
-                                                                                  .prop('checked',data.siang == 'Y' && true)
-                                                                                ))
-                              );
+                      .append($('<td>').addClass('text-right').text(i+1))
+                      .append($('<td>').text(data.kode))
+                      .append($('<td>').text(data.nama))
+                      .append($('<td>').addClass('text-center')
+                                          .append($('<input>')
+                                            .attr('data-karyawanid',data.id)
+                                            .addClass('ck-row ck-row-pagi')
+                                            .attr('type','checkbox')
+                                            .attr('name','ck_hadir_pagi_' + data.id)
+                                            .prop('checked',(data.presensi ? data.presensi.pagi : 'N') == 'Y' && true)
+                                        ))
+                      .append($('<td>').addClass('text-center')
+                            .append($('<input>')
+                            .attr('data-karyawanid',data.id)
+                            .addClass('ck-row ck-row-siang')
+                            .attr('type','checkbox')
+                            .attr('name','ck_hadir_siang_' + data.id)
+                            .prop('checked',(data.presensi ? data.presensi.siang : 'N') == 'Y' && true)
+                          ))
+                  );
 
           
-          // $(".ck-row-siang").bootstrapSwitch();
+          $(".ck-row-siang").bootstrapSwitch();
+          $(".ck-row-pagi").bootstrapSwitch();
         });
 
         // tampilkan data table presensi
@@ -214,16 +309,7 @@
           //   onText:'YES',
           //   offText:'NO'
           // });
-
-      });
-    }else{
-      alert('Lengkapi data yang kosong.');
-      // focuskan ke input tanggal
-      $('input[name=tanggal]').focus();
-    }
-
-
-  });
+    });
 
   //// check all
   // $('#ck-all').change(function(){
@@ -252,10 +338,18 @@
     });
 
     // post to database
-    var newform = $('<form>').attr('method','POST').attr('action','attendance/attend/insert');
-    newform.append($('<input>').attr('type','hidden').attr('name','tanggal').val(tanggal));
-    newform.append($('<input>').attr('type','hidden').attr('name','data_presensi').val(JSON.stringify(data_presensi)));
-    newform.submit();
+    // var newform = $('<form>').attr('method','POST').attr('action','attendance/attend/insert');
+    // newform.append($('<input>').attr('type','hidden').attr('name','tanggal').val(tanggal));
+    // newform.append($('<input>').attr('type','hidden').attr('name','data_presensi').val(JSON.stringify(data_presensi)));
+    // newform.submit();
+
+    // post to database using javascript/ajax
+    $.post('attendance/attend/insert',{
+      'tanggal' : tanggal,
+      'data_presensi' : JSON.stringify(data_presensi)
+    },function(res){
+        alert('Data presensi telah disimpan');
+    });
 
   });
 

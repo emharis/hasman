@@ -48,7 +48,7 @@
     <div class="box box-solid">
         <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px;" >
             <button class="btn btn-danger" id="btn-reconcile" data-href="sales/order/reconcile/{{$data_master->id}}" >Cancel Order</button> 
-            <div class="btn-group ">
+            {{-- <div class="btn-group ">
                 <button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                   Print <span class="caret"></span>
                 </button>
@@ -56,7 +56,8 @@
                   <li><a href="#" onclick="return false;" id="btn-direct-print" >Direct Print</a></li>
                   <li><a href="#" onclick="return false;" id="btn-print-pdf" >PDF</a></li>
                 </ul>
-            </div>
+            </div> --}}
+            <a class="btn btn-success" href="cetak-sales-order/{{$data_master->id}}" target="_blank" >Cetak</a>
              
             <label class="pull-right" >&nbsp;&nbsp;&nbsp;</label>
             <a class="btn  btn-arrow-right pull-right disabled {{$data_master->status == 'D' ? 'bg-blue' : 'bg-gray'}}" >Done</a>
